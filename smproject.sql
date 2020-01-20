@@ -99,6 +99,19 @@ CREATE TABLE IF NOT EXISTS `tblitemsinlokalen` (
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `tblitemsdefectinlokalen`
+--
+
+DROP TABLE IF EXISTS `tblitemsinlokalen`;
+CREATE TABLE IF NOT EXISTS `tblitemsinlokalen` (
+  `lokaalnr` int(11) NOT NULL,
+  `inventarisnr` int(11) NOT NULL,
+  `aantal` int(11) NOT NULL,
+  PRIMARY KEY (`lokaalnr`,`inventarisnr`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `tbllokaal`
 --
 
