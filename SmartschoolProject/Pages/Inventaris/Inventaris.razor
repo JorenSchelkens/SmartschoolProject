@@ -1,0 +1,29 @@
+﻿@page "/inventaris"
+
+    <MatAccordion>
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <p>Banken</p>
+                <MatIconButton Icon="minimize" OnClick="@lokaal.voegBankToe"></MatIconButton>
+                <p>@lokaal.aantalBanken</p>
+                <MatIconButton Icon="add" OnClick="@lokaal.voegBankToe"></MatIconButton>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+    </MatAccordion>
+
+
+@code{
+
+    public Lokaal lokaal { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //TODO pull uit databank
+        lokaal = new Lokaal();
+        lokaal.lokaalNr = 214;
+    }
+
+}

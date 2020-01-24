@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Winkel\WinkelDomain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Beheer\" />
+    <Folder Include="Pages\Bank\" />
+  </ItemGroup>
+
 </Project>
