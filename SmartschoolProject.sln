@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartschoolProject", "Smart
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarisDomain", "InventarisDomain\InventarisDomain.csproj", "{FB83E5CB-F5B2-4F80-B490-B910C07F978E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bank", "Bank\Bank.csproj", "{82775F31-1326-43A2-9305-006E130D0355}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Winkel", "Winkel\Winkel.csproj", "{CBE89161-0EF4-4845-ADC5-ACA6BDE8D883}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{FB83E5CB-F5B2-4F80-B490-B910C07F978E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB83E5CB-F5B2-4F80-B490-B910C07F978E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB83E5CB-F5B2-4F80-B490-B910C07F978E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82775F31-1326-43A2-9305-006E130D0355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82775F31-1326-43A2-9305-006E130D0355}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82775F31-1326-43A2-9305-006E130D0355}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82775F31-1326-43A2-9305-006E130D0355}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBE89161-0EF4-4845-ADC5-ACA6BDE8D883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBE89161-0EF4-4845-ADC5-ACA6BDE8D883}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBE89161-0EF4-4845-ADC5-ACA6BDE8D883}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBE89161-0EF4-4845-ADC5-ACA6BDE8D883}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

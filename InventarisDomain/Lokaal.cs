@@ -12,6 +12,7 @@ namespace InventarisDomain
         public int aantalStoelen { get; set;}
         public int aantalComputers { get; set;}
         public int aantalSchermen { get; set;}
+        
 
     }
 }
