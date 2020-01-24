@@ -2,11 +2,8 @@
 
 namespace Winkel
 {
-    class Winkel
+    public class Winkel
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+        
     }
 }
