@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `tbllokaal` (
 DROP TABLE IF EXISTS `tblrekening`;
 CREATE TABLE IF NOT EXISTS `tblrekening` (
   `gebruikersnaam` varchar(40) NOT NULL,
-  `krediet` int(11) NOT NULL,
+  `krediet` double(11) NOT NULL,
   PRIMARY KEY (`gebruikersnaam`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `tbltransacties` (
   `datum` date NOT NULL,
   `bedrag` int(11) NOT NULL,
   `gebruikersnaam` varchar(40) NOT NULL,
-  `verantwoording` text NOT NULL,
+  `omschrijving` text NOT NULL,
   PRIMARY KEY (`transactienr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
