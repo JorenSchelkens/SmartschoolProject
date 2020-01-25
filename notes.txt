@@ -1,3 +1,9 @@
 https://www.notion.so/Webservices-Smartschool-info-6ac1b0103fda42939ec931da71138ddc
 
 WSDL = https://bazandpoort.smartschool.be/Webservices/V3?wsdl
+
+https://medium.com/grensesnittet/integrating-with-soap-web-services-in-net-core-adebfad173fb
+
+https://auth0.com/blog/what-is-blazor-tutorial-on-building-webapp-with-authentication/#Securing-the-Application-with-Auth0
+
+bazandpoort.smartschool.be/OAuth
