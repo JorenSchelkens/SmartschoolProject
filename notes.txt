@@ -7,3 +7,8 @@ https://medium.com/grensesnittet/integrating-with-soap-web-services-in-net-core-
 https://auth0.com/blog/what-is-blazor-tutorial-on-building-webapp-with-authentication/#Securing-the-Application-with-Auth0
 
 bazandpoort.smartschool.be/OAuth
+
+    // OAUTH CLIENTID
+    'oauthClient'   => 'e1e2c5876e7b',
+    // OAUTH CLIENT PASSWORD
+    'oauthPassword' => 'ac4ab328672f',
