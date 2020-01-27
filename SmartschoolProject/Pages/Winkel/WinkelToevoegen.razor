@@ -1,11 +1,21 @@
 ﻿@page "/winkeltoevoegen"
-
-    <p>
-        <MatStringField @bind-Value="@myStringValue2" Label="Naam van de winkel"></MatStringField>
-    </p>
-
+    <MatAccordion>
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Personal data</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <MatTextField @bind-Value="naamWinkel" Label="Naam winkel"></MatTextField>
+                    <MatSelect Label="Kies een beheerder" @bind-Value="beheerder">
+                        <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
+                        <MatOptionString Value="saab">Saab</MatOptionString>
+                        <MatOptionString Value="mercedes">Mercedes</MatOptionString>
+                        <MatOptionString Value="audi">Audi</MatOptionString>
+                    </MatSelect>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+    </MatAccordion>
 @code {
-
-    string myStringValue2;
-
+    string naamWinkel;
+    string beheerder;
 }
