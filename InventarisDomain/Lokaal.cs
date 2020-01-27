@@ -80,7 +80,5 @@ namespace InventarisDomain
         }
 
 
-
-
     }
 }

@@ -1,11 +1,7 @@
 ﻿@page "/inventaris"
 
-    <MatAccordion>
-       
-    </MatAccordion>
-
     <MatAccordion Multi="true">
-        @foreach (Lokaal lokaal in lokalen) 
+        @foreach (Lokaal lokaal in lokalen)
         {
             <MatExpansionPanel>
                 <MatExpansionPanelSummary>
@@ -17,40 +13,45 @@
                             Banken
                             <p style="text-align:right; width:100%; padding:0;"></p>
                             <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
-                            <p style="padding-right:50px; max-height:10px">@lokaal.aantalBanken</p>
-                            <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegBankToe" />
+                            <p style="padding-right:10px; max-height:10px">@lokaal.aantalBanken</p>
+                            <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBankToe" />
+                            <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
                         </MatListItem>
                         <MatListDivider></MatListDivider>
                         <MatListItem>
                             Beamers
                             <p style="text-align:right; width:100%; padding:0;"></p>
                             <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
-                            <p style="padding-right:50px; max-height:10px">@lokaal.aantalBeamers</p>
-                            <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegBeamerToe" />
+                            <p style="padding-right:10px; max-height:10px">@lokaal.aantalBeamers</p>
+                            <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBeamerToe" />
+                            <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
                         </MatListItem>
                         <MatListDivider></MatListDivider>
                         <MatListItem>
                             Stoelen
                             <p style="text-align:right; width:100%; padding:0;"></p>
                             <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
-                            <p style="padding-right:50px; max-height:10px">@lokaal.aantalStoelen</p>
-                            <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegStoelToe" />
+                            <p style="padding-right:10px; max-height:10px">@lokaal.aantalStoelen</p>
+                            <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegStoelToe" />
+                            <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
                         </MatListItem>
                         <MatListDivider></MatListDivider>
                         <MatListItem>
                             Computers
                             <p style="text-align:right; width:100%; padding:0;"></p>
                             <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
-                            <p style="padding-right:50px; max-height:10px">@lokaal.aantalComputers</p>
-                            <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegComputerToe" />
+                            <p style="padding-right:10px; max-height:10px">@lokaal.aantalComputers</p>
+                            <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegComputerToe" />
+                            <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
                         </MatListItem>
                         <MatListDivider></MatListDivider>
                         <MatListItem>
                             Schermen
                             <p style="text-align:right; width:100%; padding:0;"></p>
                             <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
-                            <p style="padding-right:50px; max-height:10px">@lokaal.aantalSchermen</p>
-                            <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegSchermToe" />
+                            <p style="padding-right:10px; max-height:10px">@lokaal.aantalSchermen</p>
+                            <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegSchermToe" />
+                            <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
                         </MatListItem>
                     </MatList>
 
@@ -61,11 +62,30 @@
         }
     </MatAccordion>
 
+    <MatDialog @bind-IsOpen="@dialogIsOpen">
+        <MatDialogTitle>Nummer</MatDialogTitle>
+        <MatDialogContent>
+            <p>Geef de nummer van het item</p>
+            <MatNumericUpDownField Label="Nummer Item:"
+                                   @bind-Value=@itemnummer
+                                   DecimalPlaces=0
+                                   Minimum=0 Maximum=10>
+            </MatNumericUpDownField>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@popupOnClick">Voeg toe</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
 
 @code{
 
+    public bool dialogIsOpen = false;
+    public int itemnummer = 0;
+
     public Lokaal lokaal214 { get; set; }
     public Lokaal lokaal215 { get; set; }
+    public Lokaal lokaal216 { get; set; }
 
     public List<Lokaal> lokalen { get; set; }
 
@@ -78,9 +98,23 @@
         lokaal215 = new Lokaal();
         lokaal215.lokaalNr = 215;
 
+        lokaal216 = new Lokaal();
+        lokaal216.lokaalNr = 216;
+
         lokalen = new List<Lokaal>();
         lokalen.Add(lokaal214);
         lokalen.Add(lokaal215);
+        lokalen.Add(lokaal216);
+    }
+
+    public void voegToeAanDefect()
+    {
+        dialogIsOpen = true;
+    }
+
+    public void popupOnClick()
+    {
+
     }
 
 }
