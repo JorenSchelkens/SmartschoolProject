@@ -23,11 +23,12 @@
     </div>
 </div>
 
-<MatButton Unelevated="true" @onclick="betaal(prijzen)">Betaal</MatButton>
+<MatButton Unelevated="true" @onclick="@betaal">Betaal</MatButton>
 
 @code{
     public double prijs;
     public List<double> prijzen { get; set; }
+    public double totaalPrijs;
 
     protected override void OnInitialized()
     {
@@ -35,11 +36,11 @@
     }
 
 
-    public void betaal(List<double> prijzen)
+    public void betaal()
     {
         for (int i = 0; i < prijzen.Count(); i++)
         {
-
+            totaalPrijs =+ prijzen.IndexOf(i);
         }
     }
 }
