@@ -1,35 +1,117 @@
 ﻿@page "/winkeltoevoegen"
 
-    <MatAccordion>
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Personal data</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <div class="mat-layout-grid mat-layout-grid-align-left" style="max-width: 800px;">
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                            <MatTextField @bind-Value="naamWinkel" Label="Naam winkel" Style="width:100%"></MatTextField>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                            <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
-                                <MatOptionString Value="saab">Saab</MatOptionString>
-                                <MatOptionString Value="mercedes">Mercedes</MatOptionString>
-                                <MatOptionString Value="audi">Audi</MatOptionString>
-                            </MatSelect>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                            <MatButton Outlined="true" Icon="add" Style="width:99%">Voeg winkel toe</MatButton>
-                        </div>
-                        
-                    </div>
-                </div>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-    </MatAccordion>
+    
+    <h1>Winkel Toevoegen</h1>
+
+    <div class="mat-layout-grid mat-layout-grid-align-left" style="max-width: 800px;">
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatTextField @bind-Value="naamWinkel" Label="Naam winkel" Style="width:100%"></MatTextField>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
+                    <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
+                    <MatOptionString Value="saab">Saab</MatOptionString>
+                    <MatOptionString Value="mercedes">Mercedes</MatOptionString>
+                    <MatOptionString Value="audi">Audi</MatOptionString>
+                </MatSelect>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatButton Outlined="true" Icon="add" Color="@MatRippleColor.Primary" Style="width:99%" OnClick="@voegWinkelToe">Voeg winkel toe</MatButton>
+            </div>
+        </div>
+    </div>
+
+<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->
+    <MatDialog @bind-IsOpen="@dialogIsOpen">
+        <MatDialogTitle>Voeg winkel toe</MatDialogTitle>
+        <MatDialogContent>
+            <p>Geef een naam en een beheerder</p>
+            <MatTextField @bind-Value="@naamWinkel" Label="naam winkel"></MatTextField>
+            <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
+                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
+                <MatOptionString Value="saab">Saab</MatOptionString>
+                <MatOptionString Value="mercedes">Mercedes</MatOptionString>
+                <MatOptionString Value="audi">Audi</MatOptionString>
+            </MatSelect>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@accepteerDialog">OK</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+    
+    <MatDialog @bind-IsOpen="@dialogIsOpenWNaam">
+        <MatDialogTitle>Whoops..</MatDialogTitle>
+        <MatDialogContent>
+            <p>Je hebt geen winkelnaam opgegeven</p>
+            <MatTextField @bind-Value="@naamWinkel" Label="naam winkel"></MatTextField>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@accepteerDialogWNaam">OK</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
+    <MatDialog @bind-IsOpen="@dialogIsOpenBeheerder">
+        <MatDialogTitle>Whoops..</MatDialogTitle>
+        <MatDialogContent>
+            <p>Je hebt geen beheerder opgegeven</p>
+            <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
+                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
+                <MatOptionString Value="saab">Saab</MatOptionString>
+                <MatOptionString Value="mercedes">Mercedes</MatOptionString>
+                <MatOptionString Value="audi">Audi</MatOptionString>
+            </MatSelect>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@accepteerDialogBeheerder">OK</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
 @code {
 
-    string naamWinkel;
-    string beheerder;
+    string naamWinkel = "";
+    string beheerder = "";
+    bool dialogIsOpenWNaam = false;
+    bool dialogIsOpenBeheerder = false;
+    bool dialogIsOpen = false;
+
+    public void voegWinkelToe()
+    {
+        if (naamWinkel == "" && beheerder == "")
+        {
+
+            dialogIsOpen = true;
+
+        }
+        else {
+
+            if (naamWinkel == "") {
+
+                dialogIsOpenWNaam = true;
+            }
+            else if (beheerder == "") {
+
+                dialogIsOpenBeheerder = true;
+            }
+
+        }
+
+
+        //TODO implement db
+    }
+
+
+    public void accepteerDialogBeheerder() {
+
+        dialogIsOpenBeheerder = false;
+    }
+    public void accepteerDialogWNaam() {
+
+        dialogIsOpenWNaam = false;
+    }
+    public void accepteerDialog() {
+
+        dialogIsOpen = false;
+    }
+
 }
