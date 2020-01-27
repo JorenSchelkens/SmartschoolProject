@@ -1,0 +1,45 @@
+﻿@page "/winkel"
+@inject NavigationManager navigationManager
+<br />
+<div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+
+        @*@foreach (DefaultClasses.Gebruiker gebruiker in gebruikers) {
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                    <MatTextField Label="Naam" ReadOnly="true" Value="@gebruiker.Naam"></MatTextField>
+                </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <MatTextField Label="Gebruikersnaam" ReadOnly="true" Value="@gebruiker.Gebruikersnaam"></MatTextField>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <MatTextField Style="min-width: 300px;" Label="Email" ReadOnly="true" Value="@gebruiker.Email"></MatTextField>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <MatButton Type="submit" OnClick="@(() => Verwijder(gebruiker))" Raised="true">Verwijder</MatButton>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+            }*@
+
+    </div>
+</div>
+
+<MatButton Unelevated="true" @onclick="betaal(prijzen)">Betaal</MatButton>
+
+@code{
+    public double prijs;
+    public List<double> prijzen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        prijzen = new List<double>();
+    }
+
+
+    public void betaal(List<double> prijzen)
+    {
+        for (int i = 0; i < prijzen.Count(); i++)
+        {
+
+        }
+    }
+}
