@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
+using System.Threading.Tasks;
 
 namespace SmartschoolProject
 {
