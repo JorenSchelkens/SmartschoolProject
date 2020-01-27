@@ -6,10 +6,26 @@
                 <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
             </MatExpansionPanelSummary>
             <MatExpansionPanelDetails>
-                <p>Banken</p>
-                <MatIconButton Icon="minimize" OnClick="@lokaal.voegBankToe"></MatIconButton>
-                <p>@lokaal.aantalBanken</p>
-                <MatIconButton Icon="add" OnClick="@lokaal.voegBankToe"></MatIconButton>
+                <MatList>
+                    <MatListItem>
+                        Banken
+                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
+                        <p style="padding-right:300px">@lokaal.aantalBanken</p>
+                        <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegBankToe" />
+
+                    </MatListItem>
+                    <MatListDivider></MatListDivider>
+                    <MatListItem>
+                        Beamer
+                    </MatListItem>
+                    <MatListDivider></MatListDivider>
+                    <MatListItem>
+                        Stock
+                    </MatListItem>
+                </MatList>
+               
+
+
             </MatExpansionPanelDetails>
         </MatExpansionPanel>
     </MatAccordion>
