@@ -20,7 +20,10 @@ namespace InventarisDomain
 
         public void verwijderBank()
         {
-            aantalBanken--;
+            if(aantalBanken > 0)
+            {
+                aantalBanken--;
+            }
         }
 
         public void voegBeamerToe()
@@ -30,7 +33,11 @@ namespace InventarisDomain
 
         public void verwijderBeamer()
         {
-            aantalBeamers--;
+            if (aantalBeamers > 0)
+            {
+                aantalBeamers--; 
+            }
+            
         }
 
         public void voegStoelToe()
@@ -40,7 +47,10 @@ namespace InventarisDomain
 
         public void verwijderStoel()
         {
-            aantalStoelen--;
+            if(aantalStoelen > 0)
+            {
+                aantalStoelen--;
+            }
         }
 
         public void voegComputerToe()
@@ -50,7 +60,10 @@ namespace InventarisDomain
 
         public void verwijderComputer()
         {
-            aantalComputers--;
+            if(aantalComputers > 0)
+            {
+                aantalComputers--;
+            }
         }
 
         public void voegSchermToe()
@@ -60,7 +73,10 @@ namespace InventarisDomain
 
         public void verwijderScherm()
         {
-            aantalSchermen--;
+            if(aantalSchermen > 0)
+            {
+                aantalSchermen--;
+            }
         }
 
 
