@@ -23,6 +23,48 @@ namespace InventarisDomain
             aantalBanken--;
         }
 
+        public void voegBeamerToe()
+        {
+            aantalBeamers++;
+        }
+
+        public void verwijderBeamer()
+        {
+            aantalBeamers--;
+        }
+
+        public void voegStoelToe()
+        {
+            aantalStoelen++;
+        }
+
+        public void verwijderStoel()
+        {
+            aantalStoelen--;
+        }
+
+        public void voegComputerToe()
+        {
+            aantalComputers++;
+        }
+
+        public void verwijderComputer()
+        {
+            aantalComputers--;
+        }
+
+        public void voegSchermToe()
+        {
+            aantalSchermen++;
+        }
+
+        public void verwijderScherm()
+        {
+            aantalSchermen--;
+        }
+
+
+
 
     }
 }

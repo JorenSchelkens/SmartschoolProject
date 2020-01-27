@@ -9,18 +9,42 @@
                 <MatList>
                     <MatListItem>
                         Banken
+                        <p style="text-align:right; width:100%; padding:0;"></p>
                         <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
-                        <p style="padding-right:300px">@lokaal.aantalBanken</p>
+                        <p style="padding-right:50px; max-height:10px">@lokaal.aantalBanken</p>
                         <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegBankToe" />
-
                     </MatListItem>
                     <MatListDivider></MatListDivider>
                     <MatListItem>
-                        Beamer
+                        Beamers
+                        <p style="text-align:right; width:100%; padding:0;"></p>
+                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
+                        <p style="padding-right:50px; max-height:10px">@lokaal.aantalBeamers</p>
+                        <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegBeamerToe" />
                     </MatListItem>
                     <MatListDivider></MatListDivider>
                     <MatListItem>
-                        Stock
+                        Stoelen
+                        <p style="text-align:right; width:100%; padding:0;"></p>
+                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
+                        <p style="padding-right:50px; max-height:10px">@lokaal.aantalStoelen</p>
+                        <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegStoelToe" />
+                    </MatListItem>
+                    <MatListDivider></MatListDivider>
+                    <MatListItem>
+                        Computers
+                        <p style="text-align:right; width:100%; padding:0;"></p>
+                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
+                        <p style="padding-right:50px; max-height:10px">@lokaal.aantalComputers</p>
+                        <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegComputerToe" />
+                    </MatListItem>
+                    <MatListDivider></MatListDivider>
+                    <MatListItem>
+                        Schermen
+                        <p style="text-align:right; width:100%; padding:0;"></p>
+                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
+                        <p style="padding-right:50px; max-height:10px">@lokaal.aantalSchermen</p>
+                        <MatButton Label="+" style="position: absolute; right: 0" OnClick="@lokaal.voegSchermToe" />
                     </MatListItem>
                 </MatList>
                

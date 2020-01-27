@@ -1,9 +1,54 @@
 ﻿@page "/admin"
+@inject NavigationManager navigationManager
+<MatH2>Mijn winkels</MatH2>
+<br />
+<MatAccordion>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk alle winkels</MatExpansionPanelHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
 
-<h1>Hello, world!</h1>
+                    @*@foreach (DefaultClasses.Gebruiker gebruiker in gebruikers) {
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            <MatTextField Label="Naam" ReadOnly="true" Value="@gebruiker.Naam"></MatTextField>
+                        </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <MatTextField Label="Gebruikersnaam" ReadOnly="true" Value="@gebruiker.Gebruikersnaam"></MatTextField>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <MatTextField Style="min-width: 300px;" Label="Email" ReadOnly="true" Value="@gebruiker.Email"></MatTextField>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <MatButton Type="submit" OnClick="@(() => Verwijder(gebruiker))" Raised="true">Verwijder</MatButton>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                    }*@
 
+                </div>
+            </div>
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk alle winkelverzoeken</MatExpansionPanelHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            
+        </MatExpansionPanelDetails>
+</MatExpansionPanel>
+</MatAccordion>
 
+@code {
+    //winkel verwijderen
+    // public void Verwijder(DefaultClasses.Gebruiker gebruiker)
+    //{
+    //    DBConnection.RemoveGebruiker(gebruiker.Email);
+    //    gebruikers.Remove(gebruiker);
+    //    this.StateHasChanged();
 
-@code{
-
+    //    Toaster.Add("Gebruiker verwijdert", MatToastType.Success, "Verwijdert!");
+    //}
 }
