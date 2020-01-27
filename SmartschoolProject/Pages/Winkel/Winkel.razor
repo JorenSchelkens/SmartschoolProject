@@ -1,17 +1,14 @@
 ﻿@page "/winkel"
 @inject NavigationManager navigationManager
 
-<MatH1>Mijn winkels</MatH1>
+<MatH2>Mijn winkels</MatH2>
 
 <br />
-<MatButton Unelevated="true"  @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
-
-
+<MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
 @code {
 
     public void GaNaarWinkelToevoegen()
     {
         navigationManager.NavigateTo("/winkeltoevoegen");
     }
-
 }
