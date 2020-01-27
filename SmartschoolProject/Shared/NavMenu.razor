@@ -4,7 +4,6 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
-
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
@@ -19,20 +18,18 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="winkel">
-                <MatIcon Icon="shopping_cart"></MatIcon>
+                <MatIcon Icon="store"></MatIcon>
                 <span aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Mijn winkels
             </NavLink>
         </li>
-
-        <!--if (Gebruiker.Admin == 1)
-            {
-            -->
+        @*@if (Gebruiker.Admin == 1)
+        {*@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
                 <span class="oi oi-eye" aria-hidden="true"></span> Admin
             </NavLink>
         </li>
-        <!--}-->
+        @*}*@
     </ul>
 </div>
 
