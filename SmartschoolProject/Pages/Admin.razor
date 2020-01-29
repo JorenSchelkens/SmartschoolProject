@@ -1,7 +1,6 @@
 ﻿@page "/admin"
 @inject NavigationManager navigationManager
-<MatH2>Mijn winkels</MatH2>
-<br />
+
 <MatAccordion>
     <MatExpansionPanel>
         <MatExpansionPanelSummary>
@@ -41,14 +40,20 @@
 </MatExpansionPanel>
 </MatAccordion>
 
-@code {
-    //winkel verwijderen
-    // public void Verwijder(DefaultClasses.Gebruiker gebruiker)
-    //{
-    //    DBConnection.RemoveGebruiker(gebruiker.Email);
-    //    gebruikers.Remove(gebruiker);
-    //    this.StateHasChanged();
+<MatButton OnClick="maak">Maak</MatButton>
 
-    //    Toaster.Add("Gebruiker verwijdert", MatToastType.Success, "Verwijdert!");
-    //}
+<p>@DBConnection.ErrorMessage</p>
+
+@code {
+
+    public DBConnection DBConnection { get; set; } = new DBConnection();
+    public Lokaal lokaal { get; set; } = new Lokaal();
+
+    public void maak()
+    {
+        lokaal = DBConnection.GetLokaal(211);
+
+        this.StateHasChanged();
+    }
+
 }

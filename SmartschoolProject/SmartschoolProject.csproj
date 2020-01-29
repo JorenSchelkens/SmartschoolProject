@@ -5,20 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MatBlazor" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="MatBlazor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bank\BankDomain.csproj" />
+    <ProjectReference Include="..\DefaultDomain\DefaultDomain.csproj" />
     <ProjectReference Include="..\InventarisDomain\InventarisDomain.csproj" />
     <ProjectReference Include="..\Winkel\WinkelDomain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Beheer\" />
-    <Folder Include="Pages\Bank\" />
   </ItemGroup>
 
 </Project>
