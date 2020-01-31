@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `tblartikel`;
 CREATE TABLE `tblartikel` (
   `productnr` int NOT NULL AUTO_INCREMENT,
   `productnaam` text NOT NULL,
-  `prijs` int NOT NULL,
+  `prijs` double NOT NULL,
   `stock` int NOT NULL,
   `winkelnr` int NOT NULL,
   `korting` int NOT NULL,
@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `tblbesteldeartikels`;
 CREATE TABLE `tblbesteldeartikels` (
   `bestelnr` int NOT NULL,
   `productnr` int NOT NULL,
-  `prijs` int NOT NULL,
+  `prijs` double NOT NULL,
   PRIMARY KEY (`bestelnr`,`productnr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,7 +78,7 @@ CREATE TABLE `tblbestelling` (
   `bestelnr` int NOT NULL AUTO_INCREMENT,
   `datum` date NOT NULL,
   `gebruikersnaam` varchar(40) NOT NULL,
-  `prijs` int NOT NULL,
+  `prijs` double NOT NULL,
   PRIMARY KEY (`bestelnr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,50 +93,27 @@ LOCK TABLES `tblbestelling` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tblinventarisitems`
+-- Table structure for table `tblitemsinlokaal`
 --
 
-DROP TABLE IF EXISTS `tblinventarisitems`;
+DROP TABLE IF EXISTS `tblitemsinlokaal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tblinventarisitems` (
-  `inventarisnr` int NOT NULL AUTO_INCREMENT,
-  `item` int NOT NULL,
-  PRIMARY KEY (`inventarisnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblinventarisitems`
---
-
-LOCK TABLES `tblinventarisitems` WRITE;
-/*!40000 ALTER TABLE `tblinventarisitems` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblinventarisitems` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tblitemsinlokalen`
---
-
-DROP TABLE IF EXISTS `tblitemsinlokalen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tblitemsinlokalen` (
+CREATE TABLE `tblitemsinlokaal` (
   `lokaalnr` int NOT NULL,
-  `inventarisnr` int NOT NULL,
+  `voorwerpnr` int NOT NULL,
   `aantal` int NOT NULL,
-  PRIMARY KEY (`lokaalnr`,`inventarisnr`)
+  PRIMARY KEY (`lokaalnr`,`voorwerpnr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tblitemsinlokalen`
+-- Dumping data for table `tblitemsinlokaal`
 --
 
-LOCK TABLES `tblitemsinlokalen` WRITE;
-/*!40000 ALTER TABLE `tblitemsinlokalen` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblitemsinlokalen` ENABLE KEYS */;
+LOCK TABLES `tblitemsinlokaal` WRITE;
+/*!40000 ALTER TABLE `tblitemsinlokaal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblitemsinlokaal` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -213,6 +190,29 @@ LOCK TABLES `tbltransacties` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tblvoorwerp`
+--
+
+DROP TABLE IF EXISTS `tblvoorwerp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tblvoorwerp` (
+  `voorwerpnr` int NOT NULL AUTO_INCREMENT,
+  `voorwerpnaam` varchar(45) NOT NULL,
+  PRIMARY KEY (`voorwerpnr`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblvoorwerp`
+--
+
+LOCK TABLES `tblvoorwerp` WRITE;
+/*!40000 ALTER TABLE `tblvoorwerp` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblvoorwerp` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tblwinkel`
 --
 
@@ -246,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-31 11:52:20
+-- Dump completed on 2020-01-31 15:19:16
