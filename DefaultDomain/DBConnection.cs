@@ -157,7 +157,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM [tblwinkel];";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -181,9 +181,152 @@ namespace DefaultDomain
 
             return winkels;
         }
+        public bool VerwijderWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"DELETE FROM tblwinkel WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
+        public List<Artikel> GetAllArtikels()
+        {
+            this.ResetErrorMessage();
+
+            List<Artikel> artikels = new List<Artikel>();
+            Artikel artikel = new Artikel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    artikel.productnr = reader.GetInt32(0);
+                    artikel.productnaam = reader.GetString(1);
+                    artikel.prijs = reader.GetDouble(2);
+                    artikel.stock = reader.GetInt32(3);
+                    artikel.winkelnr = reader.GetInt32(4);
+                    artikel.korting = reader.GetInt32(5);
+                    artikel.actief = reader.GetBoolean(6);
+
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return artikels;
+        }
+        public List<Bestelling> GetAllBestellingen()
+        {
+            this.ResetErrorMessage();
+
+            List<Bestelling> bestellingen = new List<Bestelling>();
+            Bestelling bestelling = new Bestelling();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs FROM tblbestlling;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    bestelling.bestelnr = reader.GetInt32(0);
+                    bestelling.datum = reader.GetDateTime(1);
+                    bestelling.gebruikersnaam = reader.GetString(2);
+                    bestelling.prijs = reader.GetDouble(3);
+
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return bestellingen;
+        }
+
+        public List<Rekening> GetallRekeningen()
+        {
+            this.ResetErrorMessage();
+
+            List<Rekening> rekeningen = new List<Rekening>();
+            Rekening rekening = new Rekening();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT gebruikersnaam, krediet FROM tblrekening;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    rekening.gebruikersnaam = reader.GetString(0);
+                    rekening.krediet = reader.GetInt32(1);
+
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return rekeningen;
+        }
         #endregion
 
         #region Add
+
         public bool AddVoorwerp(Voorwerp voorwerp)
         {
             this.ResetErrorMessage();
