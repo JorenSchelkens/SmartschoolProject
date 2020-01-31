@@ -71,6 +71,47 @@ namespace DefaultDomain
             return lokaal;
         }
 
+        public Winkel GetWinkel(int winkelnr)
+        {
+            this.ResetErrorMessage();
+
+            Winkel winkel= new Winkel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel WHERE winkelnr = {winkelnr};";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                
+                while (reader.Read())
+                {
+                   
+                    winkel.winkelnr= reader.GetInt32(0);
+                    winkel.naam= reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief = reader.GetBoolean(3);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return winkel;
+        }
+
         #endregion
 
         #region GetAll
@@ -93,7 +134,7 @@ namespace DefaultDomain
                 while (reader.Read())
                 {
                     tempVoorwerp.voorwerpNr = reader.GetInt32(0);
-                    tempVoorwerp.naamItem = reader.GetString(1);
+                    tempVoorwerp.voorwerpNaam = reader.GetString(1);
 
                     voorwerpen.Add(tempVoorwerp);
                     tempVoorwerp = new Voorwerp();
@@ -293,6 +334,7 @@ namespace DefaultDomain
 
             return rekeningen;
         }
+
         #endregion
 
         #region Add
