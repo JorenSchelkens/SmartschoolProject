@@ -521,7 +521,7 @@ namespace DefaultDomain
 
                 command.Parameters.AddWithValue("@naam", winkel.naam);
                 command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
-                command.Parameters.AddWithValue("@actief", winkel.actief);
+                command.Parameters.AddWithValue("@actief", (winkel.actief)? 1 : 0);
 
                 if (command.ExecuteNonQuery() > 0)
                 {
