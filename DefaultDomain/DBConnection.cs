@@ -71,6 +71,47 @@ namespace DefaultDomain
             return lokaal;
         }
 
+        public Winkel GetWinkel(int winkelnr)
+        {
+            this.ResetErrorMessage();
+
+            Winkel winkel= new Winkel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel WHERE winkelnr = {winkelnr};";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                
+                while (reader.Read())
+                {
+                   
+                    winkel.winkelnr= reader.GetInt32(0);
+                    winkel.naam= reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief = reader.GetBoolean(3);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return winkel;
+        }
+
         #endregion
 
         #region GetAll
@@ -326,6 +367,7 @@ namespace DefaultDomain
 
             return rekeningen;
         }
+
         #endregion
 
         #region Add
@@ -529,8 +571,105 @@ namespace DefaultDomain
 
             return succes;
         }
+        public bool AddBesteldeArtikels(BesteldArtikel besteldArtikel)
+        {
+            this.ResetErrorMessage();
 
+            bool succes = false;
 
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblbesteldeartikels(bestelnr, productnr, prijs) VALUES(@bestelnr, @productnr, @prijs);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", besteldArtikel.bestelnr);
+                command.Parameters.AddWithValue("@productnr", besteldArtikel.productnr);
+                command.Parameters.AddWithValue("@prijs", besteldArtikel.prijs);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddRekening(Rekening rekening)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblrekening(gebruikersnaam, krediet) VALUES(@gebruikersnaam, @krediet);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@gebruikersnaam", rekening.gebruikersnaam);
+                command.Parameters.AddWithValue("@krediet", rekening.krediet);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddTransacties(Transactie transactie)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tbktransacties(datum, bedrag, gebruikersnaam, beschrijving) VALUES(@datum, @bedrag, @gebruikersnaam, @beschrijving);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@datum", transactie.datum);
+                command.Parameters.AddWithValue("@bedrag", transactie.bedrag);
+                command.Parameters.AddWithValue("@gebruikersnaam", transactie.gebruikersnaam);
+                command.Parameters.AddWithValue("@beschrijving", transactie.beschrijving);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
         #endregion
 
         #region Delete

@@ -8,7 +8,7 @@ namespace WinkelDomain
         public DateTime datum;
         public double bedrag;
         public string gebruikersnaam;
-        public bool omschrijving;
+        public string beschrijving;
         public Transactie() { }
     }
 }

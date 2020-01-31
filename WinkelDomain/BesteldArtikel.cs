@@ -1,12 +1,10 @@
 ﻿using System;
 namespace WinkelDomain
 {
-    public class BesteldeProduct
+    public class BesteldArtikel
     {
         public int bestelnr;
         public int productnr;
         public int prijs;
-        public BesteldeProduct()
-        {}
     }
 }
