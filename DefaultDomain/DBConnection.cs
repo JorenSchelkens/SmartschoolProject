@@ -93,7 +93,7 @@ namespace DefaultDomain
                 while (reader.Read())
                 {
                     tempVoorwerp.voorwerpNr = reader.GetInt32(0);
-                    tempVoorwerp.naamItem = reader.GetString(1);
+                    tempVoorwerp.voorwerpNaam = reader.GetString(1);
 
                     voorwerpen.Add(tempVoorwerp);
                     tempVoorwerp = new Voorwerp();
