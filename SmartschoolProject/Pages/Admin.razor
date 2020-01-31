@@ -24,7 +24,7 @@
                             @winkel.actief
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatButton Type="submit" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Verwijder</MatButton>
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Verwijder</MatButton>
                         </div>
                     }
                 </div>
@@ -112,17 +112,6 @@
     </MatExpansionPanel>
 </MatAccordion>
 
-<MatDialog @bind-IsOpen="@comfirmatieVerwijderLokaal">
-    <MatDialogTitle>Bent u zeker?</MatDialogTitle>
-    <MatDialogContent>
-       
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton OnClick="@annuleerVerwijderLokaal">Annuleer</MatButton>
-        <MatButton OnClick="@verwijderLokaal">Verwijder</MatButton>
-    </MatDialogActions>
-</MatDialog>
-
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
@@ -194,7 +183,7 @@
 
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
     {
-
+        DBConnection.VerwijderWinkel(winkel);
     }
 
 }
