@@ -168,6 +168,9 @@ namespace DefaultDomain
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
+
+                    winkels.Add(winkel);
+                    winkel = new Winkel();
                 }
 
                 reader.Close();
