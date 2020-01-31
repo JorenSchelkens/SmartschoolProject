@@ -23,6 +23,9 @@
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
                             @winkel.actief
                         </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            <MatButton Type="submit" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Verwijder</MatButton>
+                        </div>
                     }
                 </div>
             </div>
@@ -176,6 +179,11 @@
     public void maakLokaalAan()
     {
         //TODO maak lokaal aan in databank
+    }
+
+    public void VerwijderWinkel(WinkelDomain.Winkel winkel)
+    {
+
     }
 
 }
