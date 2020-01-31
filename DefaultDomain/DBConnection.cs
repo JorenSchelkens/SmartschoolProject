@@ -6,7 +6,7 @@ namespace DefaultDomain
 {
     public class DBConnection
     {
-        private string ConnectionString { get; set; } = "Server=localhost;Port=3306;Database=smproject;Uid=root;Pwd=BAZandpoort1920;";
+        private string ConnectionString { get; set; } = "Server=localhost;Port=6000;Database=smproject;Uid=root;Pwd=BAZandpoort1920;";
         private MySqlConnection MySqlConnection { get; set; }
         public string ErrorMessage { get; set; } = "";
 
