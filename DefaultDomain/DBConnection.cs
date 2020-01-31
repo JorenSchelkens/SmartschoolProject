@@ -19,6 +19,8 @@ namespace DefaultDomain
         {
             this.ErrorMessage = "";
         }
+
+        #region Get
         public Lokaal GetLokaal(int lokaalnr)
         {
             //Reset error message zodat deze altijd van de opgeroepe methode is
@@ -68,6 +70,10 @@ namespace DefaultDomain
             //Return object
             return lokaal;
         }
+
+        #endregion
+
+        #region GetAll
         public List<Voorwerp> GetAllVoorwerpen()
         {
             this.ResetErrorMessage();
@@ -87,7 +93,7 @@ namespace DefaultDomain
                 while (reader.Read())
                 {
                     tempVoorwerp.voorwerpNr = reader.GetInt32(0);
-                    tempVoorwerp.naamItem = reader.GetString(1);
+                    tempVoorwerp.voorwerpNaam = reader.GetString(1);
 
                     voorwerpen.Add(tempVoorwerp);
                     tempVoorwerp = new Voorwerp();
@@ -204,6 +210,11 @@ namespace DefaultDomain
 
             return succes;
         }
+
+        #endregion
+
+        #region Add
+
         public bool AddVoorwerp(Voorwerp voorwerp)
         {
             this.ResetErrorMessage();
@@ -300,6 +311,116 @@ namespace DefaultDomain
 
             return succes;
         }
+        public bool AddArtikel(Artikel artikel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblartikel(productnaam, prijs, stock, winkelnr, korting, actief) VALUES(@productnaam, @prijs, @stock, @winkelnr, @korting, @actief);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
+                command.Parameters.AddWithValue("@prijs", artikel.prijs);
+                command.Parameters.AddWithValue("@stock", artikel.stock);
+                command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
+                command.Parameters.AddWithValue("@korting", artikel.korting);
+                command.Parameters.AddWithValue("@actief", artikel.actief);
+
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblwinkel(naam, beheerder, actief) VALUES(@naam, @beheerder, @actief);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@naam", winkel.naam);
+                command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
+                command.Parameters.AddWithValue("@actief", winkel.actief);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddBestelling(Bestelling bestelling)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblbestelling(datum, gebruikersnaam, prijs) VALUES(@datum, @gebruikersnaam, @prijs);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@datum", bestelling.datum);
+                command.Parameters.AddWithValue("@gebruikersnaam", bestelling.gebruikersnaam);
+                command.Parameters.AddWithValue("@prijs", bestelling.prijs);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+
+
+        #endregion
+
+        #region Delete
+        #endregion
+
 
 
     }

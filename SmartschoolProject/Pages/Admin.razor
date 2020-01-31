@@ -112,6 +112,17 @@
     </MatExpansionPanel>
 </MatAccordion>
 
+<MatDialog @bind-IsOpen="@comfirmatieVerwijderLokaal">
+    <MatDialogTitle>Bent u zeker?</MatDialogTitle>
+    <MatDialogContent>
+       
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@annuleerVerwijderLokaal">Annuleer</MatButton>
+        <MatButton OnClick="@verwijderLokaal">Verwijder</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
