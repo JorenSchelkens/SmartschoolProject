@@ -16,80 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `[tblrekening]`
---
-
-DROP TABLE IF EXISTS `[tblrekening]`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `[tblrekening]` (
-  `gebruikersnaam` varchar(45) NOT NULL,
-  `krediet` double NOT NULL,
-  PRIMARY KEY (`gebruikersnaam`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `[tblrekening]`
---
-
-LOCK TABLES `[tblrekening]` WRITE;
-/*!40000 ALTER TABLE `[tblrekening]` DISABLE KEYS */;
-/*!40000 ALTER TABLE `[tblrekening]` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `[tbltransacties]`
---
-
-DROP TABLE IF EXISTS `[tbltransacties]`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `[tbltransacties]` (
-  `transactienr` int NOT NULL AUTO_INCREMENT,
-  `datum` date NOT NULL,
-  `bedrag` double NOT NULL,
-  `gebruikersnaam` varchar(45) NOT NULL,
-  `omschrijving` varchar(150) NOT NULL,
-  PRIMARY KEY (`transactienr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `[tbltransacties]`
---
-
-LOCK TABLES `[tbltransacties]` WRITE;
-/*!40000 ALTER TABLE `[tbltransacties]` DISABLE KEYS */;
-/*!40000 ALTER TABLE `[tbltransacties]` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `[tblwinkel]`
---
-
-DROP TABLE IF EXISTS `[tblwinkel]`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `[tblwinkel]` (
-  `winkelnr` int NOT NULL AUTO_INCREMENT,
-  `naam` varchar(60) NOT NULL,
-  `beheerder` varchar(45) NOT NULL,
-  `actief` int NOT NULL,
-  PRIMARY KEY (`winkelnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `[tblwinkel]`
---
-
-LOCK TABLES `[tblwinkel]` WRITE;
-/*!40000 ALTER TABLE `[tblwinkel]` DISABLE KEYS */;
-/*!40000 ALTER TABLE `[tblwinkel]` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tblartikel`
 --
 
@@ -236,6 +162,80 @@ LOCK TABLES `tbllokaal` WRITE;
 INSERT INTO `tbllokaal` VALUES (211,'Dries'),(212,'Joren');
 /*!40000 ALTER TABLE `tbllokaal` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tblrekening`
+--
+
+DROP TABLE IF EXISTS `tblrekening`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tblrekening` (
+  `gebruikersnaam` varchar(45) NOT NULL,
+  `krediet` double NOT NULL,
+  PRIMARY KEY (`gebruikersnaam`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblrekening`
+--
+
+LOCK TABLES `tblrekening` WRITE;
+/*!40000 ALTER TABLE `tblrekening` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblrekening` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbltransacties`
+--
+
+DROP TABLE IF EXISTS `tbltransacties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbltransacties` (
+  `transactienr` int NOT NULL AUTO_INCREMENT,
+  `datum` datetime NOT NULL,
+  `bedrag` double NOT NULL,
+  `gebruikersnaam` varchar(45) NOT NULL,
+  `beschrijving` longtext NOT NULL,
+  PRIMARY KEY (`transactienr`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbltransacties`
+--
+
+LOCK TABLES `tbltransacties` WRITE;
+/*!40000 ALTER TABLE `tbltransacties` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbltransacties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblwinkel`
+--
+
+DROP TABLE IF EXISTS `tblwinkel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tblwinkel` (
+  `winkelnr` int NOT NULL AUTO_INCREMENT,
+  `naam` varchar(45) NOT NULL,
+  `beheerder` varchar(45) NOT NULL,
+  `actief` int NOT NULL,
+  PRIMARY KEY (`winkelnr`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblwinkel`
+--
+
+LOCK TABLES `tblwinkel` WRITE;
+/*!40000 ALTER TABLE `tblwinkel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblwinkel` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -246,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-29 20:40:31
+-- Dump completed on 2020-01-31 11:52:20

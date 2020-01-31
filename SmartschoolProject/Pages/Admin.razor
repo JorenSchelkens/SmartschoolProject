@@ -36,18 +36,146 @@
 
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk lokalen</MatExpansionPanelHeader>
+            <MatExpansionPanelSubHeader>
+                <MatButton Label="Voeg lokaal toe" OnClick="@maakLokaalAan" />
+            </MatExpansionPanelSubHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <MatAccordion Multi="true">
+                @foreach (Lokaal lokaal in lokalen)
+                {
+                    <MatExpansionPanel>
+                        <MatExpansionPanelSummary>
+                            <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+                        </MatExpansionPanelSummary>
+                        <MatExpansionPanelDetails>
+                            <MatList>
+                                <MatListItem>
+                                    Banken
+                                    <p style="text-align:right; width:100%; padding:0;"></p>
+                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
+                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalBanken</p>
+                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBankToe" />
+                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                </MatListItem>
+                                <MatListDivider></MatListDivider>
+                                <MatListItem>
+                                    Beamers
+                                    <p style="text-align:right; width:100%; padding:0;"></p>
+                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
+                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalBeamers</p>
+                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBeamerToe" />
+                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                </MatListItem>
+                                <MatListDivider></MatListDivider>
+                                <MatListItem>
+                                    Stoelen
+                                    <p style="text-align:right; width:100%; padding:0;"></p>
+                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
+                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalStoelen</p>
+                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegStoelToe" />
+                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                </MatListItem>
+                                <MatListDivider></MatListDivider>
+                                <MatListItem>
+                                    Computers
+                                    <p style="text-align:right; width:100%; padding:0;"></p>
+                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
+                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalComputers</p>
+                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegComputerToe" />
+                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                </MatListItem>
+                                <MatListDivider></MatListDivider>
+                                <MatListItem>
+                                    Schermen
+                                    <p style="text-align:right; width:100%; padding:0;"></p>
+                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
+                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalSchermen</p>
+                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegSchermToe" />
+                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                </MatListItem>
+                                <MatListItem>
+                                    <MatButton Label="Verwijder Lokaal" style="position: absolute; right: 0;" OnClick="@verwijderLokaalPopUp" />
+                                </MatListItem>
+                            </MatList>
+                        </MatExpansionPanelDetails>
+                    </MatExpansionPanel>
+                }
+            </MatAccordion>
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
 </MatAccordion>
 
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
-    public List<Lokaal> lokalen { get; set; } = new List<Lokaal>();
+    public Lokaal lokaal { get; set; } = new Lokaal();
+    public bool dialogIsOpen = false;
+    public bool comfirmatieVerwijderLokaal = false;
+    public int itemnummer = 0;
+
+    public Lokaal lokaal214 { get; set; }
+    public Lokaal lokaal215 { get; set; }
+    public Lokaal lokaal216 { get; set; }
+
     public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
+    public List<Lokaal> lokalen { get; set; }
+
+    public void annuleerVerwijderLokaal()
+    {
+        comfirmatieVerwijderLokaal = false;
+    }
+
+    public void verwijderLokaalPopUp()
+    {
+        comfirmatieVerwijderLokaal = true;
+    }
 
     protected override void OnInitialized()
     {
         lokalen = DBConnection.GetAllLokalen();
         winkels = DBConnection.GetAllWinkels();
+        //TODO pull uit databank
+        lokaal214 = new Lokaal();
+        lokaal214.lokaalNr = 214;
+
+        lokaal215 = new Lokaal();
+        lokaal215.lokaalNr = 215;
+
+        lokaal216 = new Lokaal();
+        lokaal216.lokaalNr = 216;
+
+        lokalen = new List<Lokaal>();
+        lokalen.Add(lokaal214);
+        lokalen.Add(lokaal215);
+        lokalen.Add(lokaal216);
+
+    }
+
+    public void voegToeAanDefect()
+    {
+        dialogIsOpen = true;
+    }
+
+    public void popupOnClick()
+    {
+        //TODO voeg defect toe
+    }
+
+    public void verwijderLokaal()
+    {
+        //TODO verwijder lokaal uit databank
+
+
+        comfirmatieVerwijderLokaal = false;
+    }
+
+    public void maakLokaalAan()
+    {
+        //TODO maak lokaal aan in databank
     }
 
 }
