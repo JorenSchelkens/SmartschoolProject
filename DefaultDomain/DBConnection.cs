@@ -15,12 +15,10 @@ namespace DefaultDomain
         {
             this.MySqlConnection = new MySqlConnection(this.ConnectionString);
         }
-
         private void ResetErrorMessage()
         {
             this.ErrorMessage = "";
         }
-
         public Lokaal GetLokaal(int lokaalnr)
         {
             //Reset error message zodat deze altijd van de opgeroepe methode is
@@ -70,7 +68,6 @@ namespace DefaultDomain
             //Return object
             return lokaal;
         }
-
         public List<Voorwerp> GetAllVoorwerpen()
         {
             this.ResetErrorMessage();
@@ -107,7 +104,6 @@ namespace DefaultDomain
 
             return voorwerpen;
         }
-
         public List<Lokaal> GetAllLokalen()
         {
             this.ResetErrorMessage();
@@ -144,40 +140,6 @@ namespace DefaultDomain
 
             return lokalen;
         }
-
-        public bool AddLokaal(Lokaal lokaal)
-        {
-            this.ResetErrorMessage();
-
-            bool succes = false;
-
-            try
-            {
-                this.MySqlConnection.Open();
-
-                string sql = $"INSERT INTO tbllokaal(lokaalnr, lokaalverantwoordelijke) VALUES(@lokaalnr, @lokaalverantwoordelijke);";
-
-                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
-
-                command.Parameters.AddWithValue("@lokaalnr", lokaal.lokaalNr);
-                command.Parameters.AddWithValue("@lokaalverantwoordelijke", lokaal.lokaalVerantwoordelijke);
-
-                if (command.ExecuteNonQuery() > 0)
-                {
-                    succes = true;
-                }
-            }
-            catch (MySqlException ex)
-            {
-                this.ErrorMessage = ex.ToString();
-                succes = false;
-            }
-
-            this.MySqlConnection.Close();
-
-            return succes;
-        }
-
         public List<Winkel> GetAllWinkels()
         {
             this.ResetErrorMessage();
@@ -213,5 +175,103 @@ namespace DefaultDomain
 
             return winkels;
         }
+        public bool AddVoorwerp(Voorwerp voorwerp)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblvoorwerp(voorwerpnaam) VALUES(@voorwerpNaam);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@voorwerpNaam", voorwerp.voorwerpNaam);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddLokaal(Lokaal lokaal)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tbllokaal(lokaalnr, lokaalverantwoordelijke) VALUES(@lokaalnr, @lokaalverantwoordelijke);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@lokaalnr", lokaal.lokaalNr);
+                command.Parameters.AddWithValue("@lokaalverantwoordelijke", lokaal.lokaalVerantwoordelijke);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+        public bool AddItemsInLokaal(ItemsInLokaal itemsInLokaal)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblitemsinlokalen(lokaalnr, voorwerpnr, aantal) VALUES(@lokaalnr, @voorwerpnr, @aantal);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@lokaalnr", itemsInLokaal.lokaalNr);
+                command.Parameters.AddWithValue("@voorwerpnr", itemsInLokaal.voorwerpNr);
+                command.Parameters.AddWithValue("@aantal", itemsInLokaal.aantal);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+
+
     }
 }
