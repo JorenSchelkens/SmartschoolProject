@@ -11,19 +11,19 @@
                 <div class="mat-layout-grid-inner">
                     @foreach (WinkelDomain.Winkel winkel in winkels)
                     {
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.winkelnr
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.naam
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.beheerder
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.actief
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
                             <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Verwijder</MatButton>
                         </div>
                     }
@@ -112,6 +112,11 @@
     </MatExpansionPanel>
 </MatAccordion>
 
+<MatButton Label="Voeg lokaal toe" OnClick="@maakWinkelTest" />
+
+
+@DBConnection.ErrorMessage
+
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
@@ -184,6 +189,17 @@
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
     {
         DBConnection.VerwijderWinkel(winkel);
+        this.StateHasChanged();
+    }
+
+    public void maakWinkelTest()
+    {
+        WinkelDomain.Winkel winkel = new WinkelDomain.Winkel();
+        winkel.actief = true;
+        winkel.beheerder = "LOL";
+        winkel.naam = "DIT IS EEN TEST";
+        DBConnection.AddWinkel(winkel);
+        winkels.Add(winkel);
     }
 
 }

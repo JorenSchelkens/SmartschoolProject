@@ -209,6 +209,9 @@ namespace DefaultDomain
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
+
+                    winkels.Add(winkel);
+                    winkel = new Winkel();
                 }
 
                 reader.Close();
@@ -518,7 +521,7 @@ namespace DefaultDomain
 
                 command.Parameters.AddWithValue("@naam", winkel.naam);
                 command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
-                command.Parameters.AddWithValue("@actief", winkel.actief);
+                command.Parameters.AddWithValue("@actief", (winkel.actief)? 1 : 0);
 
                 if (command.ExecuteNonQuery() > 0)
                 {

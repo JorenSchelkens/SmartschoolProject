@@ -3,12 +3,32 @@
 
 <MatH2>Mijn winkels</MatH2>
 
+@foreach (Winkel winkel in winkels)
+{
+    <div>
+        @winkel.naam
+        <br />
+        @winkel.beheerder
+    </div>
+}
+
 <br />
 <MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
 @code {
+
+    public DBConnection DBConnection = new DBConnection();
+    public List<Winkel> winkels = new List<Winkel>();
+
+    protected override void OnInitialized()
+    {
+        winkels = DBConnection.GetAllWinkels();
+    }
 
     public void GaNaarWinkelToevoegen()
     {
         navigationManager.NavigateTo("/winkeltoevoegen");
     }
+
+
+
 }
