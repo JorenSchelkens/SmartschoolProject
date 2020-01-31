@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using InventarisDomain;
+using WinkelDomain;
 
 namespace DefaultDomain
 {
@@ -138,6 +139,42 @@ namespace DefaultDomain
             this.MySqlConnection.Close();
 
             return succes;
+        }
+
+        public List<Winkel> GetAllWinkels()
+        {
+            this.ResetErrorMessage();
+
+            List<Winkel> winkels = new List<Winkel>();
+            Winkel winkel = new Winkel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM [tblwinkel];";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    winkel.winkelnr = reader.GetInt32(0);
+                    winkel.naam = reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief= (reader.GetInt32(3) == 1) ? true : false;
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return winkels;
         }
     }
 }

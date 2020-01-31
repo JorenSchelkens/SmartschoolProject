@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InventarisDomain\InventarisDomain.csproj" />
-    <ProjectReference Include="..\Winkel\WinkelDomain.csproj" />
+    <ProjectReference Include="..\WinkelDomain\WinkelDomain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

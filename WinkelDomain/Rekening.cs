@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Winkel
+namespace WinkelDomain
 {
     public class Rekening
     {

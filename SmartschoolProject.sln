@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartschoolProject", "Smart
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankDomain", "Bank\BankDomain.csproj", "{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinkelDomain", "Winkel\WinkelDomain.csproj", "{13A49E00-4193-45AA-928F-3193CE9CF122}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarisDomain", "InventarisDomain\InventarisDomain.csproj", "{74A44BDF-237A-47BB-A131-FF382379C792}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultDomain", "DefaultDomain\DefaultDomain.csproj", "{59012007-BBD4-4794-9DF1-8FE1D91E2F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultDomainTests", "DefaultDomainTests\DefaultDomainTests.csproj", "{FD48184B-C4CC-48F7-B31D-37FB6329864E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultDomainTests", "DefaultDomainTests\DefaultDomainTests.csproj", "{FD48184B-C4CC-48F7-B31D-37FB6329864E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinkelDomain", "WinkelDomain\WinkelDomain.csproj", "{14511C20-47C0-4661-BE92-F74E1B69E650}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13A49E00-4193-45AA-928F-3193CE9CF122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13A49E00-4193-45AA-928F-3193CE9CF122}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13A49E00-4193-45AA-928F-3193CE9CF122}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13A49E00-4193-45AA-928F-3193CE9CF122}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{FD48184B-C4CC-48F7-B31D-37FB6329864E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD48184B-C4CC-48F7-B31D-37FB6329864E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD48184B-C4CC-48F7-B31D-37FB6329864E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14511C20-47C0-4661-BE92-F74E1B69E650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14511C20-47C0-4661-BE92-F74E1B69E650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14511C20-47C0-4661-BE92-F74E1B69E650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14511C20-47C0-4661-BE92-F74E1B69E650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

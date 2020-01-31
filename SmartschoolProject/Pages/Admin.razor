@@ -9,23 +9,21 @@
         <MatExpansionPanelDetails>
             <div class="mat-layout-grid">
                 <div class="mat-layout-grid-inner">
-                    
-                    @*@foreach (DefaultClasses.Gebruiker gebruiker in gebruikers) {
+                    @foreach (WinkelDomain.Winkel winkel in winkels)
+                    {
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatTextField Label="Naam" ReadOnly="true" Value="@gebruiker.Naam"></MatTextField>
+                            @winkel.winkelnr
                         </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                        <MatTextField Label="Gebruikersnaam" ReadOnly="true" Value="@gebruiker.Gebruikersnaam"></MatTextField>
-                    </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                        <MatTextField Style="min-width: 300px;" Label="Email" ReadOnly="true" Value="@gebruiker.Email"></MatTextField>
-                    </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                        <MatButton Type="submit" OnClick="@(() => Verwijder(gebruiker))" Raised="true">Verwijder</MatButton>
-                    </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
-                    }*@
-
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            @winkel.naam
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            @winkel.beheerder
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            @winkel.actief
+                        </div>
+                    }
                 </div>
             </div>
         </MatExpansionPanelDetails>
@@ -35,25 +33,21 @@
             <MatExpansionPanelHeader>Bekijk alle winkelverzoeken</MatExpansionPanelHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
-            
+
         </MatExpansionPanelDetails>
-</MatExpansionPanel>
+    </MatExpansionPanel>
 </MatAccordion>
-
-<MatButton OnClick="maak">Maak</MatButton>
-
-<p>@DBConnection.ErrorMessage</p>
 
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
-    public Lokaal lokaal { get; set; } = new Lokaal();
+    public List<Lokaal> lokalen { get; set; } = new List<Lokaal>();
+    public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
 
-    public void maak()
+    protected override void OnInitialized()
     {
-        lokaal = DBConnection.GetLokaal(211);
-
-        this.StateHasChanged();
+        lokalen = DBConnection.GetAllLokalen();
+        winkels = DBConnection.GetAllWinkels();
     }
 
 }
