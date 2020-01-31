@@ -1,4 +1,4 @@
-﻿namespace Winkel
+﻿namespace WinkelDomain
 {
     public class Winkel
     {

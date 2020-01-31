@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Bank\BankDomain.csproj" />
     <ProjectReference Include="..\DefaultDomain\DefaultDomain.csproj" />
     <ProjectReference Include="..\InventarisDomain\InventarisDomain.csproj" />
-    <ProjectReference Include="..\Winkel\WinkelDomain.csproj" />
+    <ProjectReference Include="..\WinkelDomain\WinkelDomain.csproj" />
   </ItemGroup>
 
 </Project>

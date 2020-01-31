@@ -9,23 +9,21 @@
         <MatExpansionPanelDetails>
             <div class="mat-layout-grid">
                 <div class="mat-layout-grid-inner">
-                    
-                    @*@foreach (DefaultClasses.Gebruiker gebruiker in gebruikers) {
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                                <MatTextField Label="Naam" ReadOnly="true" Value="@gebruiker.Naam"></MatTextField>
-                            </div>
+                    @foreach (WinkelDomain.Winkel winkel in winkels)
+                    {
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatTextField Label="Gebruikersnaam" ReadOnly="true" Value="@gebruiker.Gebruikersnaam"></MatTextField>
+                            @winkel.winkelnr
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatTextField Style="min-width: 300px;" Label="Email" ReadOnly="true" Value="@gebruiker.Email"></MatTextField>
+                            @winkel.naam
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatButton Type="submit" OnClick="@(() => Verwijder(gebruiker))" Raised="true">Verwijder</MatButton>
+                            @winkel.beheerder
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
-                        }*@
-
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            @winkel.actief
+                        </div>
+                    }
                 </div>
             </div>
         </MatExpansionPanelDetails>
@@ -111,36 +109,6 @@
     </MatExpansionPanel>
 </MatAccordion>
 
-<MatButton OnClick="maak">Maak</MatButton>
-
-<MatDialog @bind-IsOpen="@comfirmatieVerwijderLokaal">
-    <MatDialogTitle>Bent u zeker?</MatDialogTitle>
-    <MatDialogContent>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton OnClick="@verwijderLokaal">Verwijder</MatButton>
-        <MatButton OnClick="@annuleerVerwijderLokaal">Annuleer</MatButton>
-    </MatDialogActions>
-</MatDialog>
-
-
-<MatDialog @bind-IsOpen="@dialogIsOpen">
-    <MatDialogTitle>Nummer</MatDialogTitle>
-    <MatDialogContent>
-        <p>Geef de nummer van het item</p>
-        <MatNumericUpDownField Label="Nummer Item:"
-                               @bind-Value=@itemnummer
-                               DecimalPlaces=0
-                               Minimum=0 Maximum=10>
-        </MatNumericUpDownField>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton OnClick="@popupOnClick">Voeg toe</MatButton>
-    </MatDialogActions>
-</MatDialog>
-
-<p>@DBConnection.ErrorMessage</p>
-
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
@@ -153,6 +121,7 @@
     public Lokaal lokaal215 { get; set; }
     public Lokaal lokaal216 { get; set; }
 
+    public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
     public List<Lokaal> lokalen { get; set; }
 
     public void annuleerVerwijderLokaal()
@@ -165,15 +134,10 @@
         comfirmatieVerwijderLokaal = true;
     }
 
-    public void maak()
-    {
-        lokaal = DBConnection.GetLokaal(211);
-
-        this.StateHasChanged();
-    }
-
     protected override void OnInitialized()
     {
+        lokalen = DBConnection.GetAllLokalen();
+        winkels = DBConnection.GetAllWinkels();
         //TODO pull uit databank
         lokaal214 = new Lokaal();
         lokaal214.lokaalNr = 214;
