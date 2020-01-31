@@ -19,6 +19,8 @@ namespace DefaultDomain
         {
             this.ErrorMessage = "";
         }
+
+        #region Get
         public Lokaal GetLokaal(int lokaalnr)
         {
             //Reset error message zodat deze altijd van de opgeroepe methode is
@@ -68,6 +70,10 @@ namespace DefaultDomain
             //Return object
             return lokaal;
         }
+
+        #endregion
+
+        #region GetAll
         public List<Voorwerp> GetAllVoorwerpen()
         {
             this.ResetErrorMessage();
@@ -175,6 +181,9 @@ namespace DefaultDomain
 
             return winkels;
         }
+        #endregion
+
+        #region Add
         public bool AddVoorwerp(Voorwerp voorwerp)
         {
             this.ResetErrorMessage();
@@ -271,6 +280,11 @@ namespace DefaultDomain
 
             return succes;
         }
+        #endregion
+
+        #region Delete
+        #endregion
+
 
 
     }
