@@ -1,4 +1,5 @@
 ﻿@page "/inventaris"
+@inject IMatToaster Toaster
 
     <MatAccordion Multi="true">
         @foreach (Lokaal lokaal in lokalen)
@@ -112,7 +113,8 @@
 
     public void popupOnClick()
     {
-
+        //TODO toevoegen aan defecten
+        Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
     }
 
 }
