@@ -70,6 +70,43 @@ namespace DefaultDomain
             return lokaal;
         }
 
+        public List<Voorwerp> GetAllVoorwerpen()
+        {
+            this.ResetErrorMessage();
+
+            List<Voorwerp> voorwerpen = new List<Voorwerp>();
+            Voorwerp tempVoorwerp = new Voorwerp();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT voorwerpnr, item FROM tblvoorwerp;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    tempVoorwerp.voorwerpNr = reader.GetInt32(0);
+                    tempVoorwerp.naamItem = reader.GetString(1);
+
+                    voorwerpen.Add(tempVoorwerp);
+                    tempVoorwerp = new Voorwerp();
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return voorwerpen;
+        }
+
         public List<Lokaal> GetAllLokalen()
         {
             this.ResetErrorMessage();
@@ -140,5 +177,6 @@ namespace DefaultDomain
             return succes;
         }
 
-    }
+
+     }
 }
