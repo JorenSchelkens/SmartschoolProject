@@ -22,14 +22,14 @@
         </div>
     </div>
 
-<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->
+@*<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->*@
     <MatDialog @bind-IsOpen="@dialogIsOpen">
         <MatDialogTitle>Voeg winkel toe</MatDialogTitle>
         <MatDialogContent>
             <p>Geef een naam en een beheerder</p>
             <MatTextField @bind-Value="@naamWinkel" Label="naam winkel"></MatTextField>
             <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
+                @*<--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->*@
                 <MatOptionString Value="saab">Saab</MatOptionString>
                 <MatOptionString Value="mercedes">Mercedes</MatOptionString>
                 <MatOptionString Value="audi">Audi</MatOptionString>
@@ -39,33 +39,7 @@
             <MatButton OnClick="@accepteerDialog">OK</MatButton>
         </MatDialogActions>
     </MatDialog>
-    
-    <MatDialog @bind-IsOpen="@dialogIsOpenWNaam">
-        <MatDialogTitle>Whoops..</MatDialogTitle>
-        <MatDialogContent>
-            <p>Je hebt geen winkelnaam opgegeven</p>
-            <MatTextField @bind-Value="@naamWinkel" Label="naam winkel"></MatTextField>
-        </MatDialogContent>
-        <MatDialogActions>
-            <MatButton OnClick="@accepteerDialogWNaam">OK</MatButton>
-        </MatDialogActions>
-    </MatDialog>
 
-    <MatDialog @bind-IsOpen="@dialogIsOpenBeheerder">
-        <MatDialogTitle>Whoops..</MatDialogTitle>
-        <MatDialogContent>
-            <p>Je hebt geen beheerder opgegeven</p>
-            <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
-                <MatOptionString Value="saab">Saab</MatOptionString>
-                <MatOptionString Value="mercedes">Mercedes</MatOptionString>
-                <MatOptionString Value="audi">Audi</MatOptionString>
-            </MatSelect>
-        </MatDialogContent>
-        <MatDialogActions>
-            <MatButton OnClick="@accepteerDialogBeheerder">OK</MatButton>
-        </MatDialogActions>
-    </MatDialog>
 
 @code {
 
