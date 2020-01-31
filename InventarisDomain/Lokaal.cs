@@ -1,4 +1,6 @@
-﻿namespace InventarisDomain
+﻿using System.Collections.Generic;
+
+namespace InventarisDomain
 {
     public class Lokaal
     {
@@ -9,6 +11,7 @@
         public int aantalStoelen { get; set; } = 0;
         public int aantalComputers { get; set; } = 0;
         public int aantalSchermen { get; set; } = 0;
+
 
         public void voegBankToe()
         {
