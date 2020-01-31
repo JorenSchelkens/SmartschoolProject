@@ -157,7 +157,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM [tblwinkel];";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -181,7 +181,38 @@ namespace DefaultDomain
 
             return winkels;
         }
+        public bool VerwijderWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
 
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"DELETE FROM tblwinkel WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
         public List<Artikel> GetAllArtikels()
         {
             this.ResetErrorMessage();
@@ -221,13 +252,12 @@ namespace DefaultDomain
 
             return artikels;
         }
-
         public List<Bestelling> GetAllBestellingen()
         {
             this.ResetErrorMessage();
 
             List<Bestelling> bestellingen = new List<Bestelling>();
-            Bestelling bestelling= new Bestelling();
+            Bestelling bestelling = new Bestelling();
 
             try
             {
@@ -244,7 +274,7 @@ namespace DefaultDomain
                     bestelling.datum = reader.GetDateTime(1);
                     bestelling.gebruikersnaam = reader.GetString(2);
                     bestelling.prijs = reader.GetDouble(3);
-                   
+
                 }
 
                 reader.Close();
@@ -264,7 +294,7 @@ namespace DefaultDomain
             this.ResetErrorMessage();
 
             List<Rekening> rekeningen = new List<Rekening>();
-            Rekening rekening= new Rekening();
+            Rekening rekening = new Rekening();
 
             try
             {
@@ -277,8 +307,8 @@ namespace DefaultDomain
 
                 while (reader.Read())
                 {
-                    rekening.gebruikersnaam= reader.GetString(0);
-                    rekening.krediet= reader.GetInt32(1);
+                    rekening.gebruikersnaam = reader.GetString(0);
+                    rekening.krediet = reader.GetInt32(1);
 
                 }
 
@@ -296,6 +326,7 @@ namespace DefaultDomain
         #endregion
 
         #region Add
+
         public bool AddVoorwerp(Voorwerp voorwerp)
         {
             this.ResetErrorMessage();
@@ -495,8 +526,6 @@ namespace DefaultDomain
 
             return succes;
         }
-
-
 
 
         #endregion
