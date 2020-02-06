@@ -75,7 +75,7 @@ namespace DefaultDomain
         {
             this.ResetErrorMessage();
 
-            Winkel winkel= new Winkel();
+            Winkel winkel = new Winkel();
 
             try
             {
@@ -86,12 +86,12 @@ namespace DefaultDomain
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
 
-                
+
                 while (reader.Read())
                 {
-                   
-                    winkel.winkelnr= reader.GetInt32(0);
-                    winkel.naam= reader.GetString(1);
+
+                    winkel.winkelnr = reader.GetInt32(0);
+                    winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = reader.GetBoolean(3);
                 }
@@ -225,38 +225,6 @@ namespace DefaultDomain
 
             return winkels;
         }
-        public bool VerwijderWinkel(Winkel winkel)
-        {
-            this.ResetErrorMessage();
-
-            bool succes = false;
-
-            try
-            {
-                this.MySqlConnection.Open();
-
-                string sql = $"DELETE FROM tblwinkel WHERE winkelnr = {winkel.winkelnr}";
-
-                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
-
-                if (command.ExecuteNonQuery() > 0)
-                {
-                    succes = true;
-                }
-
-            }
-            catch (MySqlException ex)
-            {
-                this.ErrorMessage = ex.ToString();
-
-                succes = false;
-            }
-
-            this.MySqlConnection.Close();
-
-            return succes;
-
-        }
         public List<Artikel> GetAllArtikels()
         {
             this.ResetErrorMessage();
@@ -332,8 +300,7 @@ namespace DefaultDomain
 
             return bestellingen;
         }
-
-        public List<Rekening> GetallRekeningen()
+        public List<Rekening> GetAllRekeningen()
         {
             this.ResetErrorMessage();
 
@@ -367,10 +334,46 @@ namespace DefaultDomain
 
             return rekeningen;
         }
+        public List<Transactie> GetAllTransacties()
+        {
+            this.ResetErrorMessage();
+
+            List<Transactie> transacties= new List<Transactie>();
+            Transactie transactie = new Transactie();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT transactienr, datum, bedrag, gebruikersnaam, beschrijving FROM tbltransacties;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    transactie.transactienr = reader.GetInt32(0);
+                    transactie.datum = reader.GetDateTime(1);
+                    transactie.bedrag = reader.GetDouble(2);
+                    transactie.gebruikersnaam = reader.GetString(3);
+                    transactie.beschrijving = reader.GetString(4);
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return transacties;
+        }
 
         #endregion
 
-        #region Add
+        #region Add KLAAR
 
         public bool AddVoorwerp(Voorwerp voorwerp)
         {
@@ -521,7 +524,7 @@ namespace DefaultDomain
 
                 command.Parameters.AddWithValue("@naam", winkel.naam);
                 command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
-                command.Parameters.AddWithValue("@actief", (winkel.actief)? 1 : 0);
+                command.Parameters.AddWithValue("@actief", (winkel.actief) ? 1 : 0);
 
                 if (command.ExecuteNonQuery() > 0)
                 {
@@ -672,7 +675,89 @@ namespace DefaultDomain
         }
         #endregion
 
-        #region Delete
+        #region Active/Non Active KLAAR
+        public bool VeranderStatusArtikel(Artikel artikel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblartikels SET actief = @actief WHERE productnr = {artikel.productnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (artikel.actief)
+                {
+                    command.Parameters.AddWithValue("@actief", 0);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@actief", 1);
+                }
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
+        public bool VeranderStatusWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblwinkel SET actief = @actief WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (winkel.actief)
+                {
+                    command.Parameters.AddWithValue("@actief", 0);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@actief", 1);
+                }
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
+        #endregion
+
+        #region GetAll DATA
+
         #endregion
 
 
