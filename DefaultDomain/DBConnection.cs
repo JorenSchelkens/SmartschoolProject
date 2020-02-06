@@ -338,7 +338,7 @@ namespace DefaultDomain
         {
             this.ResetErrorMessage();
 
-            List<Transactie> transacties= new List<Transactie>();
+            List<Transactie> transacties = new List<Transactie>();
             Transactie transactie = new Transactie();
 
             try
@@ -757,6 +757,130 @@ namespace DefaultDomain
         #endregion
 
         #region GetAll DATA
+
+        public Lokaal GetAllDataLokaal(int lokaalnr)
+        {
+            this.ResetErrorMessage();
+
+            Lokaal lokaal = new Lokaal();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT lokaalnr, lokaalverantwoordelijke FROM tbllokaal WHERE lokaalnr = {lokaalnr};";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    lokaal.lokaalNr = reader.GetInt32(0);
+                    lokaal.lokaalVerantwoordelijke = reader.GetString(1);
+                }
+
+                lokaal = GetAllItemsInLokaal(lokaal);
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return lokaal;
+        }
+
+        private Lokaal GetAllItemsInLokaal(Lokaal lokaal)
+        {
+            this.ResetErrorMessage();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int temp = reader.GetInt32(1);
+                    string naam = GetVoorwerpNaam(temp).ToLower();
+
+                    switch (naam)
+                    {
+                        case "stoel":
+                            lokaal.aantalStoelen = reader.GetInt32(2);
+                            break;
+
+                        case "bank":
+                            lokaal.aantalBanken = reader.GetInt32(2);
+                            break;
+
+                        case "beamers":
+                            lokaal.aantalBeamers = reader.GetInt32(2);
+                            break;
+
+                        case "computers":
+                            lokaal.aantalComputers= reader.GetInt32(2);
+                            break;
+
+                        case "schermen":
+                            lokaal.aantalStoelen = reader.GetInt32(2);
+                            break;
+                    }
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return lokaal;
+        }
+
+        private string GetVoorwerpNaam(int nr)
+        {
+            this.ResetErrorMessage();
+
+            string itemnaam = "";
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    itemnaam = reader.GetString(1);
+
+                }
+
+                reader.Close();
+
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return itemnaam;
+        }
 
         #endregion
 
