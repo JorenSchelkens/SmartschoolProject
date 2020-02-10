@@ -1,16 +1,35 @@
 ﻿@inherits LayoutComponentBase
+<MatThemeProvider Theme="@theme2">
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4">
-        <a href="inloggen">Inloggen</a>
+    <div class="sidebar">
+        <NavMenu />
     </div>
 
-    <div class="content px-4">
-        <MatToastContainer />
-        @Body
+    <div class="main">
+        <div class="top-row px-4">
+            <a href="inloggen">Inloggen</a>
+        </div>
+
+        <div class="content px-4">
+            <MatToastContainer />
+            @Body
+        </div>
     </div>
-</div>
+    <style>
+        body {
+            background-image: url(spikes.png);
+        }
+    </style>
+</MatThemeProvider>
+
+@code {
+
+    MatTheme theme2 = new MatTheme()
+            {
+                Primary = MatThemeColors.Blue._500.Value,
+                Secondary = MatThemeColors.Blue._500.Value
+
+            };
+ 
+
+}
