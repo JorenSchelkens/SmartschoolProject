@@ -84,13 +84,16 @@
     public Lokaal lokaal214 { get; set; }
     public Lokaal lokaal215 { get; set; }
     public Lokaal lokaal216 { get; set; }
+    public DBConnection DBConnection { get; set; } = new DBConnection();
 
-    public List<Lokaal> lokalen { get; set; }
+    public List<Lokaal> lokalen = new List<Lokaal>();
 
     protected override void OnInitialized()
     {
+        lokalen = DBConnection.GetAllLokalen();
+
         //TODO pull uit databank
-        lokaal214 = new Lokaal();
+        /*lokaal214 = new Lokaal();
         lokaal214.lokaalNr = 214;
 
         lokaal215 = new Lokaal();
@@ -102,7 +105,7 @@
         lokalen = new List<Lokaal>();
         lokalen.Add(lokaal214);
         lokalen.Add(lokaal215);
-        lokalen.Add(lokaal216);
+        lokalen.Add(lokaal216);*/
 
     }
 
