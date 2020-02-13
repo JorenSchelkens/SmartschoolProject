@@ -1,0 +1,21 @@
+﻿@page "/temp"
+
+    <p>@test</p>
+
+@code{
+
+    private DBConnectionMongoDB DBConnectionMongoDB { get; set; }
+
+    public Lokaal Lokaal { get; set; }
+    public bool test;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.DBConnectionMongoDB = new DBConnectionMongoDB();
+
+        List<Lokaal> lokalen = await this.DBConnectionMongoDB.GetAllLokalen();
+
+        this.test = false;
+    }
+
+}
