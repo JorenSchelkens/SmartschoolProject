@@ -245,7 +245,7 @@ namespace DefaultDomain
                 {
                     artikel.productnr = reader.GetInt32(0);
                     artikel.productnaam = reader.GetString(1);
-                    artikel.prijs = reader.GetDouble(2);
+                    artikel.standaardPrijs = reader.GetDouble(2);
                     artikel.stock = reader.GetInt32(3);
                     artikel.winkelnr = reader.GetInt32(4);
                     artikel.korting = reader.GetInt32(5);
@@ -486,7 +486,7 @@ namespace DefaultDomain
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
-                command.Parameters.AddWithValue("@prijs", artikel.prijs);
+                command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
                 command.Parameters.AddWithValue("@stock", artikel.stock);
                 command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
                 command.Parameters.AddWithValue("@korting", artikel.korting);

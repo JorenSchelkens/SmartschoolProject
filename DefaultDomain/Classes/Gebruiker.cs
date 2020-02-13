@@ -11,5 +11,7 @@
         public string Initialen { get; set; }
         public string Roepnaam { get; set; }
         public string Geslacht { get; set; }
+
+        //Transactie
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace WinkelDomain
+﻿using System.Collections.Generic;
+
+namespace WinkelDomain
 {
     public class Winkel
     {
@@ -6,11 +8,13 @@
         public string naam;
         public string beheerder;
         public bool actief;
-        public Winkel() { }
-        public void veranderBeheerder(string beheerder)
+        public List<Artikel> artikels;
+
+        public Winkel()
         {
-            this.beheerder = beheerder;
+            artikels = new List<Artikel>();
         }
+
         public void veranderActief()
         {
             this.actief = !actief;
