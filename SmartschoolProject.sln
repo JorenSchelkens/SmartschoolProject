@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartschoolProject", "SmartschoolProject\SmartschoolProject.csproj", "{EE97975C-C8FF-41EA-AF9D-A3E4D39E261F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankDomain", "Bank\BankDomain.csproj", "{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarisDomain", "InventarisDomain\InventarisDomain.csproj", "{74A44BDF-237A-47BB-A131-FF382379C792}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultDomain", "DefaultDomain\DefaultDomain.csproj", "{59012007-BBD4-4794-9DF1-8FE1D91E2F5E}"
@@ -14,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultDomainTests", "DefaultDomainTests\DefaultDomainTests.csproj", "{FD48184B-C4CC-48F7-B31D-37FB6329864E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinkelDomain", "WinkelDomain\WinkelDomain.csproj", "{14511C20-47C0-4661-BE92-F74E1B69E650}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarisDomainTests", "InventarisDomainTests\InventarisDomainTests.csproj", "{A7B126C9-F105-4930-B628-0C2C6DACD42E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionDomain", "TransactionDomain\TransactionDomain.csproj", "{ABF95285-7C9D-4EF0-A5B8-8CFB9C24AA95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +27,6 @@ Global
 		{EE97975C-C8FF-41EA-AF9D-A3E4D39E261F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE97975C-C8FF-41EA-AF9D-A3E4D39E261F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE97975C-C8FF-41EA-AF9D-A3E4D39E261F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C81AED4F-A153-42D0-9C7C-F6DE94EC3BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A44BDF-237A-47BB-A131-FF382379C792}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +43,14 @@ Global
 		{14511C20-47C0-4661-BE92-F74E1B69E650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14511C20-47C0-4661-BE92-F74E1B69E650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14511C20-47C0-4661-BE92-F74E1B69E650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7B126C9-F105-4930-B628-0C2C6DACD42E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B126C9-F105-4930-B628-0C2C6DACD42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B126C9-F105-4930-B628-0C2C6DACD42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B126C9-F105-4930-B628-0C2C6DACD42E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF95285-7C9D-4EF0-A5B8-8CFB9C24AA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF95285-7C9D-4EF0-A5B8-8CFB9C24AA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF95285-7C9D-4EF0-A5B8-8CFB9C24AA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF95285-7C9D-4EF0-A5B8-8CFB9C24AA95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
