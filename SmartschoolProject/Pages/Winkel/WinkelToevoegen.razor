@@ -1,43 +1,43 @@
 ﻿@page "/winkeltoevoegen"
 
-    <h1>Winkel Toevoegen</h1>
+<h1>Winkel Toevoegen</h1>
 
-    <div class="mat-layout-grid mat-layout-grid-align-left" style="max-width: 800px;">
-        <div class="mat-layout-grid-inner">
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                <MatTextField @bind-Value="naamWinkel" Label="Naam winkel" Style="width:100%"></MatTextField>
-            </div>
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                    <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
-                    <MatOptionString Value="saab">Saab</MatOptionString>
-                    <MatOptionString Value="mercedes">Mercedes</MatOptionString>
-                    <MatOptionString Value="audi">Audi</MatOptionString>
-                </MatSelect>
-            </div>
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                <MatButton Outlined="true" Icon="add" Color="@MatRippleColor.Primary" Style="width:99%" OnClick="@voegWinkelToe">Voeg winkel toe</MatButton>
-            </div>
+<div class="mat-layout-grid mat-layout-grid-align-left" style="max-width: 800px;">
+    <div class="mat-layout-grid-inner">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+            <MatTextField @bind-Value="naamWinkel" Label="Naam winkel" Style="width:100%"></MatTextField>
         </div>
-    </div>
-
-@*<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->*@
-    <MatDialog @bind-IsOpen="@dialogIsOpen">
-        <MatDialogTitle>Voeg winkel toe</MatDialogTitle>
-        <MatDialogContent>
-            <p>Geef een naam en een beheerder</p>
-            <MatTextField @bind-Value="@naamWinkel" Label="naam winkel"></MatTextField>
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
             <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                @*<--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->*@
+                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
                 <MatOptionString Value="saab">Saab</MatOptionString>
                 <MatOptionString Value="mercedes">Mercedes</MatOptionString>
                 <MatOptionString Value="audi">Audi</MatOptionString>
             </MatSelect>
-        </MatDialogContent>
-        <MatDialogActions>
-            <MatButton OnClick="@accepteerDialog">OK</MatButton>
-        </MatDialogActions>
-    </MatDialog>
+        </div>
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+            <MatButton Outlined="true" Icon="add" Color="@MatRippleColor.Primary" Style="width:99%" OnClick="@voegWinkelToe">Voeg winkel toe</MatButton>
+        </div>
+    </div>
+</div>
+
+@*<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->*@
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <MatDialogTitle>Voeg winkel toe</MatDialogTitle>
+    <MatDialogContent>
+        <p>Geef een naam en een beheerder</p>
+        <MatTextField @bind-Value="naamWinkel" Label="naam winkel"></MatTextField>
+        <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
+            @*<--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->*@
+            <MatOptionString Value="saab">Saab</MatOptionString>
+            <MatOptionString Value="mercedes">Mercedes</MatOptionString>
+            <MatOptionString Value="audi">Audi</MatOptionString>
+        </MatSelect>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@accepteerDialog">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
 
 
 @code {
@@ -48,6 +48,9 @@
     bool dialogIsOpenBeheerder = false;
     bool dialogIsOpen = false;
 
+    DBConnection dBConnection = new DBConnection();
+
+
     public void voegWinkelToe()
     {
         if (naamWinkel == "" && beheerder == "")
@@ -56,33 +59,49 @@
             dialogIsOpen = true;
 
         }
-        else {
+        else
+        {
 
-            if (naamWinkel == "") {
+            if (naamWinkel == "")
+            {
 
                 dialogIsOpenWNaam = true;
             }
-            else if (beheerder == "") {
+            else if (beheerder == "")
+            {
 
                 dialogIsOpenBeheerder = true;
+            }
+            else
+            {
+                Winkel winkel = new Winkel();
+
+                winkel.naam = naamWinkel;
+                winkel.beheerder = beheerder;
+
+                dBConnection.AddWinkel(winkel);
             }
 
         }
 
 
         //TODO implement db
+
     }
 
 
-    public void accepteerDialogBeheerder() {
+    public void accepteerDialogBeheerder()
+    {
 
         dialogIsOpenBeheerder = false;
     }
-    public void accepteerDialogWNaam() {
+    public void accepteerDialogWNaam()
+    {
 
         dialogIsOpenWNaam = false;
     }
-    public void accepteerDialog() {
+    public void accepteerDialog()
+    {
 
         dialogIsOpen = false;
     }
