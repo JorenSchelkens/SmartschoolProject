@@ -47,7 +47,7 @@
             </MatExpansionPanelSubHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
-            <MatAccordion Multi="true">
+            @*<MatAccordion Multi="true">
                 @foreach (Lokaal lokaal in lokalen)
                 {
                     <MatExpansionPanel>
@@ -107,10 +107,22 @@
                         </MatExpansionPanelDetails>
                     </MatExpansionPanel>
                 }
-            </MatAccordion>
+            </MatAccordion>*@
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
 </MatAccordion>
+
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <MatDialogTitle>Nummer</MatDialogTitle>
+    <MatDialogContent>
+        <p>Geef de nummer van het item</p>
+        <MatTextField Label="Lokaalnummer:" @bind-Value="lokaalNummer"></MatTextField>
+        <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@maakLokaalAan">Voeg toe</MatButton>
+    </MatDialogActions>
+</MatDialog>
 
 <MatButton Label="Voeg lokaal toe" OnClick="@maakWinkelTest" />
 
@@ -120,14 +132,12 @@
 @code {
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
-    public Lokaal lokaal { get; set; } = new Lokaal();
+    public DBConnectionMongoDB BConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
 
     public bool dialogIsOpen = false;
     public bool comfirmatieVerwijderLokaal = false;
-
-    public Lokaal lokaal214 { get; set; }
-    public Lokaal lokaal215 { get; set; }
-    public Lokaal lokaal216 { get; set; }
+    public int lokaalNummer;
+    public string lokaalverantwoordelijke;
 
     public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
     public List<Lokaal> lokalen { get; set; }
@@ -144,32 +154,14 @@
 
     protected override void OnInitialized()
     {
+
         winkels = DBConnection.GetAllWinkels();
-        //TODO pull uit databank
-        lokaal214 = new Lokaal();
-        lokaal214.lokaalNr = 214;
-
-        lokaal215 = new Lokaal();
-        lokaal215.lokaalNr = 215;
-
-        lokaal216 = new Lokaal();
-        lokaal216.lokaalNr = 216;
-
-        lokalen = new List<Lokaal>();
-        lokalen.Add(lokaal214);
-        lokalen.Add(lokaal215);
-        lokalen.Add(lokaal216);
 
     }
 
     public void voegToeAanDefect()
     {
         dialogIsOpen = true;
-    }
-
-    public void popupOnClick()
-    {
-        //TODO voeg defect toe
     }
 
     public void verwijderLokaal()
@@ -182,7 +174,7 @@
 
     public void maakLokaalAan()
     {
-        //TODO maak lokaal aan in databank
+
     }
 
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)

@@ -10,6 +10,7 @@
         {
 
         }
+
         public Voorwerp(int voorwerpNr, string voorwerpNaam)
         {
             this.voorwerpNr = voorwerpNr;
