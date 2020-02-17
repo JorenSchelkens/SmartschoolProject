@@ -1,5 +1,14 @@
-﻿@page "/login"
+﻿@page "/inloggen"
 
 <h1>Inloggen</h1>
 
+<div>
+    <MatTextField @bind-Value="@naam" Label="naam"></MatTextField>
+    <MatTextField @bind-Value="@wachtwoord" Label="wachtwoord"></MatTextField>
+    <MatButton Raised="true">Raised</MatButton>
+</div>
 
+@code {
+    public int naam { get; set; }
+    public int wachtwoord { get; set; }
+}
