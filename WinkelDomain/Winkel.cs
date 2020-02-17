@@ -9,6 +9,7 @@ namespace WinkelDomain
         public string beheerder;
         public bool actief;
         public List<Artikel> artikels;
+        public bool goedgekeurd;
 
         public Winkel() 
         {
