@@ -24,7 +24,7 @@
                             @winkel.actief
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Verwijder</MatButton>
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Actief</MatButton>
                         </div>
                     }
                 </div>
@@ -175,7 +175,8 @@
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
     {
         //TODO VERANDER STATUS WINKEL
-
+        winkel.actief = !winkel.actief;
+        DBConnection.VeranderStatusWinkel(winkel);
         this.StateHasChanged();
     }
 
