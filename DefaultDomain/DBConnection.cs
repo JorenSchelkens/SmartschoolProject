@@ -71,7 +71,7 @@ namespace DefaultDomain
             return lokaal;
         }
 
-        public Winkel GetWinkel(int winkelnr)
+        public Winkel GetWinkel(string winkelnaam)
         {
             this.ResetErrorMessage();
 
@@ -81,10 +81,12 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel WHERE winkelnr = {winkelnr};";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel WHERE naam = @naam;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
+                command.Parameters.AddWithValue("@naam", winkelnaam);
+
 
 
                 while (reader.Read())
@@ -110,6 +112,52 @@ namespace DefaultDomain
 
             //Return object
             return winkel;
+        }
+
+        public Artikel GetArtikel(string productnaam)
+        {
+            this.ResetErrorMessage();
+
+            Artikel artikel = new Artikel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel WHERE productnaam = @productnaam;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@productnaam", productnaam);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    artikel.productnr = reader.GetInt32(0);
+                    artikel.productnaam = reader.GetString(1);
+                    artikel.standaardPrijs = reader.GetDouble(2);
+                    artikel.stock = reader.GetInt32(3);
+                    artikel.winkelnr = reader.GetInt32(4);
+                    artikel.korting = reader.GetInt32(5);
+                    artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return artikel;
         }
 
         #endregion
@@ -205,7 +253,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblartikel(productnaam, prijs, stock, korting, actief) VALUES(@productnaam, @prijs, @stock, @korting, @actief);";
+                string sql = $"INSERT INTO tblartikel(productnaam, prijs, stock, korting, actief, winkelnr) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
@@ -213,7 +261,8 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
                 command.Parameters.AddWithValue("@stock", artikel.stock);
                 command.Parameters.AddWithValue("@korting", artikel.korting);
-                command.Parameters.AddWithValue("@actief", artikel.actief);
+                command.Parameters.AddWithValue("@actief", (artikel.actief)? 1: 0);
+                command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
 
 
                 if (command.ExecuteNonQuery() > 0)
@@ -277,7 +326,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"UPDATE tblartikels SET actief = @actief WHERE productnr = {artikel.productnr}";
+                string sql = $"UPDATE tblartikel SET actief = @actief WHERE productnr = {artikel.productnr}";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
@@ -290,7 +339,9 @@ namespace DefaultDomain
                     command.Parameters.AddWithValue("@actief", 1);
                 }
 
-                if (command.ExecuteNonQuery() > 0)
+                var temp = command.ExecuteNonQuery();
+
+                if (temp > 0)
                 {
                     succes = true;
                 }
@@ -346,5 +397,40 @@ namespace DefaultDomain
 
         }
         #endregion
+
+        public bool DeleteRowsFromsmProject()
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"DELETE from tblartikel where productnaam !=''";
+                string sql1 = $"DELETE from tblwinkel where winkelnr !=''";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlCommand command1 = new MySqlCommand(sql1, this.MySqlConnection);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+                if (command1.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
     }
 }
