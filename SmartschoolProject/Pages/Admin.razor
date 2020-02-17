@@ -124,9 +124,6 @@
     </MatDialogActions>
 </MatDialog>
 
-<MatButton Label="Voeg lokaal toe" OnClick="@maakWinkelTest" />
-
-
 @DBConnection.ErrorMessage
 
 @code {
@@ -167,8 +164,6 @@
     public void verwijderLokaal()
     {
         //TODO verwijder lokaal uit databank
-
-
         comfirmatieVerwijderLokaal = false;
     }
 
@@ -180,17 +175,8 @@
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
     {
         //TODO VERANDER STATUS WINKEL
-        this.StateHasChanged();
-    }
 
-    public void maakWinkelTest()
-    {
-        WinkelDomain.Winkel winkel = new WinkelDomain.Winkel();
-        winkel.actief = true;
-        winkel.beheerder = "LOL";
-        winkel.naam = "DIT IS EEN TEST";
-        DBConnection.AddWinkel(winkel);
-        winkels.Add(winkel);
+        this.StateHasChanged();
     }
 
 }
