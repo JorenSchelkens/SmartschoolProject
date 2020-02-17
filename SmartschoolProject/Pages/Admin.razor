@@ -1,5 +1,6 @@
 ﻿@page "/admin"
 @inject NavigationManager navigationManager
+@inject IMatToaster Toaster
 
 <MatAccordion Multi="true">
     <MatExpansionPanel>
@@ -118,7 +119,9 @@
             </MatExpansionPanelSubHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
-            @*<MatAccordion Multi="true">
+            <MatAccordion Multi="true">
+                @if (lokalen != null)
+                {
                     @foreach (Lokaal lokaal in lokalen)
                     {
                         <MatExpansionPanel>
@@ -127,58 +130,28 @@
                             </MatExpansionPanelSummary>
                             <MatExpansionPanelDetails>
                                 <MatList>
-                                    <MatListItem>
-                                        Banken
-                                        <p style="text-align:right; width:100%; padding:0;"></p>
-                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
-                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalBanken</p>
-                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBankToe" />
-                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                    </MatListItem>
-                                    <MatListDivider></MatListDivider>
-                                    <MatListItem>
-                                        Beamers
-                                        <p style="text-align:right; width:100%; padding:0;"></p>
-                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
-                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalBeamers</p>
-                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBeamerToe" />
-                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                    </MatListItem>
-                                    <MatListDivider></MatListDivider>
-                                    <MatListItem>
-                                        Stoelen
-                                        <p style="text-align:right; width:100%; padding:0;"></p>
-                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
-                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalStoelen</p>
-                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegStoelToe" />
-                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                    </MatListItem>
-                                    <MatListDivider></MatListDivider>
-                                    <MatListItem>
-                                        Computers
-                                        <p style="text-align:right; width:100%; padding:0;"></p>
-                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
-                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalComputers</p>
-                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegComputerToe" />
-                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                    </MatListItem>
-                                    <MatListDivider></MatListDivider>
-                                    <MatListItem>
-                                        Schermen
-                                        <p style="text-align:right; width:100%; padding:0;"></p>
-                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
-                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalSchermen</p>
-                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegSchermToe" />
-                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                    </MatListItem>
-                                    <MatListItem>
-                                        <MatButton Label="Verwijder Lokaal" style="position: absolute; right: 0;" OnClick="@verwijderLokaalPopUp" />
-                                    </MatListItem>
+                                    @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
+                                    {
+                                        <MatListItem>
+                                            @voorwerp.voorwerpNaam
+                                            <p style="text-align:right; width:100%; padding:0;"></p>
+                                            <MatButton Label="-" style="padding-right:10px" OnClick="@(() => Verlaag(voorwerp, lokaal))" />
+                                            <p style="padding-right:10px; max-height:10px">@voorwerp.aantal</p>
+                                            <MatButton Label="+" style="margin-right:0px;" OnClick="@(() => Verhoog(voorwerp, lokaal))" />
+                                            <MatIconButton Icon="notification_important" style="margin-right:5px;" OnClick="@(() => popupOnClick(voorwerp, lokaal))"></MatIconButton>
+                                            <p style="margin-right:0px; max-height:1px">@voorwerp.aantalDefecten</p>
+                                            <MatButton Label="-" style="margin-right:1px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
+                                            <p style="position: absolute; right: 0; max-height:10px"></p>
+
+                                        </MatListItem>
+                                        <MatListDivider></MatListDivider>
+                                    }
                                 </MatList>
                             </MatExpansionPanelDetails>
                         </MatExpansionPanel>
                     }
-                </MatAccordion>*@
+                }
+            </MatAccordion>
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
 </MatAccordion>
@@ -186,7 +159,7 @@
 <MatDialog @bind-IsOpen="@dialogIsOpen">
     <MatDialogTitle>Nummer</MatDialogTitle>
     <MatDialogContent>
-        <p>Geef de nummer van het item</p>
+        <p>Geef de nummer van het lokaal:</p>
         <MatTextField Label="Lokaalnummer:" @bind-Value="lokaalNummer"></MatTextField>
         <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
     </MatDialogContent>
@@ -203,7 +176,7 @@
     private bool Val2 = false;
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
-    public DBConnectionMongoDB BConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
+    public DBConnectionMongoDB DBConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
 
     public bool dialogIsOpen = false;
     public bool comfirmatieVerwijderLokaal = false;
@@ -223,10 +196,11 @@
         comfirmatieVerwijderLokaal = true;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
         winkels = DBConnection.GetAllWinkels();
+        lokalen = await DBConnectionMongoDB.GetAllLokalen();
 
     }
     public void voegToeAanDefect()
@@ -252,8 +226,70 @@
         DBConnection.VeranderStatusWinkel(winkel);
         this.StateHasChanged();
     }
+
     public void sorteerLijst()
     {
+
+    }
+
+    public async void popupOnClick(Voorwerp voorwerp, Lokaal lokaal)
+    {
+        if (voorwerp.aantalDefecten < voorwerp.aantal)
+        {
+            voorwerp.aantalDefecten += 1;
+
+            if (voorwerp.aantalDefecten == 0)
+            {
+                voorwerp.defect = false;
+            }
+            else
+            {
+                voorwerp.defect = true;
+            }
+
+            await DBConnectionMongoDB.UpdateLokaal(lokaal);
+
+            Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
+        }
+        else
+        {
+            Toaster.Add("U kan niet meer defecten hebben dan dat er " + voorwerp.voorwerpNaam.ToLower() + " zijn", MatToastType.Danger, "Error");
+        }
+
+
+    }
+
+    public async void Verlaag(Voorwerp voorwerp, Lokaal lokaal)
+    {
+        if (voorwerp.aantal > 0)
+        {
+            voorwerp.verlaagHoeveelheidVoorwerp();
+            await DBConnectionMongoDB.UpdateLokaal(lokaal);
+        }
+    }
+
+    public async void Verhoog(Voorwerp voorwerp, Lokaal lokaal)
+    {
+        voorwerp.verhoogHoeveelheidVoorwerp();
+        await DBConnectionMongoDB.UpdateLokaal(lokaal);
+    }
+
+    public async void verwijderDefect(Voorwerp voorwerp, Lokaal lokaal)
+    {
+        if (voorwerp.aantalDefecten > 0)
+        {
+            voorwerp.verlaagDefecte();
+            if (voorwerp.aantalDefecten == 0)
+            {
+                voorwerp.defect = false;
+            }
+            else
+            {
+                voorwerp.defect = true;
+            }
+            await DBConnectionMongoDB.UpdateLokaal(lokaal);
+        }
+
 
     }
 }
