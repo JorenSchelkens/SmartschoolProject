@@ -6,12 +6,18 @@ namespace WinkelDomain
         public int productnr;
         public double standaardPrijs;
         public string productnaam;
+        public int winkelnr;
         public int stock;
         public int korting;
         public bool actief;
 
         public Artikel()
         {
+
+        }
+        public Artikel(string productnaam)
+        {
+            this.productnaam = productnaam;
         }
         public void kortingAanzetten(int korting)
         {

@@ -31,7 +31,7 @@ CREATE TABLE `tblartikel` (
   `korting` int NOT NULL,
   `actief` int NOT NULL,
   PRIMARY KEY (`productnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,8 +153,9 @@ CREATE TABLE `tblwinkel` (
   `naam` varchar(60) NOT NULL,
   `beheerder` varchar(45) NOT NULL,
   `actief` int NOT NULL,
+  `goedgekeurd` int NOT NULL,
   PRIMARY KEY (`winkelnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,4 +176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-14 15:47:06
+-- Dump completed on 2020-02-17 16:15:25
