@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using InventarisDomain;
+using System.Linq;
 
 namespace DefaultDomain
 {
@@ -33,6 +34,22 @@ namespace DefaultDomain
         public async Task<List<Lokaal>> GetAllLokalen()
         {
             return await this.LokalenCollection.Find(new BsonDocument()).ToListAsync();
+        }
+
+        public async Task<List<Lokaal>> GetAllLokalenMetDefect()
+        {
+            List<Lokaal> lokalen = await this.LokalenCollection.Find(new BsonDocument()).ToListAsync();
+            List<Lokaal> returnLokalen = new List<Lokaal>();
+
+            foreach (var lokaal in lokalen)
+            {
+                if (lokaal.Voorwerpen.Any(v => v.defect))
+                {
+                    returnLokalen.Add(lokaal);
+                }
+            }
+
+            return returnLokalen;
         }
 
         public async Task<Lokaal> GetLokaal(int lokaalnr)
