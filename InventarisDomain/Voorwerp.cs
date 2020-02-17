@@ -2,19 +2,33 @@
 {
     public class Voorwerp
     {
-        public int voorwerpNr { get; set; }
         public string voorwerpNaam { get; set; }
         public int aantal { get; set; }
+        public bool defect { get; set; }
+        public int aantalDefecten { get; set; }
 
         public Voorwerp()
         {
 
         }
 
-        public Voorwerp(int voorwerpNr, string voorwerpNaam)
+        public Voorwerp(string voorwerpNaam)
         {
-            this.voorwerpNr = voorwerpNr;
             this.voorwerpNaam = voorwerpNaam;
+        }
+
+        public void verlaagHoeveelheidVoorwerp()
+        {
+            aantal--;
+        }
+
+        public void verhoogHoeveelheidVoorwerp()
+        {
+            aantal++;
+        }
+        public void verlaagDefecte()
+        {
+            aantalDefecten--;
         }
     }
 }

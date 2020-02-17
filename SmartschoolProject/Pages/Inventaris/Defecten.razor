@@ -1,0 +1,60 @@
+﻿@page "/defecten"
+@inject IMatToaster Toaster
+
+<MatAccordion Multi="true">
+    @foreach (Lokaal lokaal in lokalen)
+    {
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <MatList>
+                    @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
+                    {
+                        if (voorwerp.defect)
+                        {
+                            <MatListItem>
+                                @voorwerp.voorwerpNaam
+                                <p style="text-align:right; width:100%; padding:0;"></p>
+                                <p style="padding-right:10px; max-height:10px">@voorwerp.aantalDefecten</p>
+                                <MatButton Label="X" style="margin-right:20px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
+                            </MatListItem>
+                            <MatListDivider></MatListDivider>
+                        }
+                    }
+                </MatList>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+    }
+</MatAccordion>
+
+@code{
+
+    public int itemnummer = 0;
+
+    public DBConnectionMongoDB DBConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
+
+    public List<Lokaal> lokalen = new List<Lokaal>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        lokalen = await DBConnectionMongoDB.GetAllLokalenMetDefect();
+    }
+
+    public async void verwijderDefect(Voorwerp voorwerp, Lokaal lokaal)
+    {
+        voorwerp.verlaagDefecte();
+        if (voorwerp.aantalDefecten == 0)
+        {
+            voorwerp.defect = false;
+        }
+        else
+        {
+            voorwerp.defect = true;
+        }
+        await DBConnectionMongoDB.UpdateLokaal(lokaal);
+    }
+
+
+}
