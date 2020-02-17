@@ -8,26 +8,90 @@
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
             <div class="mat-layout-grid">
-                <div class="mat-layout-grid-inner">
-                    @foreach (WinkelDomain.Winkel winkel in winkels)
-                    {
+                <MatSlideToggle @bind-Value="@Val1"></MatSlideToggle>
+                @if (Val1)
+                {
+                    <span style="margin:10px">alle lokalen</span>
+                }
+                else
+                {
+                    <span style="margin:10px">actieve lokalen</span>
+                }
+                @if (Val1)
+                {
+                    <div class="mat-layout-grid-inner">
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.winkelnr
+                            <b>winkelnummer</b>
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.naam
+                            <b>naam</b>
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.beheerder
+                            <b>beheerder</b>
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.actief
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                            <b>actief</b>
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Actief</MatButton>
-                        </div>
-                    }
+
+
+                        @foreach (WinkelDomain.Winkel winkel in winkels)
+                        {
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.winkelnr
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.naam
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.beheerder
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.actief
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                                <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Actief</MatButton>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>winkelnummer</b>
                 </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>naam</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>beheerder</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                    <b>actief</b>
+                </div>
+
+
+
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief))
+                {
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.winkelnr
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.naam
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.beheerder
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.actief
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                        <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Actief</MatButton>
+                    </div>
+                }
+            </div>
+                }
             </div>
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
@@ -48,66 +112,66 @@
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
             @*<MatAccordion Multi="true">
-                @foreach (Lokaal lokaal in lokalen)
-                {
-                    <MatExpansionPanel>
-                        <MatExpansionPanelSummary>
-                            <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
-                        </MatExpansionPanelSummary>
-                        <MatExpansionPanelDetails>
-                            <MatList>
-                                <MatListItem>
-                                    Banken
-                                    <p style="text-align:right; width:100%; padding:0;"></p>
-                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
-                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalBanken</p>
-                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBankToe" />
-                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                </MatListItem>
-                                <MatListDivider></MatListDivider>
-                                <MatListItem>
-                                    Beamers
-                                    <p style="text-align:right; width:100%; padding:0;"></p>
-                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
-                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalBeamers</p>
-                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBeamerToe" />
-                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                </MatListItem>
-                                <MatListDivider></MatListDivider>
-                                <MatListItem>
-                                    Stoelen
-                                    <p style="text-align:right; width:100%; padding:0;"></p>
-                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
-                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalStoelen</p>
-                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegStoelToe" />
-                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                </MatListItem>
-                                <MatListDivider></MatListDivider>
-                                <MatListItem>
-                                    Computers
-                                    <p style="text-align:right; width:100%; padding:0;"></p>
-                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
-                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalComputers</p>
-                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegComputerToe" />
-                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                </MatListItem>
-                                <MatListDivider></MatListDivider>
-                                <MatListItem>
-                                    Schermen
-                                    <p style="text-align:right; width:100%; padding:0;"></p>
-                                    <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
-                                    <p style="padding-right:10px; max-height:10px">@lokaal.aantalSchermen</p>
-                                    <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegSchermToe" />
-                                    <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
-                                </MatListItem>
-                                <MatListItem>
-                                    <MatButton Label="Verwijder Lokaal" style="position: absolute; right: 0;" OnClick="@verwijderLokaalPopUp" />
-                                </MatListItem>
-                            </MatList>
-                        </MatExpansionPanelDetails>
-                    </MatExpansionPanel>
-                }
-            </MatAccordion>*@
+                    @foreach (Lokaal lokaal in lokalen)
+                    {
+                        <MatExpansionPanel>
+                            <MatExpansionPanelSummary>
+                                <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+                            </MatExpansionPanelSummary>
+                            <MatExpansionPanelDetails>
+                                <MatList>
+                                    <MatListItem>
+                                        Banken
+                                        <p style="text-align:right; width:100%; padding:0;"></p>
+                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBank" />
+                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalBanken</p>
+                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBankToe" />
+                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                    </MatListItem>
+                                    <MatListDivider></MatListDivider>
+                                    <MatListItem>
+                                        Beamers
+                                        <p style="text-align:right; width:100%; padding:0;"></p>
+                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderBeamer" />
+                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalBeamers</p>
+                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegBeamerToe" />
+                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                    </MatListItem>
+                                    <MatListDivider></MatListDivider>
+                                    <MatListItem>
+                                        Stoelen
+                                        <p style="text-align:right; width:100%; padding:0;"></p>
+                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderStoel" />
+                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalStoelen</p>
+                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegStoelToe" />
+                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                    </MatListItem>
+                                    <MatListDivider></MatListDivider>
+                                    <MatListItem>
+                                        Computers
+                                        <p style="text-align:right; width:100%; padding:0;"></p>
+                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderComputer" />
+                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalComputers</p>
+                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegComputerToe" />
+                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                    </MatListItem>
+                                    <MatListDivider></MatListDivider>
+                                    <MatListItem>
+                                        Schermen
+                                        <p style="text-align:right; width:100%; padding:0;"></p>
+                                        <MatButton Label="-" style="padding-right:20px" OnClick="@lokaal.verwijderScherm" />
+                                        <p style="padding-right:10px; max-height:10px">@lokaal.aantalSchermen</p>
+                                        <MatButton Label="+" style="margin-right:20px;" OnClick="@lokaal.voegSchermToe" />
+                                        <MatIconButton Icon="notification_important" style="position: absolute; right: 0" OnClick="@voegToeAanDefect"></MatIconButton>
+                                    </MatListItem>
+                                    <MatListItem>
+                                        <MatButton Label="Verwijder Lokaal" style="position: absolute; right: 0;" OnClick="@verwijderLokaalPopUp" />
+                                    </MatListItem>
+                                </MatList>
+                            </MatExpansionPanelDetails>
+                        </MatExpansionPanel>
+                    }
+                </MatAccordion>*@
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
 </MatAccordion>
@@ -127,6 +191,9 @@
 @DBConnection.ErrorMessage
 
 @code {
+    //togle
+    private bool Val1 = true;
+    private bool Val2 = false;
 
     public DBConnection DBConnection { get; set; } = new DBConnection();
     public DBConnectionMongoDB BConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
@@ -155,7 +222,6 @@
         winkels = DBConnection.GetAllWinkels();
 
     }
-
     public void voegToeAanDefect()
     {
         dialogIsOpen = true;
@@ -179,5 +245,8 @@
         DBConnection.VeranderStatusWinkel(winkel);
         this.StateHasChanged();
     }
+    public void sorteerLijst()
+    {
 
+    }
 }
