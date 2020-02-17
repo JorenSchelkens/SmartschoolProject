@@ -1,109 +1,69 @@
 ﻿@page "/winkeltoevoegen"
+@inject NavigationManager NavigationManager
+@using System.ComponentModel.DataAnnotations
+@using System.IO
+@using System.Net.Http.Headers
 
-<h1>Winkel Toevoegen</h1>
+<style>
+    .titel {
+        margin-bottom: 2rem;
+    }
 
-<div class="mat-layout-grid mat-layout-grid-align-left" style="max-width: 800px;">
-    <div class="mat-layout-grid-inner">
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-            <MatTextField @bind-Value="naamWinkel" Label="Naam winkel" Style="width:100%"></MatTextField>
-        </div>
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-            <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-                <--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->
-                <MatOptionString Value="saab">Saab</MatOptionString>
-                <MatOptionString Value="mercedes">Mercedes</MatOptionString>
-                <MatOptionString Value="audi">Audi</MatOptionString>
-            </MatSelect>
-        </div>
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-            <MatButton Outlined="true" Icon="add" Color="@MatRippleColor.Primary" Style="width:99%" OnClick="@voegWinkelToe">Voeg winkel toe</MatButton>
-        </div>
-    </div>
-</div>
+    .naamWinkel {
+        width: 30%;
+    }
+</style>
 
-@*<--!-->Dries wilt de boveste dialog als je op een knop duwt</--!-->*@
-<MatDialog @bind-IsOpen="@dialogIsOpen">
-    <MatDialogTitle>Voeg winkel toe</MatDialogTitle>
-    <MatDialogContent>
-        <p>Geef een naam en een beheerder</p>
-        <MatTextField @bind-Value="naamWinkel" Label="naam winkel"></MatTextField>
-        <MatSelect Label="Beheerder" @bind-Value="beheerder" Style="width:100%">
-            @*<--!-->Implement de db met de options, Alle options zijn testwaardes</--!-->*@
-            <MatOptionString Value="saab">Saab</MatOptionString>
-            <MatOptionString Value="mercedes">Mercedes</MatOptionString>
-            <MatOptionString Value="audi">Audi</MatOptionString>
-        </MatSelect>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton OnClick="@accepteerDialog">OK</MatButton>
-    </MatDialogActions>
-</MatDialog>
+<MatH2 Class="titel">Winkel toevoegen</MatH2>
 
+<EditForm Model="myModel" OnInvalidSubmit="@fail" OnValidSubmit="@succes">
+    <DataAnnotationsValidator />
+
+        <p>
+            <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
+        </p>
+       
+        <MatButton Type="submit" Raised="true" OnClick="@checkWaarde">Toeveoegen</MatButton>
+        
+</EditForm>
 
 @code {
 
-    string naamWinkel = "";
-    string beheerder = "";
-    bool dialogIsOpenWNaam = false;
-    bool dialogIsOpenBeheerder = false;
-    bool dialogIsOpen = false;
-
+    public bool waarde = false;
+    public string naamWinkel = "";
     DBConnection dBConnection = new DBConnection();
 
-
-    public void voegWinkelToe()
+    public void fail()
     {
-        if (naamWinkel == "" && beheerder == "")
-        {
+        waarde = false;
+    }
 
-            dialogIsOpen = true;
+    public void succes()
+    {
+        waarde = true;
+        NavigationManager.NavigateTo("/winkel");
+    }
+
+    LoginModel myModel = new LoginModel();
+
+    public class LoginModel
+    {
+        [Required]
+        public string NaamWinkel { get; set; }
+    }
+
+    public void checkWaarde()
+    {
+        if (waarde)
+        {
+            Winkel winkel = new Winkel();
+
+            winkel.naam = myModel.NaamWinkel;
+            winkel.beheerder = "test";
+
+            dBConnection.AddWinkel(winkel);
 
         }
-        else
-        {
-
-            if (naamWinkel == "")
-            {
-
-                dialogIsOpenWNaam = true;
-            }
-            else if (beheerder == "")
-            {
-
-                dialogIsOpenBeheerder = true;
-            }
-            else
-            {
-                Winkel winkel = new Winkel();
-
-                winkel.naam = naamWinkel;
-                winkel.beheerder = beheerder;
-
-                dBConnection.AddWinkel(winkel);
-            }
-
-        }
-
-
-        //TODO implement db
-
-    }
-
-
-    public void accepteerDialogBeheerder()
-    {
-
-        dialogIsOpenBeheerder = false;
-    }
-    public void accepteerDialogWNaam()
-    {
-
-        dialogIsOpenWNaam = false;
-    }
-    public void accepteerDialog()
-    {
-
-        dialogIsOpen = false;
     }
 
 }

@@ -9,9 +9,15 @@ namespace WinkelDomain
         public string beheerder;
         public bool actief;
         public List<Artikel> artikels;
+        public bool goedgekeurd;
 
-        public Winkel()
+        public Winkel() 
         {
+        }
+        public Winkel(string beheerder, string naam)
+        {
+            this.naam = naam;
+            this.beheerder = beheerder;
             artikels = new List<Artikel>();
         }
 

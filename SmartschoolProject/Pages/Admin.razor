@@ -20,94 +20,139 @@
                 }
                 @if (Val1)
                 {
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>winkelnummer</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>naam</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>beheerder</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                            <b>actief</b>
-                        </div>
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>winkelnummer</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>naam</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>beheerder</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>actief</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <b>goedgekeurd</b>
+                </div>
 
 
-                        @foreach (WinkelDomain.Winkel winkel in winkels)
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.goedgekeurd))
+                {
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.winkelnr
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.naam
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.beheerder
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.actief
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                        @if (winkel.actief)
                         {
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.winkelnr
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.naam
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.beheerder
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.actief
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                                @if (winkel.actief)
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
-                                }
-                                else
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
-                                }
-                            </div>
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                        }
+                        else
+                        {
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
                         }
                     </div>
                 }
+            </div>
+                }
                 else
                 {
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>winkelnummer</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>naam</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>beheerder</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                            <b>actief</b>
-                        </div>
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>winkelnummer</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>naam</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>beheerder</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <b>actief</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <b>goedgekeurd</b>
+                </div>
 
 
 
-                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief))
-                        {
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.winkelnr
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.naam
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.beheerder
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.actief
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                                <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Raised="true">Actief</MatButton>
-                            </div>
-                        }
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+                {
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.winkelnr
                     </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.naam
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.beheerder
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.actief
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                        <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
+                    </div>
+                }
+            </div>
                 }
             </div>
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
     <MatExpansionPanel>
         <MatExpansionPanelSummary>
-            <MatExpansionPanelHeader>Bekijk alle winkelverzoeken</MatExpansionPanelHeader>
+            <MatExpansionPanelHeader>Bekijk alle winkels</MatExpansionPanelHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>winkelnummer</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>naam</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>beheerder</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>actief</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                        <b>goedgekeurd</b>
+                    </div>
+
+
+                    @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => !winkel.goedgekeurd))
+                    {
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.winkelnr
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.naam
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.beheerder
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.actief
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
+                        </div>
+                    }
+                </div>
+            </div>
 
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
