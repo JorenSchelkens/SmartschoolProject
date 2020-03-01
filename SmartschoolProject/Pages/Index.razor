@@ -1,5 +1,17 @@
 ﻿@page "/"
+@inject AuthenticationState AuthenticationState
+@inject Gebruiker Gebruiker
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@code{ 
+    
+    protected override void OnInitialized()
+    {
+        string email = this.AuthenticationState.User.Identity.Name;
+        this.Gebruiker = new Gebruiker(email);
+    }
+
+}

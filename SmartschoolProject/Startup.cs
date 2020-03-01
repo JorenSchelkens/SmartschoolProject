@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using SmartschoolProject.Areas.Identity;
 using SmartschoolProject.Data;
 using MatBlazor;
+using DefaultDomain.Classes;
 
 namespace SmartschoolProject
 {
@@ -45,6 +46,7 @@ namespace SmartschoolProject
 
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<Gebruiker>();
 
             services.AddHttpContextAccessor();
 
