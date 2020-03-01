@@ -33,7 +33,7 @@ namespace DefaultDomainTests
         [Fact]
         public void DBConnectionAddWinkelTest() 
         {
-            Winkel winkel = new Winkel("dries.leyers");
+            Winkel winkel = new Winkel("dries.leyers", "test");
             winkel.naam = "dries.pannenkoek";
 
             DBConnection dBConnection = new DBConnection();

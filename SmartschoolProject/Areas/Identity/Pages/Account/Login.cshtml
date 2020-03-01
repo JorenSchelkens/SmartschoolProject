@@ -1,0 +1,43 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+@{
+    <h1>Druk op "Google" en log in met je bazandpoort email, hierna zal je naar de website doorgestuurd worden</h1>
+    <h3>(voornaam.achternaam@bazandpoort.be)</h3>
+    <h3>(wachtwoord = wachtwoord van je smartschool account)</h3>
+
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button style="height:80px; width:200px; font-size : 40px;" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            </section>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
