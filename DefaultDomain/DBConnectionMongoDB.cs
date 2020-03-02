@@ -28,6 +28,7 @@ namespace DefaultDomain
 
         public async Task SaveLokaal(Lokaal lokaal)
         {
+            //TODO Dubbele lokaalnummers
             await this.LokalenCollection.InsertOneAsync(lokaal);
         }
 
