@@ -16,54 +16,38 @@
 
 <MatH2 Class="titel">Winkel toevoegen</MatH2>
 
-<EditForm Model="myModel" OnInvalidSubmit="@fail" OnValidSubmit="@succes">
+<EditForm Model="myModel" OnValidSubmit="@succes">
     <DataAnnotationsValidator />
 
         <p>
             <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
         </p>
        
-        <MatButton Type="submit" Raised="true" OnClick="@checkWaarde">Toeveoegen</MatButton>
+        <MatButton Type="submit" Raised="true">Toeveoegen</MatButton>
         
 </EditForm>
 
 @code {
 
-    public bool waarde = false;
-    public string naamWinkel = "";
     DBConnection dBConnection = new DBConnection();
 
-    public void fail()
-    {
-        waarde = false;
-    }
-
-    public void succes()
-    {
-        waarde = true;
-        NavigationManager.NavigateTo("/winkel");
-    }
-
     LoginModel myModel = new LoginModel();
-
     public class LoginModel
     {
         [Required]
         public string NaamWinkel { get; set; }
     }
 
-    public void checkWaarde()
+    public void succes()
     {
-        if (waarde)
-        {
-            Winkel winkel = new Winkel();
 
-            winkel.naam = myModel.NaamWinkel;
-            winkel.beheerder = "test";
+        Winkel winkel = new Winkel();
 
-            dBConnection.AddWinkel(winkel);
+        winkel.naam = myModel.NaamWinkel;
+        winkel.beheerder = "test";
 
-        }
+        dBConnection.AddWinkel(winkel);
+        
+        NavigationManager.NavigateTo("/winkel");
     }
-
 }
