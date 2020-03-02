@@ -13,17 +13,17 @@
         width: 30%;
     }
 </style>
-
 <MatH2 Class="titel">Winkel toevoegen</MatH2>
 
 <EditForm Model="myModel" OnValidSubmit="@succes">
     <DataAnnotationsValidator />
-
         <p>
             <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
         </p>
        
         <MatButton Type="submit" Raised="true">Toeveoegen</MatButton>
+    
+        <MatButton Type="submit" Raised="true">Toevoegen</MatButton>
         
 </EditForm>
 
