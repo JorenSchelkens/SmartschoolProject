@@ -1,5 +1,17 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --mdc-theme-primary: #89b129;
+    --mdc-theme-secondary: #89b129;
+    --mdc-theme-on-primary: #89b129;
+    --mdc-theme-on-secondary: #89b129;
+    --mdc-theme-text-primary: #89b129;
+    --mdc-theme-text-secondary: #89b129;
+    --mdc-theme-text-on-primary: #89b129;
+    --mdc-theme-text-on-secondary: #89b129;
+    --mdc-theme-surface: #89b129;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
