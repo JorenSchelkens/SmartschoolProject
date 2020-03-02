@@ -19,6 +19,7 @@ namespace WinkelDomain
             this.naam = naam;
             this.beheerder = beheerder;
             artikels = new List<Artikel>();
+            goedgekeurd = false;
         }
 
         public void veranderActief()
