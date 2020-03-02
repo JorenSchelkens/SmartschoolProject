@@ -81,13 +81,12 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel WHERE naam = @naam;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE naam = @naam;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
-                MySqlDataReader reader = command.ExecuteReader();
                 command.Parameters.AddWithValue("@naam", winkelnaam);
 
-
+                MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -96,6 +95,7 @@ namespace DefaultDomain
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = reader.GetBoolean(3);
+                    winkel.goedgekeurd = reader.GetBoolean(4);
                 }
 
                 //Reader sluiten
@@ -261,7 +261,7 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
                 command.Parameters.AddWithValue("@stock", artikel.stock);
                 command.Parameters.AddWithValue("@korting", artikel.korting);
-                command.Parameters.AddWithValue("@actief", (artikel.actief)? 1: 0);
+                command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
                 command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
 
 
@@ -290,13 +290,14 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblwinkel(naam, beheerder, actief) VALUES(@naam, @beheerder, @actief);";
+                string sql = $"INSERT INTO tblwinkel(naam, beheerder, actief,goedgekeurd) VALUES(@naam, @beheerder, @actief,@goedgekeurd);";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@naam", winkel.naam);
                 command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
                 command.Parameters.AddWithValue("@actief", (winkel.actief) ? 1 : 0);
+                command.Parameters.AddWithValue("@goedgekeurd", winkel.goedgekeurd);
 
                 if (command.ExecuteNonQuery() > 0)
                 {
