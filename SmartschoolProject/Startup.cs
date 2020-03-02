@@ -40,8 +40,8 @@ namespace SmartschoolProject
             services.AddAuthentication()
                     .AddGoogle(options =>
                     {
-                        options.ClientId = Configuration["Authentication:Google:ClientId"];
-                        options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                        options.ClientId = "e1e2c5876e7b";
+                        options.ClientSecret = "ac4ab328672f";
                     });
 
             services.AddServerSideBlazor();
