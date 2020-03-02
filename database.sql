@@ -31,7 +31,7 @@ CREATE TABLE `tblartikel` (
   `korting` int NOT NULL,
   `actief` int NOT NULL,
   PRIMARY KEY (`productnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,6 +90,35 @@ CREATE TABLE `tblbestelling` (
 LOCK TABLES `tblbestelling` WRITE;
 /*!40000 ALTER TABLE `tblbestelling` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tblbestelling` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblinschrijving`
+--
+
+DROP TABLE IF EXISTS `tblinschrijving`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tblinschrijving` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `naam` varchar(75) NOT NULL,
+  `klas` varchar(10) NOT NULL,
+  `gast1` varchar(45) NOT NULL,
+  `gast2` varchar(75) NOT NULL,
+  `bevestigdGastheer` int NOT NULL,
+  `bevestigdGast1` int NOT NULL,
+  `bevestigdGast2` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblinschrijving`
+--
+
+LOCK TABLES `tblinschrijving` WRITE;
+/*!40000 ALTER TABLE `tblinschrijving` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblinschrijving` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -153,9 +182,8 @@ CREATE TABLE `tblwinkel` (
   `naam` varchar(60) NOT NULL,
   `beheerder` varchar(45) NOT NULL,
   `actief` int NOT NULL,
-  `goedgekeurd` int NOT NULL,
   PRIMARY KEY (`winkelnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,4 +204,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-17 16:15:25
+-- Dump completed on 2020-03-02 14:34:07
