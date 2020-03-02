@@ -4,7 +4,10 @@
 <MatDialog @bind-IsOpen="@dialogIsOpen">
     <MatDialogContent>
         <MatTextField @bind-Value="@gast1Naam" Style="color: #89b129;" Label="Naam Gast 1" FullWidth="true"></MatTextField>
+        <MatCheckbox @bind-Value="@gast1plus16" Label="16+"></MatCheckbox>
         <MatTextField @bind-Value="@gast2Naam" Style="color: #89b129;" Label="Naam Gast 2" FullWidth="true"></MatTextField>
+        <MatCheckbox @bind-Value="@gast2plus16" Label="16+"></MatCheckbox>
+        <p>@error</p>
     </MatDialogContent>
     <MatDialogActions>
         <NavLink class="nav-link" href="">
@@ -22,6 +25,10 @@
 
 @code
 {
+    string error = "";
+
+    bool gast1plus16 = false;
+    bool gast2plus16 = false;
     bool dialogIsOpen = false;
 
     public Gast gastheer;
@@ -44,9 +51,17 @@
 
     void OkClick()
     {
-        //gastheer = new Gast();
-        gast1 = new Gast(gast1Naam);
-        gast2 = new Gast(gast2Naam);
-        dialogIsOpen = false;
+        if (gast1plus16 && gast2plus16)
+        {
+            //gastheer = new Gast();
+            gast1 = new Gast(gast1Naam);
+            gast2 = new Gast(gast2Naam);
+            dialogIsOpen = false;
+        }
+        else
+        {
+            error = "Beide gebruikers moeten 16+ zijn.";
+        }
+
     }
 }
