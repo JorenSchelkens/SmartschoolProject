@@ -52,14 +52,17 @@
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @winkel.actief
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.goedgekeurd
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @if (winkel.actief)
                         {
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
                         }
                         else
                         {
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
                         }
                     </div>
                 }
@@ -100,7 +103,11 @@
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @winkel.actief
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.goedgekeurd
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
                     </div>
                 }
@@ -146,9 +153,11 @@
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.actief
+                        </div> <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.goedgekeurd
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
                         </div>
                     }
                 </div>
@@ -160,7 +169,7 @@
         <MatExpansionPanelSummary>
             <MatExpansionPanelHeader>Bekijk lokalen</MatExpansionPanelHeader>
             <MatExpansionPanelSubHeader>
-                <MatButton Label="Voeg lokaal toe" OnClick="@maakLokaalAan" />
+                <MatButton Label="Voeg lokaal toe" OnClick="@voegLokaalToePopup" />
             </MatExpansionPanelSubHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
@@ -209,14 +218,13 @@
         <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@maakLokaalAan">Voeg toe</MatButton>
+        <MatButton OnClick="@(() => maakLokaalAan(lokaalNummer, lokaalverantwoordelijke))">Voeg toe</MatButton>
     </MatDialogActions>
 </MatDialog>
 
 @DBConnection.ErrorMessage
 
 @code {
-    //togle
     private bool Val1 = true;
     private bool Val2 = false;
 
@@ -227,6 +235,8 @@
     public bool comfirmatieVerwijderLokaal = false;
     public int lokaalNummer;
     public string lokaalverantwoordelijke;
+
+    public Lokaal lokaal { get; set; }
 
     public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
     public List<Lokaal> lokalen { get; set; }
@@ -248,7 +258,7 @@
         lokalen = await DBConnectionMongoDB.GetAllLokalen();
 
     }
-    public void voegToeAanDefect()
+    public void voegLokaalToePopup()
     {
         dialogIsOpen = true;
     }
@@ -259,9 +269,17 @@
         comfirmatieVerwijderLokaal = false;
     }
 
-    public void maakLokaalAan()
+    public async void maakLokaalAan(int lokaalNr, string lokaalverantwoordelijke)
     {
+        lokaal = new Lokaal(lokaalNr);
+        lokaal.lokaalVerantwoordelijke = lokaalverantwoordelijke;
 
+        dialogIsOpen = false;
+
+        await DBConnectionMongoDB.SaveLokaal(lokaal);
+        this.StateHasChanged();
+
+        Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
     }
 
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
@@ -269,6 +287,13 @@
         //TODO VERANDER STATUS WINKEL
         winkel.actief = !winkel.actief;
         DBConnection.VeranderStatusWinkel(winkel);
+        this.StateHasChanged();
+    }
+     public void goedkeuringWinkel(WinkelDomain.Winkel winkel)
+    {
+        //TODO VERANDER STATUS WINKEL
+        winkel.goedgekeurd = !winkel.goedgekeurd;
+        DBConnection.VeranderGoedgekeurdWinkel(winkel);
         this.StateHasChanged();
     }
 

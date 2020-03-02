@@ -31,7 +31,7 @@ CREATE TABLE `tblartikel` (
   `korting` int NOT NULL,
   `actief` int NOT NULL,
   PRIMARY KEY (`productnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,17 +93,17 @@ LOCK TABLES `tblbestelling` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tblinschrijving`
+-- Table structure for table `tblinschrijvingen`
 --
 
-DROP TABLE IF EXISTS `tblinschrijving`;
+DROP TABLE IF EXISTS `tblinschrijvingen`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tblinschrijving` (
+CREATE TABLE `tblinschrijvingen` (
   `id` int NOT NULL AUTO_INCREMENT,
   `naam` varchar(75) NOT NULL,
   `klas` varchar(10) NOT NULL,
-  `gast1` varchar(45) NOT NULL,
+  `gast1` varchar(75) NOT NULL,
   `gast2` varchar(75) NOT NULL,
   `bevestigdGastheer` int NOT NULL,
   `bevestigdGast1` int NOT NULL,
@@ -113,12 +113,12 @@ CREATE TABLE `tblinschrijving` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tblinschrijving`
+-- Dumping data for table `tblinschrijvingen`
 --
 
-LOCK TABLES `tblinschrijving` WRITE;
-/*!40000 ALTER TABLE `tblinschrijving` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblinschrijving` ENABLE KEYS */;
+LOCK TABLES `tblinschrijvingen` WRITE;
+/*!40000 ALTER TABLE `tblinschrijvingen` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblinschrijvingen` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -182,8 +182,9 @@ CREATE TABLE `tblwinkel` (
   `naam` varchar(60) NOT NULL,
   `beheerder` varchar(45) NOT NULL,
   `actief` int NOT NULL,
+  `goedgekeurd` int NOT NULL,
   PRIMARY KEY (`winkelnr`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-02 14:34:07
+-- Dump completed on 2020-03-02 16:15:23
