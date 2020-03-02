@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarisDomainTests", "In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinkelDomain", "WinkelDomain\WinkelDomain.csproj", "{6E11C6CD-FA24-4086-9E59-F784433A0E7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolbalDomain", "SchoolbalDomain\SchoolbalDomain.csproj", "{E1FA08E5-E33E-42E6-8A6A-28990B295DAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6E11C6CD-FA24-4086-9E59-F784433A0E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E11C6CD-FA24-4086-9E59-F784433A0E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E11C6CD-FA24-4086-9E59-F784433A0E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1FA08E5-E33E-42E6-8A6A-28990B295DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1FA08E5-E33E-42E6-8A6A-28990B295DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1FA08E5-E33E-42E6-8A6A-28990B295DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1FA08E5-E33E-42E6-8A6A-28990B295DAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

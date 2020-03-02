@@ -11,7 +11,7 @@ Welcome to your new app.
     protected override void OnInitialized()
     {
         string email = this.AuthenticationState.User.Identity.Name;
-        this.Gebruiker = new Gebruiker(email);
+        this.Gebruiker = new Gebruiker();
     }
 
 }
