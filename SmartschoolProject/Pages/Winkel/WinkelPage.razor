@@ -1,15 +1,40 @@
 ﻿@page "/winkel"
 @inject NavigationManager navigationManager
 
+<style>
+    .item {
+        padding: 0;
+    }
+
+    .knop {
+        margin-left: 2rem;
+    }
+
+    .winkelnaam{
+        width: 10rem;
+    }
+</style>
+
+
 <MatH2>Mijn winkels</MatH2>
 
-@foreach (Winkel winkel in winkels)
-{
-    <div>
-        @winkel.naam
-        <br />
-    </div>
-}
+<MatList>
+
+    @foreach (Winkel winkel in winkels)
+    {
+    <MatListItem Class="item">
+
+        <div class="winkelnaam">@winkel.naam</div>
+
+        <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
+        <MatCheckbox @bind-Value="@temp" Label="Actief"></MatCheckbox>
+
+    </MatListItem>
+        <MatListDivider></MatListDivider>
+    }
+
+</MatList>
+
 
 <br />
 <MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
@@ -17,6 +42,8 @@
 
     public DBConnection DBConnection = new DBConnection();
     public List<Winkel> winkels = new List<Winkel>();
+
+    public bool temp;
 
     protected override void OnInitialized()
     {
