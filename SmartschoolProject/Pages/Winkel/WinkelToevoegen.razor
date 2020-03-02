@@ -3,7 +3,6 @@
 @using System.ComponentModel.DataAnnotations
 @using System.IO
 @using System.Net.Http.Headers
-
 <style>
     .titel {
         margin-bottom: 2rem;
@@ -13,17 +12,14 @@
         width: 30%;
     }
 </style>
-
 <MatH2 Class="titel">Winkel toevoegen</MatH2>
-
 <EditForm Model="myModel" OnInvalidSubmit="@fail" OnValidSubmit="@succes">
     <DataAnnotationsValidator />
-
         <p>
             <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
         </p>
-       
-        <MatButton Type="submit" Raised="true" OnClick="@checkWaarde">Toeveoegen</MatButton>
+    
+        <MatButton Type="submit" Raised="true" OnClick="@checkWaarde">Toevoegen</MatButton>
         
 </EditForm>
 
