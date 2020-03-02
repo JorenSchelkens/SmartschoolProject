@@ -396,6 +396,46 @@ namespace DefaultDomain
             return succes;
 
         }
+
+        public bool VeranderGoedgekeurdWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblwinkel SET goedgekeurd = @goedgekeurd WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (winkel.goedgekeurd)
+                {
+                    command.Parameters.AddWithValue("@goedgekeurd", 0);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@goedgekeurd", 1);
+                }
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
         #endregion
 
         public bool DeleteRowsFromsmProject()

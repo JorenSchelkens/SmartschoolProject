@@ -52,14 +52,17 @@
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @winkel.actief
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.goedgekeurd
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @if (winkel.actief)
                         {
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
                         }
                         else
                         {
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
                         }
                     </div>
                 }
@@ -100,7 +103,11 @@
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         @winkel.actief
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @winkel.goedgekeurd
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                         <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
                     </div>
                 }
@@ -146,9 +153,11 @@
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             @winkel.actief
+                        </div> <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.goedgekeurd
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
                         </div>
                     }
                 </div>
@@ -269,6 +278,13 @@
         //TODO VERANDER STATUS WINKEL
         winkel.actief = !winkel.actief;
         DBConnection.VeranderStatusWinkel(winkel);
+        this.StateHasChanged();
+    }
+     public void goedkeuringWinkel(WinkelDomain.Winkel winkel)
+    {
+        //TODO VERANDER STATUS WINKEL
+        winkel.goedgekeurd = !winkel.goedgekeurd;
+        DBConnection.VeranderGoedgekeurdWinkel(winkel);
         this.StateHasChanged();
     }
 

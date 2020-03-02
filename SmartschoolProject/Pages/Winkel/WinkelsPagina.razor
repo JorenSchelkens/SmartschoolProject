@@ -1,15 +1,24 @@
 ﻿@page "/winkels"
-    
+
 <style>
     .tabs {
         background-color: rgba(193, 193, 193, 0.3);
-        }
+    }
 </style>
-
-    <div class="tabs">
-        <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px; height: 150px;"alt="Afbeeldingsresultaat voor winkel logo"/> <h2>WinkelNaam</h2>
-    </div>
-
+<div class="mat-layout-grid">
+    @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+    {
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell">
+                <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px; height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" /> <h2>@winkel.naam</h2>
+            </div>
+            @if(aantal%3==0){ 
+                <br/>
+            }
+        </div>
+    }
+</div>
 @code {
-
+    public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
+    public int aantal=0;
 }
