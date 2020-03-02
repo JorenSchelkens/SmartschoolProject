@@ -1,0 +1,52 @@
+﻿@page "/inschrijving"
+@* TODO display gebruikersnaam *@
+
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <MatDialogContent>
+        <MatTextField @bind-Value="@gast1Naam" Style="color: #89b129;" Label="Naam Gast 1" FullWidth="true"></MatTextField>
+        <MatTextField @bind-Value="@gast2Naam" Style="color: #89b129;" Label="Naam Gast 2" FullWidth="true"></MatTextField>
+    </MatDialogContent>
+    <MatDialogActions>
+        <NavLink class="nav-link" href="">
+            <MatButton @onclick="@Sluit">ANNULEER</MatButton>
+        </NavLink>
+        <MatButton OnClick="@OkClick">SCHRIJF IN</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+<style>
+    .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+        color: #89b129;
+    }
+</style>
+
+@code
+{
+    bool dialogIsOpen = false;
+
+    public Gast gastheer;
+    public Gast gast1;
+    public Gast gast2;
+
+    public string gastheerNaam = "";
+    public string gast1Naam = "";
+    public string gast2Naam = "";
+
+    protected override void OnInitialized()
+    {
+        dialogIsOpen = true;
+    }
+
+    void Sluit()
+    {
+        dialogIsOpen = false;
+    }
+
+    void OkClick()
+    {
+        //gastheer = new Gast();
+        gast1 = new Gast(gast1Naam);
+        gast2 = new Gast(gast2Naam);
+        dialogIsOpen = false;
+    }
+}

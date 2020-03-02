@@ -3,6 +3,7 @@ using DefaultDomain;
 using DefaultDomain.Classes;
 using WinkelDomain;
 using System;
+using InventarisDomain;
 
 namespace DefaultDomainTests
 {
@@ -10,11 +11,13 @@ namespace DefaultDomainTests
     {
         public Artikel artikel { get; set; }
         public Winkel winkel { get; set; }
+        private Lokaal lokaal { get; set; }
 
         public DefaultDomainTests()
         {
             artikel = new Artikel("malk");
             winkel = new Winkel("drekke","melkboeren");
+            
         }
 
         [Fact]
@@ -53,7 +56,6 @@ namespace DefaultDomainTests
             var temp = dBConnection.AddArtikel(artikel);
 
             artikel = dBConnection.GetArtikel(artikel.productnaam);
-
             bool succes = dBConnection.VeranderStatusArtikel(artikel);
             
 
@@ -77,5 +79,32 @@ namespace DefaultDomainTests
             dBConnection.DeleteRowsFromsmProject();
         }
 
+        [Fact]
+        public void DBConnectionGetLokaalTest()
+        {
+            DBConnection dBConnection = new DBConnection();
+            DBConnectionMongoDB mongoDB = new DBConnectionMongoDB();
+            var temp = mongoDB.SaveLokaal(lokaal);
+            lokaal = dBConnection.GetLokaal(216);
+            Assert.NotNull(lokaal);
+        }
+
+        [Fact]
+        public void DBConnectionGetWinkelTest()
+        {
+            DBConnection dBConnection = new DBConnection();
+            var temp = dBConnection.AddWinkel(winkel);
+            winkel = dBConnection.GetWinkel(winkel.naam);
+            Assert.NotNull(winkel.artikels);
+            dBConnection.DeleteRowsFromsmProject();
+        }
+        [Fact]
+        public void DBConnectionGetArtikelTest()
+        {
+            DBConnection dBConnection = new DBConnection();
+            var temp = dBConnection.AddArtikel(artikel);
+            artikel = dBConnection.GetArtikel("malk");
+            Assert.NotNull(artikel.productnr);
+        }
     }
 }
