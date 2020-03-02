@@ -29,7 +29,7 @@ namespace SmartschoolProject
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddRazorPages().AddRazorPagesOptions(options =>
@@ -40,8 +40,8 @@ namespace SmartschoolProject
             services.AddAuthentication()
                     .AddGoogle(options =>
                     {
-                        options.ClientId = "e1e2c5876e7b";
-                        options.ClientSecret = "ac4ab328672f";
+                        options.ClientId = "724644754137-mlsr3662k0jt7m6v6ia159lrghd6ur9l.apps.googleusercontent.com";
+                        options.ClientSecret = "LMB-7IrmdjPOTV7bqOoP0Vcg";
                     });
 
             services.AddServerSideBlazor();
