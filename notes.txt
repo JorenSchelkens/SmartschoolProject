@@ -12,3 +12,7 @@ bazandpoort.smartschool.be/OAuth
     'oauthPassword' => 'ac4ab328672f',
 
 https://dev.mysql.com/doc/connector-net/en/connector-net-tutorials-sql-command.html
+
+
+
+https://localhost:5001/Identity/Account/ExternalLogin?returnUrl=%2F&handler=Callback#
