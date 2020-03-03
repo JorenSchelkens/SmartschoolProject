@@ -1,6 +1,9 @@
-﻿<AuthorizeView>
+﻿@inject GoogleGebruiker Gebruiker
+@implements IDisposable
+
+<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+        <a href="Identity/Account/Manage">Hallo @Gebruiker.GebruikerInfo.Voornaam</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
@@ -9,3 +12,19 @@
         <a href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        Gebruiker.StateChanged += OnGebruikerStateAdvancedStateChanged;
+    }
+
+    void OnGebruikerStateAdvancedStateChanged(object sender, EventArgs e) => StateHasChanged();
+
+    void IDisposable.Dispose()
+    {
+        Gebruiker.StateChanged -= OnGebruikerStateAdvancedStateChanged;
+    }
+
+}

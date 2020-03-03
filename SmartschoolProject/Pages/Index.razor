@@ -1,17 +1,21 @@
 ﻿@page "/"
-@*@inject AuthenticationState AuthenticationState*@
-@inject Gebruiker Gebruiker
+@inject GoogleGebruiker GoogleGebruiker
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
-@code{ 
+@code{
 
-    protected override void OnInitialized()
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        //string email = this.AuthenticationState.User.Identity.Name;
-        //this.Gebruiker = new Gebruiker();
+        string email = (await AuthenticationStateTask).User.Identity.Name;
+        this.GoogleGebruiker = new GoogleGebruiker(email);
+        await Task.Delay(100);
+        this.GoogleGebruiker.Refresh();
     }
 
 }

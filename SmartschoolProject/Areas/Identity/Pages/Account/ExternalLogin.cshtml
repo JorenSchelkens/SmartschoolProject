@@ -1,0 +1,27 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Welkom</h1>
+<h4>Aangezien het de eerste keer is dat je op de site inlogt moet je nog even op "Doorgaan" drukken.</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div style="display: none; max-height: 0px;" asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group" style="visibility: hidden; max-height: 0px;">
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Doorgaan</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

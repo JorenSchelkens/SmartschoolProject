@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DefaultDomain.Classes
 {
-    public class Gebruiker
+    public class GebruikerInfo
     {
         private SmartschoolWSDLAccess SmartschoolWSDLAccess { get; set; }
 
@@ -17,26 +17,23 @@ namespace DefaultDomain.Classes
 
         //Transactie
 
-        public Gebruiker()
+        public GebruikerInfo()
         {
             this.SmartschoolWSDLAccess = new SmartschoolWSDLAccess();
         }
 
-        public async void Setup(string email)
+        public async Task<GebruikerInfo> Initialize(string email)
         {
-            await this.GetUserDetails(email);
+            return await this.GetGebruikerDetails(email);
         }
 
-        private async Task GetUserDetails(string email)
+        private async Task<GebruikerInfo> GetGebruikerDetails(string email)
         {
             string userString = await this.SmartschoolWSDLAccess.GetUserDetailsByUsername(email.Split('@')[0]);
-            this.TransferData(JObject.Parse(userString).ToObject<Gebruiker>());
-        }
 
-        private async void TransferData(Gebruiker gebruiker)
-        {
-            string temp = await this.SmartschoolWSDLAccess.GetUserClass(gebruiker.GebruikersNaam);
-            int i = 0;
+            GebruikerInfo gebruikerInfo = JObject.Parse(userString).ToObject<GebruikerInfo>();
+
+            return gebruikerInfo;
         }
     }
 }
