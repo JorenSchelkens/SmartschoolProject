@@ -77,11 +77,13 @@ namespace DefaultDomain
             return result.ModifiedCount == 1;
         }
 
-        public async Task<bool> DisableLokaal(Lokaal Lokaal)
+        public async Task<bool> ChangeStatusLokaal(Lokaal Lokaal)
         {
             var filter = Builders<Lokaal>.Filter.Eq("_id", Lokaal.Id);
-            var update = Builders<Lokaal>.Update.Set("actief", "false");
 
+            string temp = (Lokaal.isActief) ? "false" : "true"; 
+
+            var update = Builders<Lokaal>.Update.Set("actief", temp);
             var result = await this.LokalenCollection.UpdateOneAsync(filter, update);
 
             return result.ModifiedCount == 1;
