@@ -26,7 +26,16 @@
 else
 {
     <h1>@winkel.naam</h1>
-    <MatButton Label="-" style="margin-right:1px;" Value="Bestel"/>
+    @foreach (Artikel artikel in winkel.artikels)
+    {
+        <div class="mat-layout-grid-inner">
+           <h1>@artikel.productnaam</h1>
+           <h2>€@artikel.standaardPrijs</h2>
+           <h2>@artikel.stock</h2>
+        </div>
+    }
+
+    <MatButton Label="-" style="margin-right:1px;" Value="Bestel" />
 }
 
 @code {
