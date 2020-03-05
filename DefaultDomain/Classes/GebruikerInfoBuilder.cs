@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace DefaultDomain.Classes
@@ -13,9 +13,16 @@ namespace DefaultDomain.Classes
 
             string userString = await smartschoolWSDLAccess.GetUserDetailsByUsername(email.Split('@')[0]);
 
-            //temp = JsonConvert.DeserializeObject<GebruikerInfo>(userString);
+            //Internnummer leerkracht --> null
 
-            temp = JObject.Parse(userString).ToObject<GebruikerInfo>();
+            try
+            {
+                temp = JObject.Parse(userString).ToObject<GebruikerInfo>();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
             return temp;
         }
