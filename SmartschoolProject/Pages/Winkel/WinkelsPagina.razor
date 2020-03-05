@@ -1,24 +1,70 @@
 ﻿@page "/winkels"
-
+@page "/winkels/{naam}"
+@inject NavigationManager NavigationManager
 <style>
     .tabs {
         background-color: rgba(193, 193, 193, 0.3);
     }
 </style>
-<div class="mat-layout-grid">
-    @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+@if (alleWinkels)
+{
+    <div class="mat-layout-grid">
+        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+        {
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell">
+                    <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px; height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" /> <h2>@winkel.naam</h2>
+                </div>
+                @if (aantal % 3 == 0)
+                {
+                    <br />
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h1>@winkel.naam</h1>
+    @foreach (Artikel artikel in winkel.artikels)
     {
         <div class="mat-layout-grid-inner">
-            <div class="mat-layout-grid-cell">
-                <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px; height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" /> <h2>@winkel.naam</h2>
-            </div>
-            @if(aantal%3==0){ 
-                <br/>
-            }
+           <h1>@artikel.productnaam</h1>
+           <h2>€@artikel.standaardPrijs</h2>
+           <h2>@artikel.stock</h2>
         </div>
     }
-</div>
+
+    <MatButton Label="-" style="margin-right:1px;" Value="Bestel" />
+}
+
 @code {
     public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
-    public int aantal=0;
+    public Winkel winkel { get; set; }
+    public int aantal = 0;
+    public DBConnection DBConnection { get; set; }
+    public bool alleWinkels;
+
+    [Parameter]
+    public string Naam { get; set; }
+
+    protected override void OnInitialized()
+    {
+        DBConnection = new DBConnection();
+
+        if (Naam == null)
+        {
+            winkel = DBConnection.GetWinkel(Naam);
+            alleWinkels = false;
+        }
+        else
+        {
+            alleWinkels = true;
+        }
+    }
+
+    public void test(Winkel winkel)
+    {
+        NavigationManager.NavigateTo($"/winkels/{winkel.naam}", true);
+    }
 }
