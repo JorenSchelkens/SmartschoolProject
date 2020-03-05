@@ -10,6 +10,10 @@
         margin-left: 2rem;
     }
 
+    .actief{
+        margin-left: 2rem;
+    }
+
     .winkelnaam {
         width: 10rem;
     }
@@ -29,7 +33,7 @@
 
             <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
 
-            <MatCheckbox @bind-Value="@winkel.actief" Label="Actief"></MatCheckbox>
+            <MatCheckbox @bind-Value="@winkel.actief" Class="actief" Label="Actief"></MatCheckbox>
             
         </MatListItem>
         <MatListDivider></MatListDivider>

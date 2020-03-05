@@ -23,7 +23,7 @@
 
     <p>
         <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
-        <MatTextField @bind-Value="@beheerder" Label="Beheerder"></MatTextField>
+        <MatTextField @bind-Value="myModel.Beheerder" Label="Beheerder"></MatTextField>
     </p>
 
     <MatButton Type="submit" Raised="true">Toevoegen</MatButton>
@@ -41,6 +41,10 @@
     {
         [Required]
         public string NaamWinkel { get; set; }
+
+        [Required]
+        public string Beheerder { get; set; }
+
     }
 
     public void succes()
@@ -49,7 +53,8 @@
         Winkel winkel = new Winkel();
 
         winkel.naam = myModel.NaamWinkel;
-        winkel.beheerder = beheerder;
+        winkel.beheerder = myModel.Beheerder;
+        winkel.actief = false;
 
         dBConnection.AddWinkel(winkel);
 

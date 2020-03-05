@@ -183,6 +183,20 @@
                                 <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
                             </MatExpansionPanelSummary>
                             <MatExpansionPanelDetails>
+
+                                <p style="font-weight: bold">Lokaal actief/inactief: </p>
+
+                                <MatSlideToggle @bind-Value="@lokaal.isActief"></MatSlideToggle>
+
+                                @if (lokaal.isActief)
+                                {
+                                    <p style="font-weight: bold">Actief</p>
+                                }
+                                else
+                                {
+                                    <p style="font-weight: bold">Inactief</p>
+                                }
+
                                 <MatList>
                                     @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
                                     {
@@ -238,11 +252,8 @@
     public Lokaal lokaal { get; set; }
 
     public List<WinkelDomain.Winkel>
-    winkels = new List<WinkelDomain.Winkel>
-        ();
-    public List<Lokaal>
-        lokalen
-    { get; set; }
+    winkels = new List<WinkelDomain.Winkel>();
+    public List<Lokaal> lokalen { get; set; }
 
     public void annuleerVerwijderLokaal()
     {
