@@ -26,10 +26,19 @@ namespace DefaultDomain
             this.LokalenCollection = this.MongoDatabase.GetCollection<Lokaal>("lokalen");
         }
 
-        public async Task SaveLokaal(Lokaal lokaal)
+        public async Task<bool> SaveLokaal(Lokaal lokaal)
         {
             //TODO Dubbele lokaalnummers
-            await this.LokalenCollection.InsertOneAsync(lokaal);
+            var filter = Builders<Lokaal>.Filter.Eq("lokaalnr", lokaal.lokaalNr);
+            var result = await this.LokalenCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                await this.LokalenCollection.InsertOneAsync(lokaal);
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<List<Lokaal>> GetAllLokalen()
