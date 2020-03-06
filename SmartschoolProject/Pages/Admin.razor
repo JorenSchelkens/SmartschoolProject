@@ -186,7 +186,7 @@
 
                                 <p style="font-weight: bold">Lokaal actief/inactief: </p>
 
-                                <MatSlideToggle @bind-Value="@lokaal.isActief"></MatSlideToggle>
+                                <MatSlideToggle @onclick="(() => veranderStatus(lokaal))" @bind-Value="@lokaal.isActief"></MatSlideToggle>
 
                                 @if (lokaal.isActief)
                                 {
@@ -272,6 +272,7 @@
         lokalen = await DBConnectionMongoDB.GetAllLokalen();
 
     }
+
     public void voegLokaalToePopup()
     {
         dialogIsOpen = true;
@@ -392,4 +393,14 @@
             lokaalNummer = 0;
         }
     }
+
+    public async void veranderStatus(Lokaal lokaal)
+    {
+        await DBConnectionMongoDB.ChangeStatusLokaal(lokaal);
+
+        string temp = (lokaal.isActief) ? "actief" : "inactief";
+
+        Toaster.Add($"Lokaal {lokaal.lokaalNr} is nu {temp}", MatToastType.Info, "Status");
+    }
 }
+    
