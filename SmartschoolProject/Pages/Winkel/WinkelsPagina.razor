@@ -26,25 +26,39 @@
 else
 {
     <h1>@winkel.naam</h1>
-    @foreach (Artikel artikel in winkel.artikels)
+    if (winkel.artikels != null)
     {
-        <div class="mat-layout-grid-inner">
-           <h1>@artikel.productnaam</h1>
-           <h2>€@artikel.standaardPrijs</h2>
-           <h2>@artikel.stock</h2>
-        </div>
-    }
+<div class="container">
+    <div class="row">
 
-    <MatButton Label="-" style="margin-right:1px;" Value="Bestel" />
+        @foreach (Artikel artikel in winkel.artikels)
+        {
+
+            <div class="col-sm">
+                <h1 style="float:left;">@artikel.productnaam</h1>
+                <h2 style="float:left;">€ @artikel.standaardPrijs</h2>
+                <h2 style="float:left;">@artikel.stock</h2>
+            </div>
+
+        }
+    </div>
+
+</div>
+
+        <MatButton Label="-" style="margin-right:1px;" Value="Bestel" />
+    }
 }
 
 @code {
     public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
-    public Winkel winkel { get; set; }
+    public Winkel winkel { get; set; } = new Winkel();
     public int aantal = 0;
     public DBConnection DBConnection { get; set; }
     public bool alleWinkels;
-
+    public void verhoogwaarde()
+    {
+        aantal++;
+    }
     [Parameter]
     public string Naam { get; set; }
 
@@ -55,12 +69,29 @@ else
         if (Naam == null)
         {
             winkel = DBConnection.GetWinkel(Naam);
+            //veranderen naar true (bij else naar false)
             alleWinkels = false;
         }
         else
         {
             alleWinkels = true;
         }
+
+        winkel.artikels = new List<Artikel>();
+
+        var artikel = new Artikel();
+        artikel.productnaam = "Test";
+        artikel.standaardPrijs = 1.2;
+        artikel.stock = 2;
+        winkel.artikels.Add(artikel);
+        winkel.artikels.Add(artikel);
+        winkel.artikels.Add(artikel);
+        winkel.artikels.Add(artikel);
+        winkel.artikels.Add(artikel);
+        winkel.artikels.Add(artikel);
+
+
+
     }
 
     public void test(Winkel winkel)
