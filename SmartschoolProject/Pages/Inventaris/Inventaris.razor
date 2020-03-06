@@ -1,34 +1,38 @@
 ﻿@page "/inventaris"
 @inject IMatToaster Toaster
+@inject GoogleGebruiker Gebruiker
 
 <MatAccordion Multi="true">
     @foreach (Lokaal lokaal in lokalen)
     {
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <MatList>
-                    @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
-                    {
-                        <MatListItem>
-                            @voorwerp.voorwerpNaam
-                            <p style="text-align:right; width:100%; padding:0;"></p>
-                            <MatButton Label="-" style="padding-right:10px" OnClick="@(() => Verlaag(voorwerp, lokaal))" />
-                            <p style="padding-right:10px; max-height:10px">@voorwerp.aantal</p>
-                            <MatButton Label="+" style="margin-right:0px;" OnClick="@(() => Verhoog(voorwerp, lokaal))" />
-                            <MatIconButton Icon="notification_important" style="margin-right:5px;" OnClick="@(() => popupOnClick(voorwerp, lokaal))"></MatIconButton>
-                            <p style="margin-right:0px; max-height:1px">@voorwerp.aantalDefecten</p>
-                            <MatButton Label="-" style="margin-right:1px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
-                            <p style="position: absolute; right: 0; max-height:10px"></p>
+        if (lokaal.lokaalVerantwoordelijke.Equals(naam)){
 
-                        </MatListItem>
-                        <MatListDivider></MatListDivider>
-                    }
-                </MatList>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <MatList>
+                        @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
+                        {
+                            <MatListItem>
+                                @voorwerp.voorwerpNaam
+                                <p style="text-align:right; width:100%; padding:0;"></p>
+                                <MatButton Label="-" style="padding-right:10px" OnClick="@(() => Verlaag(voorwerp, lokaal))" />
+                                <p style="padding-right:10px; max-height:10px">@voorwerp.aantal</p>
+                                <MatButton Label="+" style="margin-right:0px;" OnClick="@(() => Verhoog(voorwerp, lokaal))" />
+                                <MatIconButton Icon="notification_important" style="margin-right:5px;" OnClick="@(() => popupOnClick(voorwerp, lokaal))"></MatIconButton>
+                                <p style="margin-right:0px; max-height:1px">@voorwerp.aantalDefecten</p>
+                                <MatButton Label="-" style="margin-right:1px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
+                                <p style="position: absolute; right: 0; max-height:10px"></p>
+
+                            </MatListItem>
+                            <MatListDivider></MatListDivider>
+                        }
+                    </MatList>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+        }
     }
 </MatAccordion>
 
@@ -42,8 +46,11 @@
 
     public List<Lokaal> lokalen = new List<Lokaal>();
 
+    public string naam;
+
     protected override async Task OnInitializedAsync()
     {
+        naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
         lokalen = await DBConnectionMongoDB.GetAllLokalen();
     }
 
@@ -68,7 +75,7 @@
         }
         else
         {
-            Toaster.Add("U kan niet meer defecten hebben dan dat er " + voorwerp.voorwerpNaam.ToLower() + " zijn" , MatToastType.Danger, "Error");
+            Toaster.Add("U kan niet meer defecten hebben dan dat er " + voorwerp.voorwerpNaam.ToLower() + " zijn", MatToastType.Danger, "Error");
         }
 
 
