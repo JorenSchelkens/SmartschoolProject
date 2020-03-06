@@ -8,8 +8,8 @@ namespace DefaultDomainTests
         [Fact]
         public void UserTest()
         {
-            Gebruiker gebruiker = new Gebruiker();
-            gebruiker.Setup("joren.schelkens@bazandpoort.be");
+            GebruikerInfo gebruiker = new GebruikerInfo();
+            //gebruiker.Setup("joren.schelkens@bazandpoort.be");
 
             Assert.NotNull(gebruiker);
         }
