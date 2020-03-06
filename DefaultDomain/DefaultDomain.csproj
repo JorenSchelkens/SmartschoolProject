@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InventarisDomain\InventarisDomain.csproj" />
+    <ProjectReference Include="..\SchoolbalDomain\SchoolbalDomain.csproj" />
     <ProjectReference Include="..\WinkelDomain\WinkelDomain.csproj" />
   </ItemGroup>
 
