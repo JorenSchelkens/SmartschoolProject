@@ -2,41 +2,79 @@
 @inject NavigationManager navigationManager
 
 <style>
-    .item {
+    .actief {
         padding: 0;
+        cursor: default;
     }
 
     .knop {
         margin-left: 2rem;
     }
 
-    .actief{
+    .check{
         margin-left: 2rem;
+        width: 5rem;
+        cursor: not-allowed;
     }
 
     .winkelnaam {
         width: 10rem;
     }
+
+    label{
+        margin: 0;
+    }
+
+    .heading{
+        margin-bottom: 2rem;
+    }
+
+    .nietActief{
+        padding: 0;
+        opacity: 0.6;
+    }
 </style>
 
 
-<MatH2>Mijn winkels</MatH2>
+<MatH2 Class="heading">Mijn winkels</MatH2>
 
 <MatList>
 
 
     @foreach (Winkel winkel in winkels)
     {
-        <MatListItem Class="item">
 
-            <div class="winkelnaam">@winkel.naam</div>
+        if (winkel.actief)
+        {
+            <MatListItem Class="actief" Disabled="true">
 
-            <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
+                <div class="winkelnaam">@winkel.naam</div>
 
-            <MatCheckbox @bind-Value="@winkel.actief" Class="actief" Label="Actief"></MatCheckbox>
-            
-        </MatListItem>
-        <MatListDivider></MatListDivider>
+                <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
+
+                <MatCheckbox @bind-Value="@winkel.actief" Class="check" Label="Actief"></MatCheckbox>
+
+            </MatListItem>
+
+            <MatListDivider></MatListDivider>
+        }
+        else
+        {
+
+            <MatListItem Class="nietActief" Disabled="true">
+
+                <div class="winkelnaam">@winkel.naam</div>
+
+                <MatButton Unelevated="true" Disabled="true" Class="knop">bewerken</MatButton>
+
+                <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" Label="Actief"></MatCheckbox>
+
+            </MatListItem>
+
+            <MatListDivider></MatListDivider>
+        }
+
+
 
     }
 
