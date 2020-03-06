@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using InventarisDomain;
 using WinkelDomain;
+using SchoolbalDomain;
 
 namespace DefaultDomain
 {
@@ -112,6 +113,54 @@ namespace DefaultDomain
 
             //Return object
             return winkel;
+        }
+
+        public Inschrijving GetInschrijving(Gast gastheer,string klas)
+        {
+            this.ResetErrorMessage();
+            
+            Inschrijving inschrijving = new Inschrijving(gastheer,klas);
+            Gast gast1 = new Gast("");
+            Gast gast2 = new Gast("");
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT klas, gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2 FROM tblinschrijvingen WHERE naam = $gastheer";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@naam", gastheer.Naam);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    inschrijving.klas = reader.GetString(0);
+                    gast1.Naam = reader.GetString(1);
+                    gast2.Naam = reader.GetString(2);
+                    gastheer.Confirmed = (reader.GetInt32(3) == 1) ? true : false;
+                    gast1.Confirmed = (reader.GetInt32(4) == 1) ? true : false;
+                    gast2.Confirmed = (reader.GetInt32(5) == 1) ? true : false;
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            inschrijving.gast1 = gast1;
+            inschrijving.gast1 = gast2;
+            inschrijving.gastheer = gastheer;
+
+            //Return object
+            return inschrijving;
         }
 
         public Artikel GetArtikel(string productnaam)
@@ -280,6 +329,45 @@ namespace DefaultDomain
 
             return succes;
         }
+
+        public bool AddInschrijving(Inschrijving inschrijving)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
+                command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
+                command.Parameters.AddWithValue("@stock", artikel.stock);
+                command.Parameters.AddWithValue("@korting", artikel.korting);
+                command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
+                command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
+
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+
         public bool AddWinkel(Winkel winkel)
         {
             this.ResetErrorMessage();
