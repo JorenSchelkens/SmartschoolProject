@@ -17,15 +17,22 @@
 
 <EditForm Model="myModel" OnValidSubmit="@succes">
     <DataAnnotationsValidator />
-        <p>
-            <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
-        </p>
+
        
-        <MatButton Type="submit" Raised="true">Toeveoegen</MatButton>
-        
+  
+
+    <p>
+        <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
+        <MatTextField @bind-Value="myModel.Beheerder" Label="Beheerder"></MatTextField>
+    </p>
+
+    <MatButton Type="submit" Raised="true">Toevoegen</MatButton>
+
 </EditForm>
 
 @code {
+
+    public string beheerder;
 
     DBConnection dBConnection = new DBConnection();
 
@@ -34,6 +41,10 @@
     {
         [Required]
         public string NaamWinkel { get; set; }
+
+        [Required]
+        public string Beheerder { get; set; }
+
     }
 
     public void succes()
@@ -42,10 +53,11 @@
         Winkel winkel = new Winkel();
 
         winkel.naam = myModel.NaamWinkel;
-        winkel.beheerder = "test";
+        winkel.beheerder = myModel.Beheerder;
+        winkel.actief = false;
 
         dBConnection.AddWinkel(winkel);
-        
+
         NavigationManager.NavigateTo("/winkel");
     }
 }

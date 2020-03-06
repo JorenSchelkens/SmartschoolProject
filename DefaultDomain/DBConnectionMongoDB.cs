@@ -26,10 +26,19 @@ namespace DefaultDomain
             this.LokalenCollection = this.MongoDatabase.GetCollection<Lokaal>("lokalen");
         }
 
-        public async Task SaveLokaal(Lokaal lokaal)
+        public async Task<bool> SaveLokaal(Lokaal lokaal)
         {
             //TODO Dubbele lokaalnummers
-            await this.LokalenCollection.InsertOneAsync(lokaal);
+            var filter = Builders<Lokaal>.Filter.Eq("lokaalnr", lokaal.lokaalNr);
+            var result = await this.LokalenCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                await this.LokalenCollection.InsertOneAsync(lokaal);
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<List<Lokaal>> GetAllLokalen()
@@ -68,11 +77,13 @@ namespace DefaultDomain
             return result.ModifiedCount == 1;
         }
 
-        public async Task<bool> DisableLokaal(Lokaal Lokaal)
+        public async Task<bool> ChangeStatusLokaal(Lokaal Lokaal)
         {
             var filter = Builders<Lokaal>.Filter.Eq("_id", Lokaal.Id);
-            var update = Builders<Lokaal>.Update.Set("actief", "false");
 
+            string temp = (Lokaal.isActief) ? "false" : "true"; 
+
+            var update = Builders<Lokaal>.Update.Set("actief", temp);
             var result = await this.LokalenCollection.UpdateOneAsync(filter, update);
 
             return result.ModifiedCount == 1;

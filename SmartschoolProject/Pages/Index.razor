@@ -12,10 +12,14 @@ Welcome to your new app.
 
     protected async override Task OnInitializedAsync()
     {
-        string email = (await AuthenticationStateTask).User.Identity.Name;
-        this.GoogleGebruiker = new GoogleGebruiker(email);
-        await Task.Delay(100);
-        this.GoogleGebruiker.Refresh();
-    }
+        if (string.IsNullOrEmpty(GoogleGebruiker.GebruikerInfo.Naam))
+        {
+            string email = (await AuthenticationStateTask).User.Identity.Name;
 
+            GebruikerInfo temp = await GebruikerInfoBuilder.BuildGebruikerInfoFromEmail(email);
+            this.GoogleGebruiker.GebruikerInfo = temp;
+
+            this.GoogleGebruiker.Refresh();
+        }
+    }
 }

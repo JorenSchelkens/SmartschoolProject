@@ -14,19 +14,6 @@ namespace SmartschoolProject.Data.User
             this.GebruikerInfo = new GebruikerInfo();
         }
 
-        public GoogleGebruiker(string email)
-        {
-            this.GebruikerInfo = new GebruikerInfo();
-            this.GetUserDetails(email);
-
-            this.Refresh();
-        }
-
-        private async void GetUserDetails(string email)
-        {
-            this.GebruikerInfo = await this.GebruikerInfo.Initialize(email);
-        }
-
         public void Refresh()
         {
             this.StateHasChanged();

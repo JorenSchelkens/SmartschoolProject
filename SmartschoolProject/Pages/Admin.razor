@@ -183,6 +183,20 @@
                                 <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
                             </MatExpansionPanelSummary>
                             <MatExpansionPanelDetails>
+
+                                <p style="font-weight: bold">Lokaal actief/inactief: </p>
+
+                                <MatSlideToggle @bind-Value="@lokaal.isActief"></MatSlideToggle>
+
+                                @if (lokaal.isActief)
+                                {
+                                    <p style="font-weight: bold">Actief</p>
+                                }
+                                else
+                                {
+                                    <p style="font-weight: bold">Inactief</p>
+                                }
+
                                 <MatList>
                                     @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
                                     {
@@ -211,14 +225,13 @@
 </MatAccordion>
 
 <MatDialog @bind-IsOpen="@dialogIsOpen">
-    <MatDialogTitle>Nummer</MatDialogTitle>
+    <MatDialogTitle>Lokaal toevoegen</MatDialogTitle>
     <MatDialogContent>
-        <p>Geef de nummer van het lokaal:</p>
-        <MatTextField Label="Lokaalnummer:" @bind-Value="lokaalNummer"></MatTextField>
+        <MatNumericUpDownField @onfocusout="CheckNummer" Label="Lokaalnummer:" Minimum="0" @bind-Value="lokaalNummer"></MatNumericUpDownField>
         <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@(() => maakLokaalAan(lokaalNummer, lokaalverantwoordelijke))">Voeg toe</MatButton>
+        <MatButton OnClick="@(() => maakLokaalAan(lokaalNummer, lokaalverantwoordelijke))">Toevoegen</MatButton>
     </MatDialogActions>
 </MatDialog>
 
@@ -238,7 +251,8 @@
 
     public Lokaal lokaal { get; set; }
 
-    public List<WinkelDomain.Winkel> winkels = new List<WinkelDomain.Winkel>();
+    public List<WinkelDomain.Winkel>
+    winkels = new List<WinkelDomain.Winkel>();
     public List<Lokaal> lokalen { get; set; }
 
     public void annuleerVerwijderLokaal()
@@ -276,10 +290,18 @@
 
         dialogIsOpen = false;
 
-        await DBConnectionMongoDB.SaveLokaal(lokaal);
+        var gelukt = await DBConnectionMongoDB.SaveLokaal(lokaal);
+
+        if (gelukt)
+        {
+            Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
+        }
+        else
+        {
+            Toaster.Add("Er bestaat reeds een lokaal met dit nummer", MatToastType.Danger, "Mislukt");
+        }
         this.StateHasChanged();
 
-        Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
     }
 
     public void VerwijderWinkel(WinkelDomain.Winkel winkel)
@@ -289,6 +311,7 @@
         bool temp = DBConnection.VeranderStatusWinkel(winkel);
         this.StateHasChanged();
     }
+
     public void goedkeuringWinkel(WinkelDomain.Winkel winkel)
     {
         //TODO VERANDER STATUS WINKEL
@@ -360,6 +383,13 @@
             await DBConnectionMongoDB.UpdateLokaal(lokaal);
         }
 
+    }
 
+    public void CheckNummer()
+    {
+        if (lokaalNummer < 0)
+        {
+            lokaalNummer = 0;
+        }
     }
 }

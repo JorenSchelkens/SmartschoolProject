@@ -10,7 +10,11 @@
         margin-left: 2rem;
     }
 
-    .winkelnaam{
+    .actief{
+        margin-left: 2rem;
+    }
+
+    .winkelnaam {
         width: 10rem;
     }
 </style>
@@ -20,30 +24,33 @@
 
 <MatList>
 
+
     @foreach (Winkel winkel in winkels)
     {
-    <MatListItem Class="item">
+        <MatListItem Class="item">
 
-        <div class="winkelnaam">@winkel.naam</div>
+            <div class="winkelnaam">@winkel.naam</div>
 
-        <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
-        <MatCheckbox @bind-Value="@temp" Label="Actief"></MatCheckbox>
+            <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
 
-    </MatListItem>
+            <MatCheckbox @bind-Value="@winkel.actief" Class="actief" Label="Actief"></MatCheckbox>
+            
+        </MatListItem>
         <MatListDivider></MatListDivider>
+
     }
+
 
 </MatList>
 
 
 <br />
 <MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
+
 @code {
 
     public DBConnection DBConnection = new DBConnection();
     public List<Winkel> winkels = new List<Winkel>();
-
-    public bool temp;
 
     protected override void OnInitialized()
     {
