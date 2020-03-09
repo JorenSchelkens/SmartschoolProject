@@ -340,16 +340,17 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
+                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @bevestigdGast1, @bevestigdGast2);";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-                command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
-                command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
-                command.Parameters.AddWithValue("@stock", artikel.stock);
-                command.Parameters.AddWithValue("@korting", artikel.korting);
-                command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
-                command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
+                command.Parameters.AddWithValue("@naam", inschrijving.gastheer.Naam);
+                command.Parameters.AddWithValue("@klas", inschrijving.klas);
+                command.Parameters.AddWithValue("@gast1", inschrijving.gast1);
+                command.Parameters.AddWithValue("@gast2", inschrijving.gast2);
+                command.Parameters.AddWithValue("@bevestigdGastheer", (inschrijving.gastheer.Confirmed) ? 1 : 0);
+                command.Parameters.AddWithValue("@bevestigdGast1", (inschrijving.gast1.Confirmed) ? 1 : 0);
+                command.Parameters.AddWithValue("@bevestigdGast2", (inschrijving.gast2.Confirmed) ? 1 : 0);
 
 
                 if (command.ExecuteNonQuery() > 0)
