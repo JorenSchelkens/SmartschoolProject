@@ -69,7 +69,7 @@
 
             inschrijving.gast1 = gast1;
             inschrijving.gastheer = gastheer;
-            inschrijving.klas = Gebruiker.GebruikerInfo.Klas;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
         }
@@ -89,7 +89,7 @@
 
             inschrijving.gast1 = gast1;
             inschrijving.gastheer = gastheer;
-            inschrijving.klas = Gebruiker.GebruikerInfo.Klas;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
         }
@@ -110,7 +110,7 @@
             inschrijving.gastheer = gastheer;
             inschrijving.gast1 = gast1;
             inschrijving.gast2 = gast2;
-            inschrijving.klas = Gebruiker.GebruikerInfo.Klas;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
         }

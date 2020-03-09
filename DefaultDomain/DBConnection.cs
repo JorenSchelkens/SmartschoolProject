@@ -330,43 +330,43 @@ namespace DefaultDomain
             return succes;
         }
 
-        public bool AddInschrijving(Inschrijving inschrijving)
-        {
-            this.ResetErrorMessage();
+        //public bool AddInschrijving(Inschrijving inschrijving)
+        //{
+        //    this.ResetErrorMessage();
 
-            bool succes = false;
+        //    bool succes = false;
 
-            try
-            {
-                this.MySqlConnection.Open();
+        //    try
+        //    {
+        //        this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
+        //        string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
 
-                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+        //        MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-                command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
-                command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
-                command.Parameters.AddWithValue("@stock", artikel.stock);
-                command.Parameters.AddWithValue("@korting", artikel.korting);
-                command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
-                command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
+        //        command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
+        //        command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
+        //        command.Parameters.AddWithValue("@stock", artikel.stock);
+        //        command.Parameters.AddWithValue("@korting", artikel.korting);
+        //        command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
+        //        command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
 
 
-                if (command.ExecuteNonQuery() > 0)
-                {
-                    succes = true;
-                }
-            }
-            catch (MySqlException ex)
-            {
-                this.ErrorMessage = ex.ToString();
-                succes = false;
-            }
+        //        if (command.ExecuteNonQuery() > 0)
+        //        {
+        //            succes = true;
+        //        }
+        //    }
+        //    catch (MySqlException ex)
+        //    {
+        //        this.ErrorMessage = ex.ToString();
+        //        succes = false;
+        //    }
 
-            this.MySqlConnection.Close();
+        //    this.MySqlConnection.Close();
 
-            return succes;
-        }
+        //    return succes;
+        //}
 
         public bool AddWinkel(Winkel winkel)
         {

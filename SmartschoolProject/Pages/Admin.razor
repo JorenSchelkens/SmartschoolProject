@@ -1,5 +1,6 @@
 ﻿@page "/admin"
 @inject NavigationManager navigationManager
+@inject GoogleGebruiker GoogleGebruiker
 @inject IMatToaster Toaster
 
 <MatAccordion Multi="true">
@@ -267,6 +268,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (!GoogleGebruiker.GebruikerInfo.IsAdmin)
+        {
+            navigationManager.NavigateTo("/");
+        }
 
         winkels = DBConnection.GetAllWinkels();
         lokalen = await DBConnectionMongoDB.GetAllLokalen();
@@ -403,4 +408,3 @@
         Toaster.Add($"Lokaal {lokaal.lokaalNr} is nu {temp}", MatToastType.Info, "Status");
     }
 }
-    
