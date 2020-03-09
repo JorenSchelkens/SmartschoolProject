@@ -13,6 +13,5 @@ bazandpoort.smartschool.be/OAuth
 
 https://dev.mysql.com/doc/connector-net/en/connector-net-tutorials-sql-command.html
 
-
-
-https://localhost:5001/Identity/Account/ExternalLogin?returnUrl=%2F&handler=Callback#
+https://kinsta.com/nl/kennisbank/gratis-smtp-server/
+https://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
