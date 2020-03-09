@@ -223,7 +223,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -234,6 +234,7 @@ namespace DefaultDomain
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
+                    winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
 
                     winkels.Add(winkel);
                     winkel = new Winkel();
