@@ -1,5 +1,6 @@
 ﻿@page "/admin"
 @inject NavigationManager navigationManager
+@inject GoogleGebruiker GoogleGebruiker
 @inject IMatToaster Toaster
 
 <MatAccordion Multi="true">
@@ -118,7 +119,7 @@
     </MatExpansionPanel>
     <MatExpansionPanel>
         <MatExpansionPanelSummary>
-            <MatExpansionPanelHeader>Bekijk alle winkels</MatExpansionPanelHeader>
+            <MatExpansionPanelHeader>Winkelverzoeken bekijken</MatExpansionPanelHeader>
         </MatExpansionPanelSummary>
         <MatExpansionPanelDetails>
             <div class="mat-layout-grid">
@@ -186,7 +187,7 @@
 
                                 <p style="font-weight: bold">Lokaal actief/inactief: </p>
 
-                                <MatSlideToggle @bind-Value="@lokaal.isActief"></MatSlideToggle>
+                                <MatSlideToggle @onclick="(() => veranderStatus(lokaal))" @bind-Value="@lokaal.isActief"></MatSlideToggle>
 
                                 @if (lokaal.isActief)
                                 {
@@ -267,11 +268,16 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (!GoogleGebruiker.GebruikerInfo.IsAdmin)
+        {
+            navigationManager.NavigateTo("/");
+        }
 
         winkels = DBConnection.GetAllWinkels();
         lokalen = await DBConnectionMongoDB.GetAllLokalen();
 
     }
+
     public void voegLokaalToePopup()
     {
         dialogIsOpen = true;
@@ -391,5 +397,14 @@
         {
             lokaalNummer = 0;
         }
+    }
+
+    public async void veranderStatus(Lokaal lokaal)
+    {
+        await DBConnectionMongoDB.ChangeStatusLokaal(lokaal);
+
+        string temp = (lokaal.isActief) ? "actief" : "inactief";
+
+        Toaster.Add($"Lokaal {lokaal.lokaalNr} is nu {temp}", MatToastType.Info, "Status");
     }
 }

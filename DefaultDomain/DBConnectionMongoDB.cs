@@ -28,7 +28,6 @@ namespace DefaultDomain
 
         public async Task<bool> SaveLokaal(Lokaal lokaal)
         {
-            //TODO Dubbele lokaalnummers
             var filter = Builders<Lokaal>.Filter.Eq("lokaalnr", lokaal.lokaalNr);
             var result = await this.LokalenCollection.Find(filter).FirstOrDefaultAsync();
 

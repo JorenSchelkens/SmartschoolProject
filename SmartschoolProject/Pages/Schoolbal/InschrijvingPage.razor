@@ -1,7 +1,7 @@
 ﻿@page "/inschrijving"
+@inject GoogleGebruiker Gebruiker
 
 @inject IMatToaster Toaster
-@* TODO display gebruikersnaam *@
 
 <MatDialog @bind-IsOpen="@dialogIsOpen">
     <MatDialogContent>
@@ -11,7 +11,7 @@
         <MatCheckbox @bind-Value="@gast2plus16" Label="16+"></MatCheckbox>
     </MatDialogContent>
     <MatDialogActions>
-            <MatButton @onclick="@Sluit">ANNULEER</MatButton>
+        <MatButton @onclick="@Sluit">ANNULEER</MatButton>
         <MatButton OnClick="@OkClick">SCHRIJF IN</MatButton>
     </MatDialogActions>
 </MatDialog>
@@ -57,42 +57,60 @@
         {
             Toaster.Add("Vul een gast in", MatToastType.Danger, "Error");
 
-        }else if(!gast1Naam.Trim().Equals("") && gast1plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
+        }
+        else if (!gast1Naam.Trim().Equals("") && gast1plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
         {
+            string naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
+
+            gastheer = new Gast(naam);
 
             inschrijving = new Inschrijving(gastheer, "");
             gast1 = new Gast(gast1Naam);
 
             inschrijving.gast1 = gast1;
+            inschrijving.gastheer = gastheer;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
-        }else if(!gast1Naam.Trim().Equals("") && !gast1plus16)/*Controleer of gast1 is ingevuld en 16+ is*/
+        }
+        else if (!gast1Naam.Trim().Equals("") && !gast1plus16)/*Controleer of gast1 is ingevuld en 16+ is*/
         {
             Toaster.Add("U kan geen gasten meepakken onder 16 jaar. Dit wordt gecontroleerd aan de inkom.", MatToastType.Danger, "Error");
 
-        }else if(!gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && gast2plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
+        }
+        else if (!gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && gast2plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
         {
+            string naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
+
+            gastheer = new Gast(naam);
 
             inschrijving = new Inschrijving(gastheer, "");
             gast1 = new Gast(gast2Naam);
 
             inschrijving.gast1 = gast1;
+            inschrijving.gastheer = gastheer;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
         }
-        else if(!gast2Naam.Trim().Equals("") && !gast2plus16)
+        else if (!gast2Naam.Trim().Equals("") && !gast2plus16)
         {
             Toaster.Add("U kan geen gasten meepakken onder 16 jaar. Dit wordt gecontroleerd aan de inkom.", MatToastType.Danger, "Error");
         }
         else
         {
+            string naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
+
+            gastheer = new Gast(naam);
             inschrijving = new Inschrijving(gastheer, "");
 
             gast1 = new Gast(gast1Naam);
             gast2 = new Gast(gast2Naam);
 
+            inschrijving.gastheer = gastheer;
             inschrijving.gast1 = gast1;
             inschrijving.gast2 = gast2;
+            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
             dialogIsOpen = false;
         }
