@@ -9,7 +9,7 @@
     <link href="css/site.css" rel="stylesheet" type="text/css" />
     <style>
         body {
-            background-image: url(spikes.png);
+            background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/webb.png);
         }
     </style>
     <h1>Druk op "Google" en log in met je bazandpoort email, hierna zal je naar de website doorgestuurd worden</h1>
@@ -33,7 +33,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button style="height:80px; width:200px; font-size : 40px;" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button style="height: 80px; width: 200px; font-size: 40px;" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>

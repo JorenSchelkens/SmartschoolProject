@@ -342,6 +342,7 @@ namespace DefaultDomain
 
                 string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @bevestigdGast1, @bevestigdGast2);";
 
+
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@naam", inschrijving.gastheer.Naam);
