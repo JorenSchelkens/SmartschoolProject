@@ -25,7 +25,21 @@ namespace DefaultDomain.Classes
         {
             this.IsLeerling = (this.Groups[0].isKlas) ? true : false;
 
-            // TODO Admin
+            if(this.GebruikersNaam == "gerrit.wijns")
+            {
+                this.IsAdmin = true;
+            }
+            else
+            {
+                //Tijdelijk 6IT admin
+
+                if(this.Groups[0].Name == "6IT")
+                {
+                    this.IsAdmin = true;
+                }
+
+                //Databank haal admin
+            }
         }
     }
 }
