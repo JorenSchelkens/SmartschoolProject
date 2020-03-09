@@ -14,6 +14,8 @@ namespace DefaultDomain.Classes
         public bool IsAdmin { get; set; }
         public bool IsLeerling { get; set; }
 
+        public double Balans { get; set; }
+
         //Transactie
 
         public GebruikerInfo()
