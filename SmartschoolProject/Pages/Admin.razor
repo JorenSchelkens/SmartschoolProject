@@ -403,7 +403,7 @@
     {
         await DBConnectionMongoDB.ChangeStatusLokaal(lokaal);
 
-        string temp = (lokaal.isActief) ? "actief" : "inactief";
+        string temp = (lokaal.isActief) ? "inactief" : "actief";
 
         Toaster.Add($"Lokaal {lokaal.lokaalNr} is nu {temp}", MatToastType.Info, "Status");
     }

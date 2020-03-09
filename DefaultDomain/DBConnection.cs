@@ -223,7 +223,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief FROM tblwinkel;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -234,6 +234,7 @@ namespace DefaultDomain
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
+                    winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
 
                     winkels.Add(winkel);
                     winkel = new Winkel();
@@ -330,43 +331,45 @@ namespace DefaultDomain
             return succes;
         }
 
-        //public bool AddInschrijving(Inschrijving inschrijving)
-        //{
-        //    this.ResetErrorMessage();
+        public bool AddInschrijving(Inschrijving inschrijving)
+        {
+            this.ResetErrorMessage();
 
-        //    bool succes = false;
+            bool succes = false;
 
-        //    try
-        //    {
-        //        this.MySqlConnection.Open();
+            try
+            {
+                this.MySqlConnection.Open();
 
-        //        string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@productnaam, @prijs, @stock, @korting, @actief, @winkelnr);";
-
-        //        MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
-
-        //        command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
-        //        command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
-        //        command.Parameters.AddWithValue("@stock", artikel.stock);
-        //        command.Parameters.AddWithValue("@korting", artikel.korting);
-        //        command.Parameters.AddWithValue("@actief", (artikel.actief) ? 1 : 0);
-        //        command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
+                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @bevestigdGast1, @bevestigdGast2);";
 
 
-        //        if (command.ExecuteNonQuery() > 0)
-        //        {
-        //            succes = true;
-        //        }
-        //    }
-        //    catch (MySqlException ex)
-        //    {
-        //        this.ErrorMessage = ex.ToString();
-        //        succes = false;
-        //    }
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-        //    this.MySqlConnection.Close();
+                command.Parameters.AddWithValue("@naam", inschrijving.gastheer.Naam);
+                command.Parameters.AddWithValue("@klas", inschrijving.klas);
+                command.Parameters.AddWithValue("@gast1", inschrijving.gast1);
+                command.Parameters.AddWithValue("@gast2", inschrijving.gast2);
+                command.Parameters.AddWithValue("@bevestigdGastheer", (inschrijving.gastheer.Confirmed) ? 1 : 0);
+                command.Parameters.AddWithValue("@bevestigdGast1", (inschrijving.gast1.Confirmed) ? 1 : 0);
+                command.Parameters.AddWithValue("@bevestigdGast2", (inschrijving.gast2.Confirmed) ? 1 : 0);
 
-        //    return succes;
-        //}
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
 
         public bool AddWinkel(Winkel winkel)
         {

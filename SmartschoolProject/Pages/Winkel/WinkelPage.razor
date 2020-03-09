@@ -43,10 +43,11 @@
 
     @foreach (Winkel winkel in winkels)
     {
+        Console.Out.Write(winkel.naam + " - " + winkel.goedgekeurd + " ");
 
         if (winkel.goedgekeurd)
         {
-            <MatListItem Class="actief" Disabled="true">
+            <MatListItem Class="actief">
 
                 <div class="winkelnaam">@winkel.naam</div>
 
