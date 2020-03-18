@@ -1,34 +1,53 @@
 ﻿@page "/inschrijving"
+@page "/inschrijving/{naam}/{secret}"
 @inject GoogleGebruiker Gebruiker
-
 @inject IMatToaster Toaster
 
-<MatDialog @bind-IsOpen="@dialogIsOpen">
-    <MatDialogContent>
-        <MatTextField @bind-Value="@gast1Naam" Style="color: #89b129;" Label="Naam Gast 1" FullWidth="true"></MatTextField>
-        <MatCheckbox @bind-Value="@gast1plus16" Label="16+"></MatCheckbox>
-        <MatTextField @bind-Value="@gast2Naam" Style="color: #89b129;" Label="Naam Gast 2" FullWidth="true"></MatTextField>
-        <MatCheckbox @bind-Value="@gast2plus16" Label="16+"></MatCheckbox>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton @onclick="@Sluit">ANNULEER</MatButton>
-        <MatButton OnClick="@OkClick">SCHRIJF IN</MatButton>
-    </MatDialogActions>
-</MatDialog>
+@if (geenParameters)
+{
+    <MatDialog @bind-IsOpen="@dialogIsOpen">
+        <MatDialogContent>
+            <MatTextField @bind-Value="@gast1Naam" Style="color: #89b129;" Label="Naam Gast 1" FullWidth="true"></MatTextField>
+            <MatCheckbox @bind-Value="@gast1plus16" Label="16+"></MatCheckbox>
+            <MatTextField @bind-Value="@gast2Naam" Style="color: #89b129;" Label="Naam Gast 2" FullWidth="true"></MatTextField>
+            <MatCheckbox @bind-Value="@gast2plus16" Label="16+"></MatCheckbox>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton @onclick="@Sluit">ANNULEER</MatButton>
+            <MatButton OnClick="@OkClick">SCHRIJF IN</MatButton>
+        </MatDialogActions>
+    </MatDialog>
 
-<style>
-    .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
-        color: #89b129;
-    }
-</style>
+    <style>
+        .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+            color: #89b129;
+        }
+    </style>
+}
+else
+{
+
+}
 
 @code
 {
+    [Parameter]
+    public string Naam { get; set; }
+
+    [Parameter]
+    public string Secret { get; set; }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private DBConnection DBConnection { get; set; }
+
     string error = "";
 
     bool gast1plus16 = false;
     bool gast2plus16 = false;
     bool dialogIsOpen = false;
+    bool geenParameters = true;
 
     public Gast gastheer;
     public Gast gast1;
@@ -42,7 +61,18 @@
 
     protected override void OnInitialized()
     {
-        dialogIsOpen = true;
+        this.DBConnection = new DBConnection();
+
+        if (string.IsNullOrEmpty(Naam) || string.IsNullOrEmpty(Secret))
+        {
+            geenParameters = true;
+            dialogIsOpen = true;
+        }
+        else
+        {
+            geenParameters = false;
+            CheckSecret();
+        }
     }
 
     void Sluit()
@@ -52,6 +82,9 @@
 
     void OkClick()
     {
+        //IMPORTANT GUID AAN INSCHRIJVING
+
+
         /*Controleer of gast 1 is ingevuld*/
         if (gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && !gast1plus16)
         {
@@ -114,7 +147,53 @@
 
             dialogIsOpen = false;
         }
+    }
 
+    async void SendEmail()
+    {
+        MailClass mailClass = new MailClass();
 
+        string temp = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
+        bool succes = mailClass.SendMail((await AuthenticationStateTask).User.Identity.Name, temp, this.inschrijving.secret);
+
+        if (succes)
+        {
+            Toaster.Add("Gelieven u inschrijving te bevestigen via u school email", MatToastType.Success, "Succes!");
+        }
+        else
+        {
+            Toaster.Add("Bevestigings email niet verstuurd, gelieven contact op te nemen met een IT verantwoordelijke", MatToastType.Danger, "Error");
+        }
+    }
+
+    void CheckSecret()
+    {
+        //Kijken dat de secret bij de email hoort in de databank en dan bevestigen op true zetten
+        Gast gastheer = new Gast(this.Naam);
+
+        Inschrijving inschrijving = DBConnection.GetInschrijving(gastheer, Gebruiker.GebruikerInfo.Groups[0].Name);
+        this.inschrijving = inschrijving;
+
+        if (inschrijving.secret == this.Secret)
+        {
+            //DB Goedkeuren
+            inschrijving.gastheer.Confirmed = true;
+
+            bool succes = this.DBConnection.VeranderInschrijvingConfirmatie(inschrijving);
+
+            if (succes)
+            {
+                Toaster.Add("Inschrijving goedgekeurd", MatToastType.Success, "Succes!");
+            }
+            else
+            {
+                Toaster.Add("Er is een fout opgelopen bij het goedkeuren van de bevestiging, gelieven contact op te nemen met een IT verantwoordelijke", MatToastType.Danger, "Error");
+            }
+        }
+        else
+        {
+            Toaster.Add("Inschrijving niet goedgekeurd, er is een nieuwe email verstuurd", MatToastType.Danger, "Error");
+            this.SendEmail();
+        }
     }
 }

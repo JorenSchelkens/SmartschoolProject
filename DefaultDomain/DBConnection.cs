@@ -115,11 +115,11 @@ namespace DefaultDomain
             return winkel;
         }
 
-        public Inschrijving GetInschrijving(Gast gastheer,string klas)
+        public Inschrijving GetInschrijving(Gast gastheer, string klas)
         {
             this.ResetErrorMessage();
-            
-            Inschrijving inschrijving = new Inschrijving(gastheer,klas);
+
+            Inschrijving inschrijving = new Inschrijving(gastheer, klas);
             Gast gast1 = new Gast("");
             Gast gast2 = new Gast("");
 
@@ -127,7 +127,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT klas, gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2 FROM tblinschrijvingen WHERE naam = $gastheer";
+                string sql = $"SELECT klas, gast1, gast2, bevestigdGastheer, secret FROM tblinschrijvingen WHERE naam = $gastheer";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 command.Parameters.AddWithValue("@naam", gastheer.Naam);
@@ -139,8 +139,7 @@ namespace DefaultDomain
                     gast1.Naam = reader.GetString(1);
                     gast2.Naam = reader.GetString(2);
                     gastheer.Confirmed = (reader.GetInt32(3) == 1) ? true : false;
-                    gast1.Confirmed = (reader.GetInt32(4) == 1) ? true : false;
-                    gast2.Confirmed = (reader.GetInt32(5) == 1) ? true : false;
+                    inschrijving.secret = reader.GetString(4);
                 }
 
                 //Reader sluiten
@@ -341,19 +340,17 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, bevestigdGast1, bevestigdGast2) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @bevestigdGast1, @bevestigdGast2);";
+                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, secret) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @secret);";
 
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@naam", inschrijving.gastheer.Naam);
                 command.Parameters.AddWithValue("@klas", inschrijving.klas);
-                command.Parameters.AddWithValue("@gast1", inschrijving.gast1);
-                command.Parameters.AddWithValue("@gast2", inschrijving.gast2);
+                command.Parameters.AddWithValue("@gast1", inschrijving.gast1.Naam);
+                command.Parameters.AddWithValue("@gast2", inschrijving.gast2.Naam);
                 command.Parameters.AddWithValue("@bevestigdGastheer", (inschrijving.gastheer.Confirmed) ? 1 : 0);
-                command.Parameters.AddWithValue("@bevestigdGast1", (inschrijving.gast1.Confirmed) ? 1 : 0);
-                command.Parameters.AddWithValue("@bevestigdGast2", (inschrijving.gast2.Confirmed) ? 1 : 0);
-
+                command.Parameters.AddWithValue("@secret", inschrijving.secret);
 
                 if (command.ExecuteNonQuery() > 0)
                 {
@@ -511,6 +508,41 @@ namespace DefaultDomain
                 {
                     command.Parameters.AddWithValue("@goedgekeurd", 1);
                 }
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
+        #endregion
+
+        #region Bevestigingen
+        public bool VeranderInschrijvingConfirmatie(Inschrijving inschrijving)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblinschrijvingen SET bevestigdGastheer = @goedgekeurd WHERE naam = {inschrijving.gastheer.Naam}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@goedgekeurd", 1);
 
                 if (command.ExecuteNonQuery() > 0)
                 {

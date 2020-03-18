@@ -106,8 +106,7 @@ CREATE TABLE `tblinschrijvingen` (
   `gast1` varchar(75) NOT NULL,
   `gast2` varchar(75) NOT NULL,
   `bevestigdGastheer` int NOT NULL,
-  `bevestigdGast1` int NOT NULL,
-  `bevestigdGast2` int NOT NULL,
+  `secret` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -205,4 +204,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-02 16:15:23
+-- Dump completed on 2020-03-18 16:25:09

@@ -6,6 +6,7 @@
         public string klas { get; set; }
         public Gast gast1 { get; set; }
         public Gast gast2 { get; set; }
+        public string secret { get; set; }
             
         public Inschrijving(Gast gastheer, string klas)
         {

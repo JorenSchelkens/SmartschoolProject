@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SchoolbalDomain
+﻿namespace SchoolbalDomain
 {
     public class Gast
     {
@@ -12,7 +8,7 @@ namespace SchoolbalDomain
         public Gast(string naam)
         {
             this.Naam = naam;
-            Confirmed = false;
+            this.Confirmed = false;
         }
     }
 }
