@@ -217,11 +217,12 @@ namespace DefaultDomain
 
             List<Winkel> winkels = new List<Winkel>();
             Winkel winkel = new Winkel();
-
+            List<Artikel> artikels = new List<Artikel>();
+            Artikel artikel = new Artikel();
             try
             {
+                artikels = GetAllArtikels();
                 this.MySqlConnection.Open();
-
                 string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
@@ -234,6 +235,14 @@ namespace DefaultDomain
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
                     winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
+
+                    for (int i = 0; i < artikels.Count; i++) 
+                    {
+                        if (artikels[i].winkelnr == winkel.winkelnr) 
+                        {
+                            winkel.artikels.Add(artikels[i]);
+                        }
+                    }
 
                     winkels.Add(winkel);
                     winkel = new Winkel();

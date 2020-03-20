@@ -4,6 +4,7 @@ using DefaultDomain.Classes;
 using WinkelDomain;
 using System;
 using InventarisDomain;
+using System.Collections.Generic;
 
 namespace DefaultDomainTests
 {
@@ -113,6 +114,20 @@ namespace DefaultDomainTests
             Assert.NotNull(winkel.artikels);
             dBConnection.DeleteRowsFromsmProject();
         }
+
+
+        [Fact]
+        public void DBConnectionGetAllWinkelTest()
+        {
+            DBConnection dBConnection = new DBConnection();
+            var temp = dBConnection.AddWinkel(winkel);
+            List<Winkel> winkels = new List<Winkel>();
+
+            winkels = dBConnection.GetAllWinkels();
+            Assert.NotNull(winkels);
+            dBConnection.DeleteRowsFromsmProject();
+        }
+
         [Fact]
         public void DBConnectionGetArtikelTest()
         {
