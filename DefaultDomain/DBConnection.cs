@@ -12,6 +12,8 @@ namespace DefaultDomain
         private MySqlConnection MySqlConnection { get; set; }
         public string ErrorMessage { get; set; } = "";
 
+        //TODO: Bestelling Methode + Winkel met artikels in 1 keer terug geven
+
         public DBConnection()
         {
             this.MySqlConnection = new MySqlConnection(this.ConnectionString);
