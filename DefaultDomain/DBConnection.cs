@@ -117,11 +117,11 @@ namespace DefaultDomain
             return winkel;
         }
 
-        public Inschrijving GetInschrijving(Gast gastheer, string klas)
+        public Inschrijving GetInschrijving(Gast gastheer)
         {
             this.ResetErrorMessage();
 
-            Inschrijving inschrijving = new Inschrijving(gastheer, klas);
+            Inschrijving inschrijving = new Inschrijving(gastheer, "");
             Gast gast1 = new Gast("");
             Gast gast2 = new Gast("");
 
@@ -129,7 +129,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT klas, gast1, gast2, bevestigdGastheer, secret FROM tblinschrijvingen WHERE naam = $gastheer";
+                string sql = $"SELECT klas, gast1, gast2, bevestigdGastheer, secret FROM tblinschrijvingen WHERE naam = @naam";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 command.Parameters.AddWithValue("@naam", gastheer.Naam);
@@ -342,7 +342,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, secret) VALUES(@naam, @klas , @gast1, @gast2, @bevigdGastheer, @secret);";
+                string sql = $"INSERT INTO tblinschrijvingen(naam,klas,gast1, gast2, bevestigdGastheer, secret) VALUES(@naam, @klas , @gast1, @gast2, @bevestigdGastheer, @secret);";
 
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
@@ -540,11 +540,12 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"UPDATE tblinschrijvingen SET bevestigdGastheer = @goedgekeurd WHERE naam = {inschrijving.gastheer.Naam}";
+                string sql = $"UPDATE tblinschrijvingen SET bevestigdGastheer = @goedgekeurd WHERE naam = @naam";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@goedgekeurd", 1);
+                command.Parameters.AddWithValue("@naam", inschrijving.gastheer.Naam);
 
                 if (command.ExecuteNonQuery() > 0)
                 {

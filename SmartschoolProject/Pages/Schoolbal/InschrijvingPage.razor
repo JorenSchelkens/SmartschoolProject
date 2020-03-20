@@ -79,8 +79,6 @@
 
     void OkClick()
     {
-        //IMPORTANT: GUID AAN INSCHRIJVING ALS SECRET
-
         /*Controleer of gast 1 is ingevuld*/
         if (gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && !gast1plus16)
         {
@@ -94,10 +92,18 @@
 
             inschrijving = new Inschrijving(gastheer, "");
             gast1 = new Gast(gast1Naam);
+            gast2 = new Gast("");
 
             inschrijving.gast1 = gast1;
+            inschrijving.gast2 = gast2;
             inschrijving.gastheer = gastheer;
             inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
+
+            inschrijving.secret = Guid.NewGuid().ToString();
+
+            bool temp = DBConnection.AddInschrijving(inschrijving);
+
+            this.SendEmail();
 
             dialogIsOpen = false;
         }
@@ -125,6 +131,12 @@
             inschrijving.gast2 = gast2;
             inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
 
+            inschrijving.secret = Guid.NewGuid().ToString();
+
+            bool temp = DBConnection.AddInschrijving(inschrijving);
+
+            this.SendEmail();
+
             dialogIsOpen = false;
         }
     }
@@ -151,7 +163,7 @@
         //Kijken dat de secret bij de email hoort in de databank en dan bevestigen op true zetten
         Gast gastheer = new Gast(this.Naam);
 
-        Inschrijving inschrijving = DBConnection.GetInschrijving(gastheer, Gebruiker.GebruikerInfo.Groups[0].Name);
+        Inschrijving inschrijving = DBConnection.GetInschrijving(gastheer);
         this.inschrijving = inschrijving;
 
         if (inschrijving.secret == this.Secret)
@@ -164,7 +176,6 @@
             if (succes)
             {
                 Toaster.Add("Inschrijving goedgekeurd", MatToastType.Success, "Succes!");
-                NavigationManager.NavigateTo("/");
             }
             else
             {
