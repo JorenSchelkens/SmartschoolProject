@@ -1,6 +1,7 @@
 ﻿@page "/winkels"
 @page "/winkels/{naam}"
 @inject NavigationManager NavigationManager
+@inject GoogleGebruiker Gebruiker
 <style>
     .tabs {
         background-color: rgba(193, 193, 193, 0.3);
@@ -50,13 +51,25 @@ else
                     </div>
 
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                        <MatButton Unelevated="true" @onclick="@(() => BestelArtikel(artikel))">Bestel</MatButton>
+
+                        @if (artikel.stock == 0)
+                        {
+                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => BestelArtikel(artikel))">Bestel</MatButton>
+                        }
+                        else
+                        {
+                            <MatButton Unelevated="true" @onclick="@(() => BestelArtikel(artikel))">Bestel</MatButton>
+                        }
+
                     </div>
 
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
                 }
 
-                <MatButton Unelevated="true" @onclick="@(() => BestellingAfronden())">Bestelling Afronden</MatButton>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                    <MatButton Unelevated="true" @onclick="@(() => BestellingAfronden())">Bestelling Afronden</MatButton>
+                </div>
+
             }
 
         </div>
@@ -69,6 +82,8 @@ else
     public Winkel winkel { get; set; } = new Winkel();
     public DBConnection DBConnection { get; set; }
     public bool alleWinkels;
+
+    public Bestelling Bestelling { get; set; }
 
     [Parameter]
     public string Naam { get; set; }
@@ -85,17 +100,29 @@ else
         }
         else
         {
+            //Get artikels van winkel uit DB
+            //winkel = DBConnection
+
             alleWinkels = false;
+
+            var artikel = new Artikel();
+            artikel.productnaam = "Test";
+            artikel.standaardPrijs = 1.2;
+            artikel.stock = 2;
+            winkel.artikels.Add(artikel);
+
+            var artikel2 = new Artikel();
+            artikel2.productnaam = "Test2";
+            artikel2.standaardPrijs = 2;
+            artikel2.stock = 0;
+
+            winkel.artikels.Add(artikel2);
+
+            Bestelling = new Bestelling(Gebruiker.GebruikerInfo.GebruikersNaam);
+
+            this.StateHasChanged();
         }
 
-        var artikel = new Artikel();
-        artikel.productnaam = "Test";
-        artikel.standaardPrijs = 1.2;
-        artikel.stock = 2;
-        winkel.artikels.Add(artikel);
-        winkel.artikels.Add(artikel);
-
-        this.StateHasChanged();
     }
 
     public void GaNaarWinkel(Winkel winkel)
@@ -105,11 +132,17 @@ else
 
     public void BestelArtikel(Artikel artikel)
     {
+        BesteldArtikel temp = new BesteldArtikel(artikel, 0, null);
 
+        if (!(Bestelling.BesteldeArtikels.Contains(temp)))
+        {
+            Bestelling.BesteldeArtikels.Add(temp);
+        }
     }
 
     public void BestellingAfronden()
     {
-
+        //int bestelNr = DBConnection
+        //NavigationManager.NavigateTo($"/betalen/{bestelNr}");
     }
 }
