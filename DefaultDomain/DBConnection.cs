@@ -12,7 +12,7 @@ namespace DefaultDomain
         private MySqlConnection MySqlConnection { get; set; }
         public string ErrorMessage { get; set; } = "";
 
-        //TODO: Bestelling Methode + Winkel met artikels in 1 keer terug geven
+        //TODO: Bestelling Methode per bestelNr, Bestelling Opslaan dan bestelNr teruggeven
 
         public DBConnection()
         {
@@ -208,6 +208,92 @@ namespace DefaultDomain
 
             //Return object
             return artikel;
+        }
+
+        public Bestelling GetBestelling(int bestelNr)
+        {
+            this.ResetErrorMessage();
+
+            Bestelling bestelling = new Bestelling("");
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs FROM tblbestelling WHERE bestelnr = @bestelnr;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", bestelNr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    bestelling.BestelNr = bestelNr;
+                    bestelling.AanmaakDatum = reader.GetDateTime(1);
+                    bestelling.GebruikersNaam = reader.GetString(2);
+                    bestelling.
+                    artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return bestelling;
+        }
+
+        public List<Artikel> GetBesteldeArtikels(int bestelNr) 
+        {
+            this.ResetErrorMessage();
+            List<Artikel> artikels = new List<Artikel>();
+            List<Artikel> alleBestaandeArtikels = new List<Artikel>();
+            Artikel artikel = new Artikel();
+
+            try
+            {
+                alleBestaandeArtikels = GetAllArtikels();
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT productnr, prijs FROM tblbesteldeartikels WHERE bestelnr = @bestelnr";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", bestelNr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                                        
+                    artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return bestelling;
         }
 
         #endregion
