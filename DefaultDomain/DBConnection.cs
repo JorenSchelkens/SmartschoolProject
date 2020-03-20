@@ -135,13 +135,22 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@naam", gastheer.Naam);
                 MySqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
+                if (reader.HasRows)
                 {
-                    inschrijving.klas = reader.GetString(0);
-                    gast1.Naam = reader.GetString(1);
-                    gast2.Naam = reader.GetString(2);
-                    gastheer.Confirmed = (reader.GetInt32(3) == 1) ? true : false;
-                    inschrijving.secret = reader.GetString(4);
+                    while (reader.Read())
+                    {
+                        inschrijving.klas = reader.GetString(0);
+                        gast1.Naam = reader.GetString(1);
+                        gast2.Naam = reader.GetString(2);
+                        gastheer.Confirmed = (reader.GetInt32(3) == 1) ? true : false;
+                        inschrijving.secret = reader.GetString(4);
+                    }
+                }
+                else
+                {
+                    reader.Close();
+                    this.MySqlConnection.Close();
+                    return null;
                 }
 
                 //Reader sluiten
@@ -238,9 +247,9 @@ namespace DefaultDomain
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
                     winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
 
-                    for (int i = 0; i < artikels.Count; i++) 
+                    for (int i = 0; i < artikels.Count; i++)
                     {
-                        if (artikels[i].winkelnr == winkel.winkelnr) 
+                        if (artikels[i].winkelnr == winkel.winkelnr)
                         {
                             winkel.artikels.Add(artikels[i]);
                         }

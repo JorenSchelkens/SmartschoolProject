@@ -60,6 +60,14 @@
     {
         this.DBConnection = new DBConnection();
 
+        Inschrijving temp = DBConnection.GetInschrijving(new Gast(Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam));
+
+        if(temp != null)
+        {
+            Toaster.Add("Je bent al ingeschreven", MatToastType.Info, "Opgelet");
+            NavigationManager.NavigateTo("/", true);
+        }
+
         if (string.IsNullOrEmpty(Naam) || string.IsNullOrEmpty(Secret))
         {
             geenParameters = true;
