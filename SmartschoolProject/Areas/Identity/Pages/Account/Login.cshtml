@@ -9,37 +9,60 @@
     <link href="css/site.css" rel="stylesheet" type="text/css" />
     <style>
         body {
-            background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/webb.png);
+            background-image: url(https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .border {
+            background-color: rgb(255, 255, 255,0.5);
+            border: 5px solid white;
+            margin: auto;
+            margin-top: 200px;
+            text-align: center;
+            padding: 10px;
+            padding-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        footer {
+            overflow: hidden !important;
+            background-color: white !important;
+        }
+
+        .container{
+            text-align: center !important;
         }
     </style>
-    <h1>Druk op "Google" en log in met je bazandpoort email, hierna zal je naar de website doorgestuurd worden</h1>
-    <h3>(voornaam.achternaam@bazandpoort.be)</h3>
-    <h3>(wachtwoord = wachtwoord van je smartschool account)</h3>
+    <!-- background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/webb.png); -->
 
+    <div class="border">
+        <h1>Hallo</h1>
+        <h4>Druk op "Google" en log in met je bazandpoort email, hierna zal je naar de website doorgestuurd worden</h4>
+        <h4>(voornaam.achternaam@bazandpoort.be)</h4>
+        <h4>(wachtwoord = wachtwoord van je smartschool account)</h4>
 
-    <br />
-    <br />
-
-    <div class="row">
-        <div class="col-md-4">
-            <section>
-                @if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button style="height: 80px; width: 200px; font-size: 40px;" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            </section>
+        <div class="row">
+            <div class="col-md-4" style="margin: auto;">
+                <section style="margin: auto;">
+                    @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal"  style="margin: auto;">
+                            <div  style="margin: auto;">
+                                <p  style="margin: auto;">
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button style="margin: auto;height: 80px; width: 200px; font-size: 40px;" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                </section>
+            </div>
         </div>
     </div>
 }

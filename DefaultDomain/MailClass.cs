@@ -26,9 +26,10 @@ namespace DefaultDomain
                 {
                     mail.From = new MailAddress(EmailSchool);
                     mail.To.Add(emailGebruiker);
+                    mail.Body = $"<div><img src = 'https://www.busleydenatheneum.be/sites/default/files/thumbnails/image/BA_bol.jpg' style = 'width: 100px;float: left;'><h1 style = 'padding-left: 110px;padding-top: 31px;'> bevestigen schoolbal </h1></div><div style = 'margin-top: 50px;' href =\"{href}\"><p> Klik op de link hieronder om je inschrijving te bevestigen</p><a href=\"{href}\"> Bevestigen </a></div>";
 
                     mail.Subject = "Bedankt voor de inschrijving!";
-                    mail.Body = $"<h1>Klik op de link hieronder om je inschrijving te bevestigen</h1><a href=\"{href}\">Bevestigen</a>";
+                    //mail.Body = $"<h1>Klik op de link hieronder om je inschrijving te bevestigen</h1><a href=\"{href}\">Bevestigen</a>";
                     mail.IsBodyHtml = true;
 
                     using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
