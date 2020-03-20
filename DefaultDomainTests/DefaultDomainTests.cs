@@ -72,6 +72,8 @@ namespace DefaultDomainTests
             var temp = dBConnection.AddWinkel(winkel);
             winkel = dBConnection.GetWinkel(winkel.naam);
 
+            winkel.actief = true;
+
             Assert.True(dBConnection.VeranderStatusWinkel(winkel));
             dBConnection.DeleteRowsFromsmProject();
         }
@@ -85,12 +87,11 @@ namespace DefaultDomainTests
             var temp = dBConnection.AddWinkel(winkel);
             winkel = dBConnection.GetWinkel(winkel.naam);
 
-
+            winkel.goedgekeurd = true;
 
             Assert.True(dBConnection.VeranderGoedgekeurdWinkel(winkel));
+            var temp2 = 0;
             dBConnection.DeleteRowsFromsmProject();
-            
-
         }
 
         [Fact]
@@ -121,12 +122,10 @@ namespace DefaultDomainTests
             Assert.NotNull(artikel.productnr);
         }
 
+        [Fact]
         public void MongoDBConnectionSaveLokaalTest() 
         {
             DBConnectionMongoDB mongoDB = new DBConnectionMongoDB();
-
         }
-
-
     }
 }

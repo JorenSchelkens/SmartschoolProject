@@ -2,6 +2,7 @@
 @page "/inschrijving/{naam}/{secret}"
 @inject GoogleGebruiker Gebruiker
 @inject IMatToaster Toaster
+@inject NavigationManager NavigationManager
 
 @if (geenParameters)
 {
@@ -23,10 +24,6 @@
             color: #89b129;
         }
     </style>
-}
-else
-{
-
 }
 
 @code
@@ -82,16 +79,14 @@ else
 
     void OkClick()
     {
-        //IMPORTANT GUID AAN INSCHRIJVING
-
+        //IMPORTANT: GUID AAN INSCHRIJVING ALS SECRET
 
         /*Controleer of gast 1 is ingevuld*/
         if (gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && !gast1plus16)
         {
             Toaster.Add("Vul een gast in", MatToastType.Danger, "Error");
-
         }
-        else if (!gast1Naam.Trim().Equals("") && gast1plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
+        else if (!gast1Naam.Trim().Equals("") && (gast1plus16 || gast1Naam.Trim().Equals("") && gast2plus16))/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
         {
             string naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
 
@@ -110,21 +105,6 @@ else
         {
             Toaster.Add("U kan geen gasten meepakken onder 16 jaar. Dit wordt gecontroleerd aan de inkom.", MatToastType.Danger, "Error");
 
-        }
-        else if (!gast2Naam.Trim().Equals("") && gast1Naam.Trim().Equals("") && gast2plus16)/*Als gebruiker 2 is ingevuld en 1 niet, verander dan*/
-        {
-            string naam = Gebruiker.GebruikerInfo.Voornaam + Gebruiker.GebruikerInfo.Naam;
-
-            gastheer = new Gast(naam);
-
-            inschrijving = new Inschrijving(gastheer, "");
-            gast1 = new Gast(gast2Naam);
-
-            inschrijving.gast1 = gast1;
-            inschrijving.gastheer = gastheer;
-            inschrijving.klas = Gebruiker.GebruikerInfo.Groups[0].Name;
-
-            dialogIsOpen = false;
         }
         else if (!gast2Naam.Trim().Equals("") && !gast2plus16)
         {
@@ -184,6 +164,7 @@ else
             if (succes)
             {
                 Toaster.Add("Inschrijving goedgekeurd", MatToastType.Success, "Succes!");
+                NavigationManager.NavigateTo("/");
             }
             else
             {

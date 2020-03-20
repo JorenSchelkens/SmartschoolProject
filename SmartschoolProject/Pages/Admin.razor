@@ -59,11 +59,11 @@
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                 @if (winkel.actief)
                                 {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
                                 }
                                 else
                                 {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
                                 }
                             </div>
                         }
@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <MatButton Type="submit" @key="winkel" OnClick="@(() => VerwijderWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
+                                <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
                             </div>
                         }
                     </div>
@@ -310,7 +310,7 @@
 
     }
 
-    public void VerwijderWinkel(WinkelDomain.Winkel winkel)
+    public void ActiefMakenWinkel(WinkelDomain.Winkel winkel)
     {
         //TODO VERANDER STATUS WINKEL
         winkel.actief = !winkel.actief;

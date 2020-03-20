@@ -13,7 +13,9 @@ namespace WinkelDomain
 
         public Winkel() 
         {
+            artikels = new List<Artikel>();
         }
+
         public Winkel(string beheerder, string naam)
         {
             this.naam = naam;

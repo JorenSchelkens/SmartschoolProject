@@ -462,11 +462,11 @@ namespace DefaultDomain
 
                 if (winkel.actief)
                 {
-                    command.Parameters.AddWithValue("@actief", 0);
+                    command.Parameters.AddWithValue("@actief", 1);
                 }
                 else
                 {
-                    command.Parameters.AddWithValue("@actief", 1);
+                    command.Parameters.AddWithValue("@actief", 0);
                 }
 
                 if (command.ExecuteNonQuery() > 0)
@@ -502,11 +502,11 @@ namespace DefaultDomain
 
                 if (winkel.goedgekeurd)
                 {
-                    command.Parameters.AddWithValue("@goedgekeurd", 0);
+                    command.Parameters.AddWithValue("@goedgekeurd", 1);
                 }
                 else
                 {
-                    command.Parameters.AddWithValue("@goedgekeurd", 1);
+                    command.Parameters.AddWithValue("@goedgekeurd", 0);
                 }
 
                 if (command.ExecuteNonQuery() > 0)
