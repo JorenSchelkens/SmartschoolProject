@@ -243,8 +243,8 @@ namespace DefaultDomain
                     bestelling.BestelNr = bestelNr;
                     bestelling.AanmaakDatum = reader.GetDateTime(1);
                     bestelling.GebruikersNaam = reader.GetString(2);
-                    bestelling.
-                    artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                    //bestelling.
+                    //artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
                 }
 
                 //Reader sluiten
@@ -302,7 +302,8 @@ namespace DefaultDomain
             this.MySqlConnection.Close();
 
             //Return object
-            return bestelling;
+            //return bestelling;
+            return null;
         }
 
         #endregion
