@@ -2,6 +2,11 @@
 @inject NavigationManager navigationManager
 @inject GoogleGebruiker GoogleGebruiker
 @inject IMatToaster Toaster
+@page "/DocIO"
+@*@inject ServerSideApplication.Data.WordService service
+@using ServerSideApplication;*@
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using System.IO;
 
 <MatAccordion Multi="true">
     <MatExpansionPanel>
@@ -236,6 +241,8 @@
     </MatDialogActions>
 </MatDialog>
 
+<button class="btn btn-primary" @onclick="@CreateWord">Create Word</button>
+
 @DBConnection.ErrorMessage
 
 @code {
@@ -255,6 +262,14 @@
     public List<WinkelDomain.Winkel>
     winkels = new List<WinkelDomain.Winkel>();
     public List<Lokaal> lokalen { get; set; }
+
+    MemoryStream documentStream;
+
+    protected async void CreateWord()
+    {
+        //documentStream = service.CreateWord();
+        await JS.SaveAs("Sample.docx", documentStream.ToArray());
+    }
 
     public void annuleerVerwijderLokaal()
     {
