@@ -114,7 +114,14 @@
                             </div>
 
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">Actief</MatButton>
+                                @if (winkel.actief)
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                                }
+                                else
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                                }
                             </div>
                         }
                     </div>

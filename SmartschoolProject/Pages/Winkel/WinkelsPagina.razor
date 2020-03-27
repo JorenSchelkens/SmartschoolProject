@@ -6,6 +6,19 @@
     .tabs {
         background-color: rgba(193, 193, 193, 0.3);
     }
+
+    .container {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .row {
+        margin: 0px;
+    }
+
+    .content px-4 {
+        padding-right: 0px;
+    }
 </style>
 
 @if (alleWinkels)
@@ -16,7 +29,7 @@
             @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
             {
                 <div class="mat-layout-grid-cell">
-                    <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px; height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
+                    <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px;height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
                     <h2>@winkel.naam</h2>
                     <MatButton Unelevated="true" @onclick="@(() => GaNaarWinkel(winkel))">Ga naar winkel</MatButton>
                 </div>
@@ -27,51 +40,110 @@
 }
 else
 {
-    <div class="mat-layout-grid">
-        <div class="mat-layout-grid-inner">
 
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-                <h1>@winkel.naam</h1>
-            </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
 
-            @if (winkel.artikels != null)
-            {
-                @foreach (Artikel artikel in winkel.artikels)
-                {
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                        <h2>@artikel.productnaam</h2>
-                    </div>
+                <div class="mat-layout-grid">
+                    <div class="mat-layout-grid-inner">
 
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                        <h2>€ @artikel.standaardPrijs</h2>
-                    </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                            <h1>@winkel.naam</h1>
+                        </div>
 
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                        <h2>@artikel.stock</h2>
-                    </div>
-
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-
-                        @if (artikel.stock == 0)
+                        @if (winkel.artikels != null)
                         {
-                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => BestelArtikel(artikel))">Bestel</MatButton>
-                        }
-                        else
-                        {
-                            <MatButton Unelevated="true" @onclick="@(() => BestelArtikel(artikel))">Bestel</MatButton>
+                            @foreach (Artikel artikel in winkel.artikels)
+                            {
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>Product naam: @artikel.productnaam</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>Prijs: €@artikel.standaardPrijs</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>Aantal producten in stock: @artikel.stock</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+
+                                    @if (artikel.stock == 0)
+                                    {
+                                        <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
+                                    }
+                                    else
+                                    {
+                                        <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
+                                    }
+
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                            }
                         }
 
                     </div>
-
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
-                }
-
-                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-                    <MatButton Unelevated="true" @onclick="@(() => BestellingAfronden())">Bestelling Afronden</MatButton>
                 </div>
 
-            }
+                <MatDialog @bind-IsOpen="@dialogIsOpen">
+                    <MatDialogContent>
+                        <MatDialogTitle>Informatie over artikel</MatDialogTitle>
 
+                        <MatNumericUpDownField @onfocusout="CheckNummer" Label="Aantal:" Minimum="1" Maximum="max" @bind-Value="aantalVanProduct"></MatNumericUpDownField>
+                        <MatTextField @bind-Value="@notitie" Dense="true" Label="Notitie:" TextArea="true"></MatTextField>
+
+                    </MatDialogContent>
+                    <MatDialogActions>
+                        <MatButton @onclick="@Sluit">ANNULEER</MatButton>
+                        <MatButton OnClick="@BestelArtikel">VOEG TOE</MatButton>
+                    </MatDialogActions>
+                </MatDialog>
+
+            </div>
+            <div class="col-4">
+
+                @if (!this.Bestelling.IsBestellingEmpty())
+                {
+                    <div class="mat-layout-grid">
+                        <div class="mat-layout-grid-inner">
+
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                                <h3>Winkelmandje</h3>
+                            </div>
+
+                            @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldArtikels())
+                            {
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>@besteldArtikel.AantalString</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>@besteldArtikel.Productnaam</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <h2>€@besteldArtikel.Prijs</h2>
+                                </div>
+
+                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <MatFAB @onclick="@(() => VerwijderArtikel(besteldArtikel))" Icon="@MatIconNames.Remove"></MatFAB>
+                                </div>
+
+                            }
+
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                                <MatButton Unelevated="true" @onclick="@(() => BestellingAfronden())">Bestelling Afronden</MatButton>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
         </div>
     </div>
 }
@@ -83,7 +155,15 @@ else
     public DBConnection DBConnection { get; set; }
     public bool alleWinkels;
 
+    public bool dialogIsOpen = false;
+
+    public int max = 2;
+
+    public int aantalVanProduct = 1;
+    public string notitie = "";
+
     public Bestelling Bestelling { get; set; }
+    public Artikel Artikel { get; set; }
 
     [Parameter]
     public string Naam { get; set; }
@@ -130,19 +210,55 @@ else
         NavigationManager.NavigateTo($"/winkels/{winkel.naam}", true);
     }
 
-    public void BestelArtikel(Artikel artikel)
+    public void BestelArtikel()
     {
-        BesteldArtikel temp = new BesteldArtikel(artikel, 0, null);
+        BesteldArtikel temp = new BesteldArtikel(Artikel, aantalVanProduct, notitie);
 
-        if (!(Bestelling.BesteldeArtikels.Contains(temp)))
+        bool succes = this.Bestelling.AddArtikel(temp);
+
+        if (succes)
         {
-            Bestelling.BesteldeArtikels.Add(temp);
+            this.Artikel = null;
+            this.aantalVanProduct = 1;
+            this.notitie = "";
+            this.dialogIsOpen = false;
         }
+
+        this.StateHasChanged();
     }
 
     public void BestellingAfronden()
     {
         //int bestelNr = DBConnection
         //NavigationManager.NavigateTo($"/betalen/{bestelNr}");
+    }
+
+    public void Sluit()
+    {
+        dialogIsOpen = false;
+    }
+
+    public void OpenDialog(Artikel artikel)
+    {
+        if (artikel != null)
+        {
+            this.Artikel = artikel;
+            max = this.Artikel.stock;
+            dialogIsOpen = true;
+        }
+    }
+
+    public void VerwijderArtikel(BesteldArtikel besteldArtikel)
+    {
+        this.Bestelling.VerwijderArtikel(besteldArtikel);
+        this.StateHasChanged();
+    }
+
+    public void CheckNummer()
+    {
+        if (aantalVanProduct < 1 || aantalVanProduct > max)
+        {
+            aantalVanProduct = 1;
+        }
     }
 }
