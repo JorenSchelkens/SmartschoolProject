@@ -10,16 +10,19 @@ namespace WinkelDomain
         public string GebruikersNaam { get; set; }
         private List<BesteldArtikel> BesteldeArtikels { get; set; }
         public double TotaalBedrag { get; set; } = 0;
+        public string Code { get; set; }
 
         public Bestelling(string gebruikersNaam)
         {
             this.AanmaakDatum = DateTime.Now;
             this.GebruikersNaam = gebruikersNaam;
 
+            this.Code = Guid.NewGuid().ToString();
+
             this.BesteldeArtikels = new List<BesteldArtikel>();
         }
 
-        public List<BesteldArtikel> GetBesteldArtikels()
+        public List<BesteldArtikel> GetBesteldeArtikels()
         {
             return this.BesteldeArtikels;
         }
@@ -59,6 +62,16 @@ namespace WinkelDomain
             else
             {
                 this.BesteldeArtikels.Remove(besteldArtikel);
+            }
+        }
+
+        public void FinishBestelling()
+        {
+            this.TotaalBedrag = 0;
+
+            foreach (BesteldArtikel besteldArtikel in this.BesteldeArtikels)
+            {
+                this.TotaalBedrag += besteldArtikel.Prijs;
             }
         }
     }

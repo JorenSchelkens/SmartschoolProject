@@ -12,8 +12,6 @@ namespace DefaultDomain
         private MySqlConnection MySqlConnection { get; set; }
         public string ErrorMessage { get; set; } = "";
 
-        //TODO: Bestelling Methode per bestelNr, Bestelling Opslaan dan bestelNr teruggeven
-
         public DBConnection()
         {
             this.MySqlConnection = new MySqlConnection(this.ConnectionString);
@@ -219,32 +217,83 @@ namespace DefaultDomain
             return artikel;
         }
 
-        public Bestelling GetBestelling(int bestelNr)
+        public Artikel GetArtikel(int productnr)
         {
             this.ResetErrorMessage();
 
-            Bestelling bestelling = new Bestelling("");
+            Artikel artikel = new Artikel();
 
             try
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs FROM tblbestelling WHERE bestelnr = @bestelnr;";
+                string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel WHERE productnr = @productnr;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-                command.Parameters.AddWithValue("@bestelnr", bestelNr);
+                command.Parameters.AddWithValue("@productnr", productnr);
 
                 MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
 
-                    bestelling.BestelNr = bestelNr;
+                    artikel.productnr = reader.GetInt32(0);
+                    artikel.productnaam = reader.GetString(1);
+                    artikel.standaardPrijs = reader.GetDouble(2);
+                    artikel.stock = reader.GetInt32(3);
+                    artikel.winkelnr = reader.GetInt32(4);
+                    artikel.korting = reader.GetInt32(5);
+                    artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return artikel;
+        }
+
+        public Bestelling GetBestelling(string code)
+        {
+            this.ResetErrorMessage();
+
+            Bestelling bestelling = new Bestelling("");
+            List<BesteldArtikel> besteldArtikels = GetAllBesteldArtikels(GetBestelnr(code));
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs, code FROM tblbestelling WHERE code = @code;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", code);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    bestelling.BestelNr = reader.GetInt32(0);
                     bestelling.AanmaakDatum = reader.GetDateTime(1);
                     bestelling.GebruikersNaam = reader.GetString(2);
-                    //bestelling.
-                    //artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
+                    bestelling.TotaalBedrag = reader.GetDouble(3);
+                    bestelling.Code = reader.GetString(4);
+                }
+
+                foreach (BesteldArtikel besteldArtikel in besteldArtikels)
+                {
+                    bestelling.AddArtikel(besteldArtikel);
                 }
 
                 //Reader sluiten
@@ -261,6 +310,43 @@ namespace DefaultDomain
 
             //Return object
             return bestelling;
+        }
+
+        public int GetBestelnr(string code)
+        {
+            this.ResetErrorMessage();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr FROM tblbestelling WHERE code = @code;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", code);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    return reader.GetInt32(0);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return -1;
         }
 
         public List<Artikel> GetBesteldeArtikels(int bestelNr) 
@@ -382,6 +468,8 @@ namespace DefaultDomain
                     artikel.korting = reader.GetInt32(5);
                     artikel.actief = reader.GetBoolean(6);
 
+                    artikels.Add(artikel);
+                    artikel = new Artikel();
                 }
 
                 reader.Close();
@@ -395,7 +483,49 @@ namespace DefaultDomain
 
             return artikels;
         }
+        public List<BesteldArtikel> GetAllBesteldArtikels(int bestelnr)
+        {
+            this.ResetErrorMessage();
 
+            List<BesteldArtikel> besteldArtikels = new List<BesteldArtikel>();
+            Artikel artikel = new Artikel();
+            BesteldArtikel besteldArtikel;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr, productnr, prijs, notitie, aantal FROM tblbesteldeartikels WHERE bestelnr = @bestelnr;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@bestelnr", bestelnr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    artikel = GetArtikel(reader.GetInt32(1));
+                    besteldArtikel = new BesteldArtikel(artikel, reader.GetInt32(4), reader.GetString(3));
+
+                    besteldArtikel.Prijs = reader.GetDouble(2);
+
+                    besteldArtikels.Add(besteldArtikel);
+
+                    artikel = new Artikel();
+                    besteldArtikel = null;
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return besteldArtikels;
+        }
         #endregion
 
         #region Add KLAAR
@@ -421,6 +551,40 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@winkelnr", artikel.winkelnr);
 
 
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+
+        public bool AddBesteldArtikel(BesteldArtikel besteldArtikel, int bestelnr)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblbesteldeartikels(bestelnr ,productnr, prijs) VALUES(@bestelnr ,@productnr, @prijs);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@bestelnr", bestelnr);
+                command.Parameters.AddWithValue("@productnr", besteldArtikel.Productnr);
+                command.Parameters.AddWithValue("@prijs", besteldArtikel.Prijs);
+                
                 if (command.ExecuteNonQuery() > 0)
                 {
                     succes = true;
@@ -509,6 +673,50 @@ namespace DefaultDomain
 
             return succes;
         }
+
+        public bool AddBestelling(Bestelling bestelling)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"INSERT INTO tblbestelling(datum, gebruikersnaam, prijs, betaald, code) VALUES(@datum, @gebruikersnaam, @prijs, @betaald, @code);";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@datum", bestelling.AanmaakDatum);
+                command.Parameters.AddWithValue("@gebruikersnaam", bestelling.GebruikersNaam);
+                command.Parameters.AddWithValue("@prijs", bestelling.TotaalBedrag);
+                command.Parameters.AddWithValue("@betaald", 0);
+                command.Parameters.AddWithValue("@code", bestelling.Code);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            int bestelnr = GetBestelnr(bestelling.Code);
+
+            foreach (BesteldArtikel besteldArtikel in bestelling.GetBesteldeArtikels())
+            {
+                this.AddBesteldArtikel(besteldArtikel, bestelnr);
+            }
+
+            return succes;
+        }
+
         #endregion
 
         #region Active/Non Active KLAAR

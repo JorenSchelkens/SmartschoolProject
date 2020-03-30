@@ -1,5 +1,6 @@
 ﻿@page "/winkels"
 @page "/winkels/{naam}"
+@inject IMatToaster Toaster
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
 <style>
@@ -114,7 +115,7 @@ else
                                 <h3>Winkelmandje</h3>
                             </div>
 
-                            @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldArtikels())
+                            @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
                             {
 
                                 <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
@@ -229,8 +230,18 @@ else
 
     public void BestellingAfronden()
     {
-        //int bestelNr = DBConnection
-        //NavigationManager.NavigateTo($"/betalen/{bestelNr}");
+        this.Bestelling.FinishBestelling();
+
+        bool succes = DBConnection.AddBestelling(this.Bestelling);
+
+        if (succes)
+        {
+            NavigationManager.NavigateTo($"/betalen/{this.Bestelling.Code}");
+        }
+        else
+        {
+            Toaster.Add("Er is iets fout gegaan, neem contact op met een ICT verantwoordelijke", MatToastType.Danger, "Error");
+        }
     }
 
     public void Sluit()

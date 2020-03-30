@@ -1,8 +1,6 @@
 ﻿@page "/winkeltoevoegen"
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
-@using System.IO
-@using System.Net.Http.Headers
 
 <style>
     .titel {
@@ -13,6 +11,7 @@
         width: 30%;
     }
 </style>
+
 <MatH2 Class="titel">Winkel toevoegen</MatH2>
 
 <EditForm Model="myModel" OnValidSubmit="@succes">
@@ -20,7 +19,7 @@
 
     <p>
         <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
-        <MatTextField @bind-Value="myModel.Beheerder" Label="Beheerder"></MatTextField>
+        <MatTextField @bind-Value="myModel.Beheerder" Label="Beheerder"/>
     </p>
 
     <MatButton Type="submit" Raised="true">Toevoegen</MatButton>
@@ -41,12 +40,10 @@
 
         [Required]
         public string Beheerder { get; set; }
-
     }
 
     public void succes()
     {
-
         Winkel winkel = new Winkel();
 
         winkel.naam = myModel.NaamWinkel;

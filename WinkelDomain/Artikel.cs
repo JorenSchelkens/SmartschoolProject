@@ -1,5 +1,4 @@
-﻿using System;
-namespace WinkelDomain
+﻿namespace WinkelDomain
 {
     public class Artikel
     {

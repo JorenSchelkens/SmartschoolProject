@@ -1,10 +1,29 @@
-﻿@page "/betalen/{bestelNr}"
+﻿@page "/betalen/{code}"
+@inject IMatToaster Toaster
+@inject NavigationManager NavigationManager
+@inject GoogleGebruiker Gebruiker
 
-
+<MatH1>Betalen</MatH1>
 
 @code{
 
     [Parameter]
-    public int BestelNr { get; set; }
+    public string Code { get; set; }
 
+    private DBConnection DBConnection { get; set; }
+
+    public Bestelling Bestelling { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrEmpty(this.Code))
+        {
+            this.Bestelling = DBConnection.GetBestelling(this.Code);
+        }
+        else
+        {
+            Toaster.Add("Er is geen betaling gevonden", MatToastType.Danger, "Error");
+            NavigationManager.NavigateTo("/");
+        }
+    }
 }
