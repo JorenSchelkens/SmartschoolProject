@@ -10,6 +10,7 @@ using SmartschoolProject.Areas.Identity;
 using SmartschoolProject.Data;
 using MatBlazor;
 using SmartschoolProject.Data.User;
+using Blazored.SessionStorage;
 
 namespace SmartschoolProject
 {
@@ -47,6 +48,7 @@ namespace SmartschoolProject
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<GoogleGebruiker>();
+            services.AddBlazoredSessionStorage();
 
             services.AddHttpContextAccessor();
 

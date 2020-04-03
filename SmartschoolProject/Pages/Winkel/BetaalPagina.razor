@@ -5,6 +5,41 @@
 
 <MatH1>Betalen</MatH1>
 
+<div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+            <h3>Bestelling</h3>
+        </div>
+
+        @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
+        {
+
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <h2>@besteldArtikel.Productnaam</h2>
+            </div>
+
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <h2>@besteldArtikel.AantalString</h2>
+            </div>
+
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                <h2>€@besteldArtikel.Prijs</h2>
+            </div>
+
+        }
+
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
+            <h2>Totaal bedrag: €@Bestelling.TotaalBedrag</h2>
+
+            <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling Afronden</MatButton>
+
+        </div>
+
+    </div>
+</div>
+
 @code{
 
     [Parameter]
@@ -16,6 +51,8 @@
 
     protected override void OnInitialized()
     {
+        this.DBConnection = new DBConnection();
+
         if (!string.IsNullOrEmpty(this.Code))
         {
             this.Bestelling = DBConnection.GetBestelling(this.Code);
@@ -25,5 +62,10 @@
             Toaster.Add("Er is geen betaling gevonden", MatToastType.Danger, "Error");
             NavigationManager.NavigateTo("/");
         }
+    }
+
+    public void BestellingAfronden()
+    {
+
     }
 }

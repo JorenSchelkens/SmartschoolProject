@@ -3,6 +3,7 @@
 @inject IMatToaster Toaster
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
+@inject ISessionStorageService sessionStorage
 <style>
     .tabs {
         background-color: rgba(193, 193, 193, 0.3);
@@ -204,6 +205,19 @@ else
             this.StateHasChanged();
         }
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.Gebruiker = await sessionStorage.GetItemAsync<GoogleGebruiker>("GoogleGebruiker");
+        this.Gebruiker.Refresh();
+
+        if(this.Bestelling != null)
+        {
+            this.Bestelling.GebruikersNaam = this.Gebruiker.GebruikerInfo.GebruikersNaam;
+        }
+
+        this.StateHasChanged();
     }
 
     public void GaNaarWinkel(Winkel winkel)

@@ -115,6 +115,49 @@ namespace DefaultDomain
             return winkel;
         }
 
+        public Winkel GetWinkel(int winkelNr)
+        {
+            this.ResetErrorMessage();
+
+            Winkel winkel = new Winkel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE winkelnr = @winkelnr;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@winkelnr", winkelNr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    winkel.winkelnr = reader.GetInt32(0);
+                    winkel.naam = reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief = reader.GetBoolean(3);
+                    winkel.goedgekeurd = reader.GetBoolean(4);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            //Return object
+            return winkel;
+        }
+
         public Inschrijving GetInschrijving(Gast gastheer)
         {
             this.ResetErrorMessage();
@@ -401,11 +444,9 @@ namespace DefaultDomain
 
             List<Winkel> winkels = new List<Winkel>();
             Winkel winkel = new Winkel();
-            List<Artikel> artikels = new List<Artikel>();
-            Artikel artikel = new Artikel();
+            List<Artikel> artikels = GetAllArtikels();
             try
             {
-                artikels = GetAllArtikels();
                 this.MySqlConnection.Open();
                 string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel;";
 
@@ -443,6 +484,58 @@ namespace DefaultDomain
 
             return winkels;
         }
+
+        public List<Winkel> GetMyWinkels(string gebruikersNaam)
+        {
+            this.ResetErrorMessage();
+
+            List<Winkel> winkels = new List<Winkel>();
+            Winkel winkel = new Winkel();
+            List<Artikel> artikels = GetAllArtikels();
+
+            try
+            {
+                this.MySqlConnection.Open();
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE beheerder = @beheerder;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("beheerder", gebruikersNaam);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    winkel.winkelnr = reader.GetInt32(0);
+                    winkel.naam = reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
+                    winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
+
+                    for (int i = 0; i < artikels.Count; i++)
+                    {
+                        if (artikels[i].winkelnr == winkel.winkelnr)
+                        {
+                            winkel.artikels.Add(artikels[i]);
+                        }
+                    }
+
+                    winkels.Add(winkel);
+                    winkel = new Winkel();
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return winkels;
+        }
+
         public List<Artikel> GetAllArtikels()
         {
             this.ResetErrorMessage();
@@ -483,6 +576,7 @@ namespace DefaultDomain
 
             return artikels;
         }
+
         public List<BesteldArtikel> GetAllBesteldArtikels(int bestelnr)
         {
             this.ResetErrorMessage();
@@ -526,6 +620,7 @@ namespace DefaultDomain
 
             return besteldArtikels;
         }
+
         #endregion
 
         #region Add KLAAR

@@ -1,5 +1,8 @@
 ﻿@page "/winkel"
+@page "/winkel/{winkelNr}"
 @inject NavigationManager navigationManager
+@inject GoogleGebruiker Gebruiker
+@inject ISessionStorageService sessionStorage
 
 <style>
     .actief {
@@ -11,7 +14,7 @@
         margin-left: 2rem;
     }
 
-    .check{
+    .check {
         margin-left: 2rem;
         width: 5rem;
         cursor: not-allowed;
@@ -21,77 +24,113 @@
         width: 10rem;
     }
 
-    label{
+    label {
         margin: 0;
     }
 
-    .heading{
+    .heading {
         margin-bottom: 2rem;
     }
 
-    .nietActief{
+    .nietActief {
         padding: 0;
         opacity: 0.6;
     }
 </style>
 
-<MatH2 Class="heading">Mijn winkels</MatH2>
+@if (showMijnWinkels)
+{
+    <MatH2 Class="heading">Mijn winkels</MatH2>
 
-<MatList>
+    <MatList>
 
-    @foreach (Winkel winkel in winkels)
-    {
-        Console.Out.Write(winkel.naam + " - " + winkel.goedgekeurd + " ");
-
-        if (winkel.goedgekeurd)
+        @foreach (Winkel winkel in winkels)
         {
-            <MatListItem Class="actief">
+            if (winkel.goedgekeurd)
+            {
+                <MatListItem Class="actief">
 
-                <div class="winkelnaam">@winkel.naam</div>
+                    <div class="winkelnaam">@winkel.naam</div>
 
-                <MatButton Unelevated="true" Class="knop">bewerken</MatButton>
+                    <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.winkelnr))" Class="knop">bewerken</MatButton>
 
-                <MatCheckbox @bind-Value="@winkel.actief" Class="check" Label="Actief"></MatCheckbox>
+                    <MatCheckbox @bind-Value="@winkel.actief" Class="check" Label="Actief"></MatCheckbox>
 
-            </MatListItem>
+                </MatListItem>
 
-            <MatListDivider></MatListDivider>
+                <MatListDivider></MatListDivider>
+            }
+            else
+            {
+
+                <MatListItem Class="nietActief" Disabled="true">
+
+                    <div class="winkelnaam">@winkel.naam</div>
+
+                    <MatButton Unelevated="true" Disabled="true" Class="knop">bewerken</MatButton>
+
+                    <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" Label="Actief"></MatCheckbox>
+
+                </MatListItem>
+
+                <MatListDivider></MatListDivider>
+            }
         }
-        else
-        {
 
-            <MatListItem Class="nietActief" Disabled="true">
+    </MatList>
 
-                <div class="winkelnaam">@winkel.naam</div>
+    <br />
+    <MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
+}
+else
+{
+    <h1>@winkel.naam</h1>
+}
 
-                <MatButton Unelevated="true" Disabled="true" Class="knop">bewerken</MatButton>
 
-                <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" Label="Actief"></MatCheckbox>
-
-            </MatListItem>
-
-            <MatListDivider></MatListDivider>
-        }
-    }
-
-</MatList>
-
-<br />
-<MatButton Unelevated="true" @onclick="@GaNaarWinkelToevoegen">Winkel toevoegen</MatButton>
 
 @code {
 
     public DBConnection DBConnection = new DBConnection();
     public List<Winkel> winkels = new List<Winkel>();
 
+    public Winkel winkel { get; set; }
+
+    [Parameter]
+    public string winkelNr { get; set; }
+
+    public bool showMijnWinkels { get; set; }
+
     protected override void OnInitialized()
     {
-        winkels = DBConnection.GetAllWinkels();
+        if (string.IsNullOrEmpty(winkelNr))
+        {
+            winkels = DBConnection.GetMyWinkels(this.Gebruiker.GebruikerInfo.GebruikersNaam);
+            showMijnWinkels = true;
+        }
+        else
+        {
+            winkel = DBConnection.GetWinkel(winkelNr);
+            showMijnWinkels = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.Gebruiker = await sessionStorage.GetItemAsync<GoogleGebruiker>("GoogleGebruiker");
+        this.Gebruiker.Refresh();
+
+        this.StateHasChanged();
     }
 
     public void GaNaarWinkelToevoegen()
     {
         navigationManager.NavigateTo("/winkeltoevoegen");
+    }
+
+    public void GaNaarWinkel(int winkelNr)
+    {
+        navigationManager.NavigateTo($"/winkel/{winkelNr.ToString()}", true);
     }
 
 }
