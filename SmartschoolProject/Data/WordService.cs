@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-//@using Syncfusion.DocIO;
-//@using Syncfusion.DocIO.DLS;
-//@using System.IO;
 
 namespace SmartschoolProject.Data
 {
@@ -64,14 +61,14 @@ namespace SmartschoolProject.Data
             paragraph = section.AddParagraph();
             paragraph.ParagraphFormat.FirstLineIndent = 36;
             paragraph.BreakCharacterFormat.FontSize = 12f;
-            textRange = paragraph.AppendText("Adventure Works Cycles, the fictitious company on which the AdventureWorks sample databases are based, is a large, multinational manufacturing company. The company manufactures and sells metal and composite bicycles to North American, European and Asian commercial markets. While its base operation is in Bothell, Washington with 290 employees, several regional sales teams are located throughout their market base.") as WTextRange;
+            textRange = paragraph.AppendText("Hello World") as WTextRange;
             textRange.CharacterFormat.FontSize = 12f;
 
             //Appends paragraph
             paragraph = section.AddParagraph();
             paragraph.ParagraphFormat.FirstLineIndent = 36;
             paragraph.BreakCharacterFormat.FontSize = 12f;
-            textRange = paragraph.AppendText("In 2000, AdventureWorks Cycles bought a small manufacturing plant, Importadores Neptuno, located in Mexico. Importadores Neptuno manufactures several critical subcomponents for the AdventureWorks Cycles product line. These subcomponents are shipped to the Bothell location for final product assembly. In 2001, Importadores Neptuno, became the sole manufacturer and distributor of the touring bicycle product group.") as WTextRange;
+            textRange = paragraph.AppendText("Hello Earth") as WTextRange;
             textRange.CharacterFormat.FontSize = 12f;
 
             //Saves the Word document to MemoryStream
