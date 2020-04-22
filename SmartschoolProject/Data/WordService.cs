@@ -43,8 +43,8 @@ namespace SmartschoolProject.Data
             IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
 
             paragraph.ApplyStyle("Normal");
-            paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Left;
-            WTextRange textRange = paragraph.AppendText("Adventure Works Cycles") as WTextRange;
+            paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+            WTextRange textRange = paragraph.AppendText("Inventaris Lokalen") as WTextRange;
             textRange.CharacterFormat.FontSize = 12f;
             textRange.CharacterFormat.FontName = "Calibri";
             textRange.CharacterFormat.TextColor = Syncfusion.Drawing.Color.Red;
@@ -53,7 +53,7 @@ namespace SmartschoolProject.Data
             paragraph = section.AddParagraph();
             paragraph.ApplyStyle("Heading 1");
             paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
-            textRange = paragraph.AppendText("Adventure Works Cycles") as WTextRange;
+            textRange = paragraph.AppendText("Inventaris Lokalen") as WTextRange;
             textRange.CharacterFormat.FontSize = 18f;
             textRange.CharacterFormat.FontName = "Calibri";
 
