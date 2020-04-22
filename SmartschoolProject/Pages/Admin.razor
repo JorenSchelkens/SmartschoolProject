@@ -273,8 +273,8 @@
 
     protected async void CreateWord()
     {
-        documentStream = service.CreateWord();
-        await JS.SaveAs("Sample.docx", documentStream.ToArray());
+        documentStream = service.CreateWord(lokalen);
+        await JS.SaveAs("Overzicht.docx", documentStream.ToArray());
     }
 
     public void annuleerVerwijderLokaal()

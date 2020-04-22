@@ -1,4 +1,5 @@
-﻿using Syncfusion.DocIO;
+﻿using InventarisDomain;
+using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace SmartschoolProject.Data
     public class WordService
     {
 
-        public MemoryStream CreateWord()
+        public MemoryStream CreateWord(List<Lokaal> lokalen)
         {
             //Creating a new document
             WordDocument document = new WordDocument();
@@ -57,12 +58,15 @@ namespace SmartschoolProject.Data
             textRange.CharacterFormat.FontSize = 18f;
             textRange.CharacterFormat.FontName = "Calibri";
 
-            //Appends paragraph
-            paragraph = section.AddParagraph();
-            paragraph.ParagraphFormat.FirstLineIndent = 36;
-            paragraph.BreakCharacterFormat.FontSize = 12f;
-            textRange = paragraph.AppendText("Hello World") as WTextRange;
-            textRange.CharacterFormat.FontSize = 12f;
+            foreach (Lokaal lokaal in lokalen)
+            {
+                //Appends paragraph
+                paragraph = section.AddParagraph();
+                paragraph.ParagraphFormat.FirstLineIndent = 36;
+                paragraph.BreakCharacterFormat.FontSize = 12f;
+                textRange = paragraph.AppendText("Lokaal " + lokaal.lokaalNr) as WTextRange;
+                textRange.CharacterFormat.FontSize = 20f;
+            }
 
             //Appends paragraph
             paragraph = section.AddParagraph();
