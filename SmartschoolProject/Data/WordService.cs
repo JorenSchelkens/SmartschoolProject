@@ -81,10 +81,7 @@ namespace SmartschoolProject.Data
             document.Close();
             stream.Position = 0;
 
-            //Download the Word document in the browser
-            //JS.SaveAs("Sample.docx", stream.ToArray());
-
-            return null;
+            return stream;
         }
 
     }

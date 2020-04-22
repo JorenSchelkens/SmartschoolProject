@@ -48,6 +48,7 @@ namespace SmartschoolProject
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<GoogleGebruiker>();
+            services.AddScoped<WordService>();
             services.AddBlazoredSessionStorage();
 
             services.AddHttpContextAccessor();

@@ -3,8 +3,7 @@
 @inject GoogleGebruiker GoogleGebruiker
 @inject IMatToaster Toaster
 @page "/DocIO"
-@*@inject ServerSideApplication.Data.WordService service
-@using ServerSideApplication;*@
+@inject Data.WordService service
 @inject Microsoft.JSInterop.IJSRuntime JS
 @using System.IO;
 
@@ -274,7 +273,7 @@
 
     protected async void CreateWord()
     {
-        //documentStream = service.CreateWord();
+        documentStream = service.CreateWord();
         await JS.SaveAs("Sample.docx", documentStream.ToArray());
     }
 
