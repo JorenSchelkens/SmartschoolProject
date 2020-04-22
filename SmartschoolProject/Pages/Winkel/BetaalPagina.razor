@@ -2,6 +2,7 @@
 @inject IMatToaster Toaster
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
+@inject ISessionStorageService sessionStorage
 
 <MatH1>Betalen</MatH1>
 
@@ -62,6 +63,13 @@
             Toaster.Add("Er is geen betaling gevonden", MatToastType.Danger, "Error");
             NavigationManager.NavigateTo("/");
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.Gebruiker = await sessionStorage.GetItemAsync<GoogleGebruiker>("GoogleGebruiker");
+        this.Gebruiker.Refresh();
+        this.StateHasChanged();
     }
 
     public void BestellingAfronden()

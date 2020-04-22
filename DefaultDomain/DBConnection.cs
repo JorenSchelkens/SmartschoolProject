@@ -268,8 +268,6 @@ namespace DefaultDomain
 
             try
             {
-                this.MySqlConnection.Open();
-
                 string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel WHERE productnr = @productnr;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
@@ -299,9 +297,6 @@ namespace DefaultDomain
                 this.ErrorMessage = ex.ToString();
             }
 
-            //Connectie sluiten
-            this.MySqlConnection.Close();
-
             //Return object
             return artikel;
         }
@@ -321,7 +316,7 @@ namespace DefaultDomain
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-                command.Parameters.AddWithValue("@bestelnr", code);
+                command.Parameters.AddWithValue("@code", code);
 
                 MySqlDataReader reader = command.ExecuteReader();
 
@@ -584,6 +579,7 @@ namespace DefaultDomain
             List<BesteldArtikel> besteldArtikels = new List<BesteldArtikel>();
             Artikel artikel = new Artikel();
             BesteldArtikel besteldArtikel;
+            List<int> productNrs = new List<int>();
 
             try
             {
@@ -672,14 +668,16 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblbesteldeartikels(bestelnr ,productnr, prijs) VALUES(@bestelnr ,@productnr, @prijs);";
+                string sql = $"INSERT INTO tblbesteldeartikels(bestelnr ,productnr, prijs, aantal, notitie) VALUES(@bestelnr ,@productnr, @prijs, @aantal, @notitie);";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
                 command.Parameters.AddWithValue("@bestelnr", bestelnr);
                 command.Parameters.AddWithValue("@productnr", besteldArtikel.Productnr);
                 command.Parameters.AddWithValue("@prijs", besteldArtikel.Prijs);
-                
+                command.Parameters.AddWithValue("@aantal", besteldArtikel.Aantal);
+                command.Parameters.AddWithValue("@notitie", besteldArtikel.Notitie);
+
                 if (command.ExecuteNonQuery() > 0)
                 {
                     succes = true;
