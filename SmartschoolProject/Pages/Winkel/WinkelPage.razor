@@ -1,8 +1,9 @@
 ﻿@page "/winkel"
-@page "/winkel/{winkelNr}"
+@page "/winkel/{winkelNaam}"
 @inject NavigationManager navigationManager
 @inject GoogleGebruiker Gebruiker
 @inject ISessionStorageService sessionStorage
+@inject IMatToaster Toaster
 
 <style>
     .actief {
@@ -52,7 +53,7 @@
 
                     <div class="winkelnaam">@winkel.naam</div>
 
-                    <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.winkelnr))" Class="knop">bewerken</MatButton>
+                    <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.naam))" Class="knop">bewerken</MatButton>
 
                     <MatCheckbox @bind-Value="@winkel.actief" Class="check" Label="Actief"></MatCheckbox>
 
@@ -85,9 +86,98 @@
 else
 {
     <h1>@winkel.naam</h1>
+
+    @foreach (Artikel artikel in winkel.artikels)
+    {
+        <div>
+            Naam: @artikel.productnaam
+            <br />
+            Prijs: @artikel.standaardPrijs
+            <br />
+            Stock: @artikel.stock
+            <br />
+
+            @if (artikel.actief)
+            {
+                <span>Actief</span>
+            }
+            else
+            {
+                <span>Niet Actief</span>
+            }
+
+            <br />
+
+            <MatButton Unelevated="true" @onclick="@(() => ShowDialogArtikelAanpassen(artikel))">Artikel aanpassen</MatButton>
+
+            <br />
+
+            @if (artikel.actief)
+            {
+                <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op niet actief zetten</MatButton>
+            }
+            else
+            {
+                <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op actief zetten</MatButton>
+            }
+
+        </div>
+    }
+
+    <MatDialog @bind-IsOpen="@showDialog">
+        <MatDialogTitle>Artikel Toevoegen</MatDialogTitle>
+        <MatDialogContent>
+
+            <MatTextField @bind-Value="@tempArtikel.productnaam" Label="Artikel naam"></MatTextField>
+
+            <MatNumericUpDownField Label="Artikel prijs"
+                                   @bind-Value=@tempPrijs
+                                   Minimum="0"
+                                   Step="0.01m"
+                                   DecimalPlaces=2>
+
+            </MatNumericUpDownField>
+
+            <MatNumericUpDownField Label="Artikel stock"
+                                   TValue="int"
+                                   @bind-Value=@tempArtikel.stock>
+            </MatNumericUpDownField>
+
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@CloseDialog">Sluiten</MatButton>
+            <MatButton OnClick="@AddArtikel">Toevoegen</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
+    <MatDialog @bind-IsOpen="@showDialog2">
+        <MatDialogTitle>Artikel Aanpasssen</MatDialogTitle>
+        <MatDialogContent>
+
+            <MatTextField @bind-Value="@tempArtikel.productnaam" Label="Artikel naam"></MatTextField>
+
+            <MatNumericUpDownField Label="Artikel prijs"
+                                   @bind-Value=@tempPrijs
+                                   Minimum="0"
+                                   Step="0.01m"
+                                   DecimalPlaces=2>
+
+            </MatNumericUpDownField>
+
+            <MatNumericUpDownField Label="Artikel stock"
+                                   TValue="int"
+                                   @bind-Value=@tempArtikel.stock>
+            </MatNumericUpDownField>
+
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@CloseDialog2">Sluiten</MatButton>
+            <MatButton OnClick="@UpdateArtikel">Toevoegen</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
+    <MatButton Unelevated="true" @onclick="@ShowDialogArtikel">Artikel toevoegen</MatButton>
 }
-
-
 
 @code {
 
@@ -97,20 +187,30 @@ else
     public Winkel winkel { get; set; }
 
     [Parameter]
-    public string winkelNr { get; set; }
+    public string winkelNaam { get; set; }
 
     public bool showMijnWinkels { get; set; }
+    public bool showDialog { get; set; }
+    public bool showDialog2 { get; set; }
+
+    public Artikel tempArtikel { get; set; }
+    public decimal tempPrijs { get; set; }
 
     protected override void OnInitialized()
     {
-        if (string.IsNullOrEmpty(winkelNr))
+        showDialog = false;
+        showDialog2 = false;
+        tempPrijs = 0m;
+        tempArtikel = new Artikel();
+
+        if (string.IsNullOrEmpty(winkelNaam))
         {
             winkels = DBConnection.GetMyWinkels(this.Gebruiker.GebruikerInfo.GebruikersNaam);
             showMijnWinkels = true;
         }
         else
         {
-            winkel = DBConnection.GetWinkel(winkelNr);
+            winkel = DBConnection.GetWinkel(winkelNaam);
             showMijnWinkels = false;
         }
     }
@@ -123,14 +223,105 @@ else
         this.StateHasChanged();
     }
 
+    public void ShowDialogArtikel()
+    {
+        showDialog = true;
+    }
+
+    public void CloseDialog()
+    {
+        tempArtikel = new Artikel();
+        tempPrijs = 0m;
+        showDialog = false;
+    }
+
+    public void CloseDialog2()
+    {
+        tempArtikel = new Artikel();
+        tempPrijs = 0m;
+        showDialog2 = false;
+    }
+
+    public void UpdateArtikel()
+    {
+        if (!string.IsNullOrWhiteSpace(tempArtikel.productnaam))
+        {
+            tempArtikel.standaardPrijs = Decimal.ToDouble(tempPrijs);
+            bool succes = DBConnection.UpdateArtikel(tempArtikel);
+
+            if (succes)
+            {
+                Toaster.Add("Succesvol aangepast", MatToastType.Success, "Succes");
+            }
+            else
+            {
+                winkel.artikels.Remove(tempArtikel);
+                Toaster.Add("Probleem bij het aangepassen", MatToastType.Danger, "Error");
+            }
+
+            tempArtikel = new Artikel();
+            tempPrijs = 0m;
+            showDialog2 = false;
+        }
+    }
+
+    public void AddArtikel()
+    {
+        if (!string.IsNullOrWhiteSpace(tempArtikel.productnaam))
+        {
+            tempArtikel.winkelnr = winkel.winkelnr;
+            tempArtikel.standaardPrijs = Decimal.ToDouble(tempPrijs);
+            winkel.artikels.Add(tempArtikel);
+            bool succes = DBConnection.AddArtikel(tempArtikel);
+
+            if (succes)
+            {
+                Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Succes");
+            }
+            else
+            {
+                winkel.artikels.Remove(tempArtikel);
+                Toaster.Add("Probleem bij het toevoegen", MatToastType.Danger, "Error");
+            }
+
+            tempArtikel = new Artikel();
+            tempPrijs = 0m;
+            showDialog = false;
+        }
+    }
+
+    public void ShowDialogArtikelAanpassen(Artikel artikel)
+    {
+        tempArtikel = artikel;
+        tempPrijs = Convert.ToDecimal(artikel.standaardPrijs);
+        showDialog2 = true;
+    }
+
+    public void ToggleArtikelActief(Artikel artikel)
+    {
+        artikel.actief = !artikel.actief;
+        bool succes = DBConnection.VeranderStatusArtikel(artikel);
+
+        if (succes)
+        {
+            Toaster.Add("Succesvol aangepast", MatToastType.Success, "Succes");
+        }
+        else
+        {
+            Toaster.Add("Probleem bij het aanpassen", MatToastType.Danger, "Error");
+        }
+
+        this.StateHasChanged();
+    }
+
     public void GaNaarWinkelToevoegen()
     {
         navigationManager.NavigateTo("/winkeltoevoegen");
     }
 
-    public void GaNaarWinkel(int winkelNr)
+    public void GaNaarWinkel(string winkelNaam)
     {
-        navigationManager.NavigateTo($"/winkel/{winkelNr.ToString()}", true);
+        navigationManager.NavigateTo($"/winkel/{winkelNaam.ToString()}", true);
     }
 
 }

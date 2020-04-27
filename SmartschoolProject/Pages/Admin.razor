@@ -55,10 +55,28 @@
                                 @winkel.beheerder
                             </div>
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.actief
+
+                                @if (winkel.actief)
+                                {
+                                    <span>Actief</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Actief</span>
+                                }
+
                             </div>
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.goedgekeurd
+
+                                @if (winkel.goedgekeurd)
+                                {
+                                    <span>Goedgekeurd</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Goedgekeurd</span>
+                                }
+
                             </div>
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                 @if (winkel.actief)
@@ -106,10 +124,24 @@
                                 @winkel.beheerder
                             </div>
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.actief
+                                @if (winkel.actief)
+                                {
+                                    <span>Actief</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Actief</span>
+                                }
                             </div>
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.goedgekeurd
+                                @if (winkel.goedgekeurd)
+                                {
+                                    <span>Goedgekeurd</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Goedgekeurd</span>
+                                }
                             </div>
 
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
@@ -164,9 +196,23 @@
                             @winkel.beheerder
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.actief
+                            @if (winkel.actief)
+                            {
+                                <span>Actief</span>
+                            }
+                            else
+                            {
+                                <span>Niet Actief</span>
+                            }
                         </div> <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            @winkel.goedgekeurd
+                            @if (winkel.goedgekeurd)
+                            {
+                                <span>Goedgekeurd</span>
+                            }
+                            else
+                            {
+                                <span>Niet Goedgekeurd</span>
+                            }
                         </div>
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             <MatButton Type="submit" @key="winkel" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>

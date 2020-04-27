@@ -111,6 +111,50 @@ namespace DefaultDomain
             //Connectie sluiten
             this.MySqlConnection.Close();
 
+            List<Artikel> artikels = new List<Artikel>();
+            Artikel artikel;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel WHERE winkelnr = @winkelnr;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@winkelnr", winkel.winkelnr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    artikel = new Artikel
+                    {
+                        productnr = reader.GetInt32(0),
+                        productnaam = reader.GetString(1),
+                        standaardPrijs = reader.GetDouble(2),
+                        stock = reader.GetInt32(3),
+                        winkelnr = reader.GetInt32(4),
+                        korting = reader.GetInt32(5),
+                        actief = (reader.GetInt32(6) == 1) ? true : false
+                    };
+
+                    artikels.Add(artikel);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            winkel.artikels = artikels;
+
             //Return object
             return winkel;
         }
@@ -829,11 +873,11 @@ namespace DefaultDomain
 
                 if (artikel.actief)
                 {
-                    command.Parameters.AddWithValue("@actief", 0);
+                    command.Parameters.AddWithValue("@actief", 1);
                 }
                 else
                 {
-                    command.Parameters.AddWithValue("@actief", 1);
+                    command.Parameters.AddWithValue("@actief", 0);
                 }
 
                 var temp = command.ExecuteNonQuery();
@@ -854,6 +898,7 @@ namespace DefaultDomain
             return succes;
 
         }
+
         public bool VeranderStatusWinkel(Winkel winkel)
         {
             this.ResetErrorMessage();
@@ -969,6 +1014,56 @@ namespace DefaultDomain
             return succes;
 
         }
+        #endregion
+
+        #region Update
+
+        public bool UpdateArtikel(Artikel artikel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblartikel SET actief = @actief, productnaam = @productnaam, prijs = @prijs, stock = @stock WHERE productnr = {artikel.productnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (artikel.actief)
+                {
+                    command.Parameters.AddWithValue("@actief", 0);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@actief", 1);
+                }
+
+                command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
+                command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
+                command.Parameters.AddWithValue("@stock", artikel.stock);
+
+                var temp = command.ExecuteNonQuery();
+
+                if (temp > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+
+        }
+
         #endregion
 
         public bool DeleteRowsFromsmProject()
