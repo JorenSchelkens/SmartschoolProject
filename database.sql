@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `tblbesteldeartikels`;
 CREATE TABLE `tblbesteldeartikels` (
   `bestelnr` int NOT NULL,
   `productnr` int NOT NULL,
-  `prijs` int NOT NULL,
+  `prijs` double NOT NULL,
   `notitie` varchar(200) DEFAULT NULL,
   `aantal` int NOT NULL,
   PRIMARY KEY (`bestelnr`,`productnr`)
@@ -67,7 +67,7 @@ CREATE TABLE `tblbesteldeartikels` (
 
 LOCK TABLES `tblbesteldeartikels` WRITE;
 /*!40000 ALTER TABLE `tblbesteldeartikels` DISABLE KEYS */;
-INSERT INTO `tblbesteldeartikels` VALUES (-1,0,1,'',1);
+INSERT INTO `tblbesteldeartikels` VALUES (25,47,8,'test',5),(24,47,8,'Allemaal met witte suiker',5);
 /*!40000 ALTER TABLE `tblbesteldeartikels` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +86,7 @@ CREATE TABLE `tblbestelling` (
   `betaald` int NOT NULL,
   `code` varchar(100) NOT NULL,
   PRIMARY KEY (`bestelnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `tblbestelling` (
 
 LOCK TABLES `tblbestelling` WRITE;
 /*!40000 ALTER TABLE `tblbestelling` DISABLE KEYS */;
-INSERT INTO `tblbestelling` VALUES (16,'2020-04-24','joren.schelkens',1,0,'1d3259fc-a870-49ca-bcdd-04793de835a9');
+INSERT INTO `tblbestelling` VALUES (25,'2020-05-04','joren.schelkens',8,0,'489f4a6f-1280-40e0-98e6-5b93e29dd48a'),(24,'2020-05-04','joren.schelkens',8,0,'0a6c6817-a69e-4cef-81e0-19c3e06b90d7');
 /*!40000 ALTER TABLE `tblbestelling` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,4 +213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-27 16:38:51
+-- Dump completed on 2020-05-04 14:49:59
