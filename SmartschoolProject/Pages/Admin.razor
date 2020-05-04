@@ -369,7 +369,7 @@
         dialogLokaalIsOpen = true;
     }
 
-    public void voegVoorwerpToePopup(int lokaalNr)
+    public void voegVoorwerpToePopup(int lokaalnummer)
     {
         dialogVoorwerpIsOpen = true;
         lokaalNr = lokaalNr;
@@ -409,7 +409,6 @@
 
         dialogVoorwerpIsOpen = false;
 
-        lokaal = new Lokaal();
         lokaal = await DBConnectionMongoDB.GetLokaal(lokaalNr);
         lokaal.Voorwerpen.Add(voorwerp);
 
