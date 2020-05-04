@@ -185,20 +185,7 @@ else
             //Get artikels van winkel uit DB
             //winkel = DBConnection
 
-            alleWinkels = false;
-
-            var artikel = new Artikel();
-            artikel.productnaam = "Test";
-            artikel.standaardPrijs = 1.2;
-            artikel.stock = 2;
-            winkel.artikels.Add(artikel);
-
-            var artikel2 = new Artikel();
-            artikel2.productnaam = "Test2";
-            artikel2.standaardPrijs = 2;
-            artikel2.stock = 0;
-
-            winkel.artikels.Add(artikel2);
+            winkel = DBConnection.GetWinkel(Naam);
 
             Bestelling = new Bestelling(Gebruiker.GebruikerInfo.GebruikersNaam);
 

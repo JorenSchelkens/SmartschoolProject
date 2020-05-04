@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using InventarisDomain;
 using WinkelDomain;
 using SchoolbalDomain;
+using System.Linq;
 
 namespace DefaultDomain
 {
@@ -398,6 +399,8 @@ namespace DefaultDomain
         {
             this.ResetErrorMessage();
 
+            int temp = -1;
+
             try
             {
                 this.MySqlConnection.Open();
@@ -406,13 +409,13 @@ namespace DefaultDomain
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
-                command.Parameters.AddWithValue("@bestelnr", code);
+                command.Parameters.AddWithValue("@code", code);
 
                 MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    return reader.GetInt32(0);
+                    temp = reader.GetInt32(0);
                 }
 
                 //Reader sluiten
@@ -428,7 +431,7 @@ namespace DefaultDomain
             this.MySqlConnection.Close();
 
             //Return object
-            return -1;
+            return temp;
         }
 
         public List<Artikel> GetBesteldeArtikels(int bestelNr) 
@@ -622,6 +625,7 @@ namespace DefaultDomain
 
             List<BesteldArtikel> besteldArtikels = new List<BesteldArtikel>();
             Artikel artikel = new Artikel();
+            List<Artikel> artikels = this.GetAllArtikels();
             BesteldArtikel besteldArtikel;
             List<int> productNrs = new List<int>();
 
@@ -638,7 +642,7 @@ namespace DefaultDomain
 
                 while (reader.Read())
                 {
-                    artikel = GetArtikel(reader.GetInt32(1));
+                    artikel = artikels.First(v => v.productnr == reader.GetInt32(1));
                     besteldArtikel = new BesteldArtikel(artikel, reader.GetInt32(4), reader.GetString(3));
 
                     besteldArtikel.Prijs = reader.GetDouble(2);
