@@ -255,6 +255,8 @@
                                     <p style="font-weight: bold">Inactief</p>
                                 }
 
+                                <MatButton Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))"/>
+
                                 <MatList>
                                     @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
                                     {
@@ -282,14 +284,25 @@
     </MatExpansionPanel>
 </MatAccordion>
 
-<MatDialog @bind-IsOpen="@dialogIsOpen">
+<MatDialog @bind-IsOpen="@dialogLokaalIsOpen">
     <MatDialogTitle>Lokaal toevoegen</MatDialogTitle>
     <MatDialogContent>
-        <MatNumericUpDownField @onfocusout="CheckNummer" Label="Lokaalnummer:" Minimum="0" @bind-Value="lokaalNummer"></MatNumericUpDownField>
+        <MatNumericUpDownField @onfocusout="CheckNummerLokaal" Label="Lokaalnummer:" Minimum="0" @bind-Value="lokaalNummer"></MatNumericUpDownField>
         <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
         <MatButton OnClick="@(() => maakLokaalAan(lokaalNummer, lokaalverantwoordelijke))">Toevoegen</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+<MatDialog @bind-IsOpen="@dialogVoorwerpIsOpen">
+    <MatDialogTitle>Voorwerp toevoegen</MatDialogTitle>
+    <MatDialogContent>
+        <MatTextField Label="Voorwerpnaam:" @bind-Value="voorwerpnaam"></MatTextField>
+        <MatNumericUpDownField @onfocusout="@CheckAantalVoorwerp" Label="Aantal:" Minimum="0" @bind-Value="aantalVoorwerp"></MatNumericUpDownField>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(() => maakVoorwerpAan(voorwerpnaam, aantalVoorwerp))">Toevoegen</MatButton>
     </MatDialogActions>
 </MatDialog>
 
@@ -304,11 +317,17 @@
     public DBConnection DBConnection { get; set; } = new DBConnection();
     public DBConnectionMongoDB DBConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
 
-    public bool dialogIsOpen = false;
+    public bool dialogLokaalIsOpen = false;
     public bool comfirmatieVerwijderLokaal = false;
     public int lokaalNummer;
     public string lokaalverantwoordelijke;
 
+    public bool dialogVoorwerpIsOpen = false;
+    public int aantalVoorwerp;
+    public string voorwerpnaam;
+    public int lokaalNr;
+
+    public Voorwerp voorwerp { get; set; }
     public Lokaal lokaal { get; set; }
 
     public List<WinkelDomain.Winkel>
@@ -347,7 +366,13 @@
 
     public void voegLokaalToePopup()
     {
-        dialogIsOpen = true;
+        dialogLokaalIsOpen = true;
+    }
+
+    public void voegVoorwerpToePopup(int lokaalNr)
+    {
+        dialogVoorwerpIsOpen = true;
+        lokaalNr = lokaalNr;
     }
 
     public void verwijderLokaal()
@@ -361,7 +386,7 @@
         lokaal = new Lokaal(lokaalNr);
         lokaal.lokaalVerantwoordelijke = lokaalverantwoordelijke;
 
-        dialogIsOpen = false;
+        dialogLokaalIsOpen = false;
 
         var gelukt = await DBConnectionMongoDB.SaveLokaal(lokaal);
 
@@ -374,6 +399,30 @@
             Toaster.Add("Er bestaat reeds een lokaal met dit nummer", MatToastType.Danger, "Mislukt");
         }
         this.StateHasChanged();
+
+    }
+
+    public async void maakVoorwerpAan(string voorwerpnaam, int aantalVoorwerp)
+    {
+        voorwerp = new Voorwerp(voorwerpnaam);
+        voorwerp.aantal = aantalVoorwerp;
+
+        dialogVoorwerpIsOpen = false;
+
+        lokaal = new Lokaal();
+        lokaal = await DBConnectionMongoDB.GetLokaal(lokaalNr);
+        lokaal.Voorwerpen.Add(voorwerp);
+
+        var gelukt = await DBConnectionMongoDB.UpdateLokaal(lokaal);
+
+        if (gelukt)
+        {
+            Toaster.Add("Succesvol toegevoegd", MatToastType.Success, "Gelukt");
+        }
+        else
+        {
+            Toaster.Add("Er is iets misgelopen", MatToastType.Danger, "Mislukt");
+        }
 
     }
 
@@ -458,11 +507,19 @@
 
     }
 
-    public void CheckNummer()
+    public void CheckNummerLokaal()
     {
         if (lokaalNummer < 0)
         {
             lokaalNummer = 0;
+        }
+    }
+
+    public void CheckAantalVoorwerp()
+    {
+        if (aantalVoorwerp < 0)
+        {
+            aantalVoorwerp = 0;
         }
     }
 
