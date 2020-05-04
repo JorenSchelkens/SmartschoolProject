@@ -255,7 +255,10 @@
                                     <p style="font-weight: bold">Inactief</p>
                                 }
 
-                                <MatButton Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))"/>
+                                <p>Verantwoordelijke : @lokaal.lokaalVerantwoordelijke</p>
+
+                                <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => wijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
+                                <MatButton Unelevated="true" Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))" />
 
                                 <MatList>
                                     @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
@@ -285,7 +288,7 @@
 </MatAccordion>
 
 <MatDialog @bind-IsOpen="@dialogLokaalIsOpen">
-    <MatDialogTitle>Lokaal toevoegen</MatDialogTitle>
+    <MatDialogTitle>Nieuw lokaal</MatDialogTitle>
     <MatDialogContent>
         <MatNumericUpDownField @onfocusout="CheckNummerLokaal" Label="Lokaalnummer:" Minimum="0" @bind-Value="lokaalNummer"></MatNumericUpDownField>
         <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
@@ -296,17 +299,27 @@
 </MatDialog>
 
 <MatDialog @bind-IsOpen="@dialogVoorwerpIsOpen">
-    <MatDialogTitle>Voorwerp toevoegen</MatDialogTitle>
+    <MatDialogTitle>Nieuw voorwerp</MatDialogTitle>
     <MatDialogContent>
         <MatTextField Label="Voorwerpnaam:" @bind-Value="voorwerpnaam"></MatTextField>
-        <MatNumericUpDownField @onfocusout="@CheckAantalVoorwerp" Label="Aantal:" Minimum="0" @bind-Value="aantalVoorwerp"></MatNumericUpDownField>
+        <MatNumericUpDownField @onfocusout="@CheckAantalVoorwerp" Label="Aantal:" Minimum="1" @bind-Value="aantalVoorwerp"></MatNumericUpDownField>
     </MatDialogContent>
     <MatDialogActions>
         <MatButton OnClick="@(() => maakVoorwerpAan(voorwerpnaam, aantalVoorwerp))">Toevoegen</MatButton>
     </MatDialogActions>
 </MatDialog>
 
-<button class="btn btn-primary" @onclick="@CreateWord">Create Word</button>
+<MatDialog @bind-IsOpen="@dialogVerantwoordelijkeIsOpen">
+    <MatDialogTitle>Nieuwe verantwoordelijke</MatDialogTitle>
+    <MatDialogContent>
+        <MatTextField Label="Naam:" @bind-Value="naamVerantwoordelijke"></MatTextField>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(() => wijzigVerantwoordelijke(naamVerantwoordelijke))">Wijzigen</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+<MatButton style="margin-top: 10px" Raised="true" @onclick="@CreateWord">Exporteer Word</MatButton>
 
 @DBConnection.ErrorMessage
 
@@ -318,7 +331,6 @@
     public DBConnectionMongoDB DBConnectionMongoDB { get; set; } = new DBConnectionMongoDB();
 
     public bool dialogLokaalIsOpen = false;
-    public bool comfirmatieVerwijderLokaal = false;
     public int lokaalNummer;
     public string lokaalverantwoordelijke;
 
@@ -326,6 +338,9 @@
     public int aantalVoorwerp;
     public string voorwerpnaam;
     public int lokaalNr;
+
+    public bool dialogVerantwoordelijkeIsOpen = false;
+    public string naamVerantwoordelijke;
 
     public Voorwerp voorwerp { get; set; }
     public Lokaal lokaal { get; set; }
@@ -340,16 +355,6 @@
     {
         documentStream = service.CreateWord(lokalen);
         await JS.SaveAs("Overzicht.docx", documentStream.ToArray());
-    }
-
-    public void annuleerVerwijderLokaal()
-    {
-        comfirmatieVerwijderLokaal = false;
-    }
-
-    public void verwijderLokaalPopUp()
-    {
-        comfirmatieVerwijderLokaal = true;
     }
 
     protected override async Task OnInitializedAsync()
@@ -375,10 +380,10 @@
         lokaalNr = lokaalnummer;
     }
 
-    public void verwijderLokaal()
+    public void wijzigVerantwoordelijkePopup(int lokaalnummer)
     {
-        //TODO verwijder lokaal uit databank
-        comfirmatieVerwijderLokaal = false;
+        dialogVerantwoordelijkeIsOpen = true;
+        lokaalNr = lokaalnummer;
     }
 
     public async void maakLokaalAan(int lokaalNr, string lokaalverantwoordelijke)
@@ -422,6 +427,28 @@
         {
             Toaster.Add("Er is iets misgelopen", MatToastType.Danger, "Mislukt");
         }
+        this.StateHasChanged();
+
+    }
+
+    public async void wijzigVerantwoordelijke(string naam)
+    {
+        lokaal = await DBConnectionMongoDB.GetLokaal(lokaalNr);
+        lokaal.lokaalVerantwoordelijke = naam;
+
+        dialogVerantwoordelijkeIsOpen = false;
+
+        var gelukt = await DBConnectionMongoDB.UpdateLokaal(lokaal);
+
+        if (gelukt)
+        {
+            Toaster.Add("Succesvol gewijzigd", MatToastType.Success, "Gelukt");
+        }
+        else
+        {
+            Toaster.Add("Er is iets misgelopen", MatToastType.Danger, "Mislukt");
+        }
+        this.StateHasChanged();
 
     }
 
@@ -516,9 +543,9 @@
 
     public void CheckAantalVoorwerp()
     {
-        if (aantalVoorwerp < 0)
+        if (aantalVoorwerp < 1)
         {
-            aantalVoorwerp = 0;
+            aantalVoorwerp = 1;
         }
     }
 
