@@ -324,7 +324,7 @@
     <MatDialogTitle>Nieuw lokaal</MatDialogTitle>
     <MatDialogContent>
         <MatNumericUpDownField @onfocusout="CheckNummerLokaal" Label="Lokaalnummer:" Minimum="0" @bind-Value="lokaalNummer"></MatNumericUpDownField>
-        <MatTextField Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
+        <MatTextField @onfocusout="CheckNummerLokaal" Label="Lokaalverantwoordelijke:" @bind-Value="lokaalverantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
         <MatButton OnClick="@(() => maakLokaalAan(lokaalNummer, lokaalverantwoordelijke))">Toevoegen</MatButton>
@@ -334,8 +334,8 @@
 <MatDialog @bind-IsOpen="@dialogVoorwerpIsOpen">
     <MatDialogTitle>Nieuw voorwerp</MatDialogTitle>
     <MatDialogContent>
-        <MatTextField Label="Voorwerpnaam:" @bind-Value="voorwerpnaam"></MatTextField>
-        <MatNumericUpDownField @onfocusout="@CheckAantalVoorwerp" Label="Aantal:" Minimum="1" @bind-Value="aantalVoorwerp"></MatNumericUpDownField>
+        <MatTextField @onfocusout="CheckAantalVoorwerp" Label="Voorwerpnaam:" @bind-Value="voorwerpnaam"></MatTextField>
+        <MatNumericUpDownField @onfocusout="CheckAantalVoorwerp" Label="Aantal:" Minimum="1" @bind-Value="aantalVoorwerp"></MatNumericUpDownField>
     </MatDialogContent>
     <MatDialogActions>
         <MatButton OnClick="@(() => maakVoorwerpAan(voorwerpnaam, aantalVoorwerp))">Toevoegen</MatButton>
@@ -345,7 +345,7 @@
 <MatDialog @bind-IsOpen="@dialogVerantwoordelijkeIsOpen">
     <MatDialogTitle>Nieuwe verantwoordelijke</MatDialogTitle>
     <MatDialogContent>
-        <MatTextField Label="Naam:" @bind-Value="naamVerantwoordelijke"></MatTextField>
+        <MatTextField @onfocusout="CheckWijziging" Label="Naam:" @bind-Value="naamVerantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
         <MatButton OnClick="@(() => wijzigVerantwoordelijke(naamVerantwoordelijke))">Wijzigen</MatButton>
@@ -568,17 +568,27 @@
 
     public void CheckNummerLokaal()
     {
-        if (lokaalNummer < 0)
+        if (lokaalNummer < 0 || string.IsNullOrWhiteSpace(lokaalverantwoordelijke))
         {
             lokaalNummer = 0;
+            lokaalverantwoordelijke = "leerkracht";
         }
     }
 
     public void CheckAantalVoorwerp()
     {
-        if (aantalVoorwerp < 1)
+        if (aantalVoorwerp < 1 || string.IsNullOrWhiteSpace(voorwerpnaam))
         {
             aantalVoorwerp = 1;
+            voorwerpnaam = "voorwerp";
+        }
+    }
+
+    public void CheckWijziging()
+    {
+        if (string.IsNullOrWhiteSpace(naamVerantwoordelijke))
+        {
+            naamVerantwoordelijke = "verantwoordelijke";
         }
     }
 
