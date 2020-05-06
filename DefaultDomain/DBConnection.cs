@@ -600,6 +600,7 @@ namespace DefaultDomain
                     artikel.productnaam = reader.GetString(1);
                     artikel.standaardPrijs = reader.GetDouble(2);
                     artikel.stock = reader.GetInt32(3);
+                    artikel.winkelnr = reader.GetInt32(4);
                     artikel.korting = reader.GetInt32(5);
                     artikel.actief = reader.GetBoolean(6);
 
