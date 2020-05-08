@@ -1,4 +1,4 @@
-﻿@page "/betalen/{code}"
+﻿@page "/betalen/{code}/{winkelnaam}"
 @inject IMatToaster Toaster
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
@@ -29,7 +29,7 @@
             </div>
 
             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                <h2>€@besteldArtikel.Notitie</h2>
+                <h2>@besteldArtikel.Notitie</h2>
             </div>
 
         }
@@ -38,7 +38,8 @@
 
             <h2>Totaal bedrag: €@Bestelling.TotaalBedrag</h2>
 
-            <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling Afronden</MatButton>
+            <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
+            <MatButton Unelevated="true" @onclick="TerugNaarWinkel">Terug naar winkel</MatButton>
 
         </div>
 
@@ -49,6 +50,9 @@
 
     [Parameter]
     public string Code { get; set; }
+
+    [Parameter]
+    public string WinkelNaam { get; set; }
 
     private DBConnection DBConnection { get; set; }
 
@@ -79,5 +83,10 @@
     public void BestellingAfronden()
     {
 
+    }
+
+    public void TerugNaarWinkel()
+    {
+        NavigationManager.NavigateTo($"/winkels/{this.WinkelNaam}");
     }
 }

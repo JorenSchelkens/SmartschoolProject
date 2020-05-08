@@ -25,16 +25,41 @@
 
 @if (alleWinkels)
 {
+    <MatTextField @bind-Value="@SearchString1" Label="Winkel naam" FullWidth="true" @onchange="Refresh"></MatTextField>
+
+    <br />
+
     <div class="mat-layout-grid">
         <div class="mat-layout-grid-inner">
 
-            @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+            @if (string.IsNullOrWhiteSpace(SearchString1))
             {
-                <div class="mat-layout-grid-cell">
-                    <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px;height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
-                    <h2>@winkel.naam</h2>
-                    <MatButton Unelevated="true" @onclick="@(() => GaNaarWinkel(winkel))">Ga naar winkel</MatButton>
-                </div>
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+                {
+                    <div class="mat-layout-grid-cell">
+                        <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px;height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
+                        <h2>@winkel.naam</h2>
+                        <MatButton Unelevated="true" @onclick="@(() => GaNaarWinkel(winkel))">Ga naar winkel</MatButton>
+                    </div>
+                }
+            }
+            else
+            {
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd && winkel.naam.ToLower().Contains(SearchString1.ToLower().Trim())))
+                {
+                    <div class="mat-layout-grid-cell">
+                        <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px;height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
+                        <h2>@winkel.naam</h2>
+                        <MatButton Unelevated="true" @onclick="@(() => GaNaarWinkel(winkel))">Ga naar winkel</MatButton>
+                    </div>
+                }
+
+                @if (winkels.Where(winkel => winkel.actief && winkel.goedgekeurd && winkel.naam.ToLower().Contains(SearchString1.ToLower().Trim())).Count() == 0)
+                {
+                    <div class="mat-layout-grid-cell">
+                        <h2>Geen winkels gevonden</h2>
+                    </div>
+                }
             }
 
         </div>
@@ -42,8 +67,12 @@
 }
 else
 {
+    <MatTextField @bind-Value="@SearchString2" Label="Artikel naam" FullWidth="true" @onchange="Refresh"></MatTextField>
+
+    <br />
 
     <div class="container">
+
         <div class="row">
             <div class="col-8">
 
@@ -56,36 +85,80 @@ else
 
                         @if (winkel.artikels != null)
                         {
-                            @foreach (Artikel artikel in winkel.artikels)
+                            @if (string.IsNullOrWhiteSpace(SearchString2))
                             {
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>Product naam: @artikel.productnaam</h2>
-                                </div>
+                                @foreach (Artikel artikel in winkel.artikels)
+                                {
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Product naam: @artikel.productnaam</h2>
+                                    </div>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>Prijs: €@artikel.standaardPrijs</h2>
-                                </div>
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Prijs: €@artikel.standaardPrijs</h2>
+                                    </div>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>Aantal producten in stock: @artikel.stock</h2>
-                                </div>
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Aantal producten in stock: @artikel.stock</h2>
+                                    </div>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
 
-                                    @if (artikel.stock == 0)
-                                    {
-                                        <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
-                                    }
-                                    else
-                                    {
-                                        <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
-                                    }
+                                        @if (artikel.stock == 0)
+                                        {
+                                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
+                                        }
+                                        else
+                                        {
+                                            <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
+                                        }
 
-                                </div>
+                                    </div>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                                }
+                            }
+                            else
+                            {
+                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
+                                {
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Product naam: @artikel.productnaam</h2>
+                                    </div>
+
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Prijs: €@artikel.standaardPrijs</h2>
+                                    </div>
+
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                        <h2>Aantal producten in stock: @artikel.stock</h2>
+                                    </div>
+
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+
+                                        @if (artikel.stock == 0)
+                                        {
+                                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
+                                        }
+                                        else
+                                        {
+                                            <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
+                                        }
+
+                                    </div>
+
+                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                                }
+
+                                @if (winkel.artikels.Where(v => v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())).Count() == 0)
+                                {
+                                    <h2>Geen artikels gevonden</h2>
+                                }
                             }
                         }
+
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                            <MatButton Unelevated="true" @onclick="TerugNaarAlleWinkels">Terug naar alle winkels</MatButton>
+                        </div>
 
                     </div>
                 </div>
@@ -164,6 +237,9 @@ else
     public int aantalVanProduct = 1;
     public string notitie = "";
 
+    public string SearchString1 = "";
+    public string SearchString2 = "";
+
     public Bestelling Bestelling { get; set; }
     public Artikel Artikel { get; set; }
 
@@ -199,7 +275,7 @@ else
         this.Gebruiker = await sessionStorage.GetItemAsync<GoogleGebruiker>("GoogleGebruiker");
         this.Gebruiker.Refresh();
 
-        if(this.Bestelling != null)
+        if (this.Bestelling != null)
         {
             this.Bestelling.GebruikersNaam = this.Gebruiker.GebruikerInfo.GebruikersNaam;
         }
@@ -210,6 +286,11 @@ else
     public void GaNaarWinkel(Winkel winkel)
     {
         NavigationManager.NavigateTo($"/winkels/{winkel.naam}", true);
+    }
+
+    public void TerugNaarAlleWinkels()
+    {
+        NavigationManager.NavigateTo("winkels", true);
     }
 
     public void BestelArtikel()
@@ -229,6 +310,11 @@ else
         this.StateHasChanged();
     }
 
+    public void Refresh()
+    {
+        this.StateHasChanged();
+    }
+
     public void BestellingAfronden()
     {
         this.Bestelling.FinishBestelling();
@@ -237,7 +323,7 @@ else
 
         if (succes)
         {
-            NavigationManager.NavigateTo($"/betalen/{this.Bestelling.Code}");
+            NavigationManager.NavigateTo($"/betalen/{this.Bestelling.Code}/{this.Naam}");
         }
         else
         {
