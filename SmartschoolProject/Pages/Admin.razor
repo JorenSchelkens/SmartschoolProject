@@ -53,6 +53,7 @@
                                 </div>
                                 <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                     @winkel.beheerder
+                                <MatButton Unelevated="true" OnClick="@(() => WijzigWinkelVerantwoordelijkePopUp(winkel.naam))">Wijzig</MatButton>
                                 </div>
                                 <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
 
@@ -290,7 +291,7 @@
 
                                     <p>Verantwoordelijke : @lokaal.lokaalVerantwoordelijke</p>
 
-                                    <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => wijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
+                                    <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => WijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
                                     <MatButton Unelevated="true" Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))" />
 
                                     <MatList>
@@ -348,7 +349,17 @@
         <MatTextField @onfocusout="CheckWijziging" Label="Naam:" @bind-Value="naamVerantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@(() => wijzigVerantwoordelijke(naamVerantwoordelijke))">Wijzigen</MatButton>
+        <MatButton OnClick="@(() => WijzigVerantwoordelijke(naamVerantwoordelijke))">Wijzigen</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+<MatDialog @bind-IsOpen="@dialogWinkelVerantwoordelijkeIsOpen">
+    <MatDialogTitle>Nieuwe winkelverantwoordelijke</MatDialogTitle>
+    <MatDialogContent>
+        <MatTextField @onfocusout="CheckWijziging" Label="Naam:" @bind-Value="naamWinkelVerantwoordelijke"></MatTextField>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(() => WijzigWinkelVerantwoordelijke(naamWinkelVerantwoordelijke))">Wijzigen</MatButton>
     </MatDialogActions>
 </MatDialog>
 
@@ -375,8 +386,13 @@
     public bool dialogVerantwoordelijkeIsOpen = false;
     public string naamVerantwoordelijke;
 
+    public bool dialogWinkelVerantwoordelijkeIsOpen = false;
+    public string winkelnaam;
+    public string naamWinkelVerantwoordelijke;
+
     public Voorwerp voorwerp { get; set; }
     public Lokaal lokaal { get; set; }
+    public WinkelDomain.Winkel winkel { get; set; }
 
     public List<WinkelDomain.Winkel>
     winkels = new List<WinkelDomain.Winkel>();
@@ -413,10 +429,16 @@
         lokaalNr = lokaalnummer;
     }
 
-    public void wijzigVerantwoordelijkePopup(int lokaalnummer)
+    public void WijzigVerantwoordelijkePopup(int lokaalnummer)
     {
         dialogVerantwoordelijkeIsOpen = true;
         lokaalNr = lokaalnummer;
+    }
+
+    public void WijzigWinkelVerantwoordelijkePopUp(string naamWinkel)
+    {
+        dialogWinkelVerantwoordelijkeIsOpen = true;
+        winkelnaam = naamWinkel;
     }
 
     public async void maakLokaalAan(int lokaalNr, string lokaalverantwoordelijke)
@@ -464,7 +486,7 @@
 
     }
 
-    public async void wijzigVerantwoordelijke(string naam)
+    public async void WijzigVerantwoordelijke(string naam)
     {
         lokaal = await DBConnectionMongoDB.GetLokaal(lokaalNr);
         lokaal.lokaalVerantwoordelijke = naam;
@@ -483,6 +505,11 @@
         }
         this.StateHasChanged();
 
+    }
+
+    public async void WijzigWinkelVerantwoordelijke(string naam)
+    {
+        winkel = await DBConnection.GetWinkel(winkelnaam);
     }
 
     public void ActiefMakenWinkel(WinkelDomain.Winkel winkel)
