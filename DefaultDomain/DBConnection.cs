@@ -1069,6 +1069,41 @@ namespace DefaultDomain
 
         }
 
+        public bool UpdateWinkel(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblwinkel SET beheerder = @beheerder WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
+
+                var temp = command.ExecuteNonQuery();
+
+                if (temp > 0)
+                {
+                    succes = true;
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
+        }
+
         #endregion
 
         public bool DeleteRowsFromsmProject()

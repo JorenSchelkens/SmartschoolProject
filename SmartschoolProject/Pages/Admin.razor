@@ -294,6 +294,7 @@
                                     <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => WijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
                                     <MatButton Unelevated="true" Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))" />
 
+                                    <p style="margin-top: 20px">Voorwerpen :</p>
                                     <MatList>
                                         @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
                                         {
@@ -349,17 +350,17 @@
         <MatTextField @onfocusout="CheckWijziging" Label="Naam:" @bind-Value="naamVerantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@(() => WijzigVerantwoordelijke(naamVerantwoordelijke))">Wijzigen</MatButton>
+        <MatButton OnClick="@(() => WijzigVerantwoordelijke(naamVerantwoordelijke))">Bevestig</MatButton>
     </MatDialogActions>
 </MatDialog>
 
 <MatDialog @bind-IsOpen="@dialogWinkelVerantwoordelijkeIsOpen">
     <MatDialogTitle>Nieuwe winkelverantwoordelijke</MatDialogTitle>
     <MatDialogContent>
-        <MatTextField @onfocusout="CheckWijziging" Label="Naam:" @bind-Value="naamWinkelVerantwoordelijke"></MatTextField>
+        <MatTextField @onfocusout="CheckWijzigingWinkel" Label="Naam:" @bind-Value="naamWinkelVerantwoordelijke"></MatTextField>
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@(() => WijzigWinkelVerantwoordelijke(naamWinkelVerantwoordelijke))">Wijzigen</MatButton>
+        <MatButton OnClick="@(() => WijzigWinkelVerantwoordelijke(naamWinkelVerantwoordelijke))">Bevestig</MatButton>
     </MatDialogActions>
 </MatDialog>
 
@@ -507,9 +508,23 @@
 
     }
 
-    public async void WijzigWinkelVerantwoordelijke(string naam)
+    public void WijzigWinkelVerantwoordelijke(string naam)
     {
-        //winkel = await DBConnection.GetWinkel(winkelnaam);
+        winkel = DBConnection.GetWinkel(winkelnaam);
+        winkel.beheerder = naam;
+
+        dialogWinkelVerantwoordelijkeIsOpen = false;
+
+        var gelukt = DBConnection.UpdateWinkel(winkel);
+
+        if (gelukt)
+        {
+            Toaster.Add("Succesvol gewijzigd", MatToastType.Success, "Gelukt");
+        } else
+        {
+            Toaster.Add("Er is iets misgelopen", MatToastType.Success, "Mislukt");
+        }
+        this.StateHasChanged();
     }
 
     public void ActiefMakenWinkel(WinkelDomain.Winkel winkel)
@@ -616,6 +631,14 @@
         if (string.IsNullOrWhiteSpace(naamVerantwoordelijke))
         {
             naamVerantwoordelijke = "verantwoordelijke";
+        }
+    }
+
+    public void CheckWijzigingWinkel()
+    {
+        if (string.IsNullOrWhiteSpace(naamWinkelVerantwoordelijke))
+        {
+            naamWinkelVerantwoordelijke= "verantwoordelijke";
         }
     }
 
