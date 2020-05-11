@@ -620,6 +620,69 @@ namespace DefaultDomain
             return artikels;
         }
 
+        public List<Bestelling> GetAllBestellingen()
+        {
+            this.ResetErrorMessage();
+
+            List<Bestelling> bestellingen = new List<Bestelling>();
+            Bestelling bestelling = new Bestelling();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs, code FROM tblbestelling;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    bestelling.BestelNr = reader.GetInt32(0);
+                    bestelling.AanmaakDatum = reader.GetDateTime(1);
+                    bestelling.GebruikersNaam = reader.GetString(2);
+                    bestelling.TotaalBedrag = reader.GetDouble(3);
+                    bestelling.Code = reader.GetString(4);
+
+                    bestellingen.Add(bestelling);
+                    bestelling = new Bestelling();
+                }
+
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+            }
+
+            this.MySqlConnection.Close();
+
+            return bestellingen;
+        }
+
+        public List<Bestelling> GetAllBestellingenFromWinkel(int winkelnr)
+        {
+            List<Bestelling> bestellingen = new List<Bestelling>();
+            Bestelling bestelling;
+
+            List<Bestelling> alleBestellingenZonderProducten = this.GetAllBestellingen();
+            List<Bestelling> alleBestellingenMetProducten = new List<Bestelling>();
+
+
+            foreach (Bestelling temp in alleBestellingenZonderProducten)
+            {
+                bestelling = this.GetBestelling(temp.Code);
+                alleBestellingenMetProducten.Add(bestelling);
+            }
+
+            foreach (Bestelling temp in alleBestellingenMetProducten.Where(v => v.GetBesteldeArtikels()[0].GetWinkelNr() == winkelnr))
+            {
+                bestellingen.Add(temp);
+            }
+
+            return bestellingen;
+        }
+
         public List<BesteldArtikel> GetAllBesteldArtikels(int bestelnr)
         {
             this.ResetErrorMessage();

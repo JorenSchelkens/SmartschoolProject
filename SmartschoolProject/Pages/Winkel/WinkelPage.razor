@@ -126,6 +126,41 @@ else
         </div>
     }
 
+    <br />
+    <br />
+
+    <h2>Bestellingen</h2>
+
+    @if (this.bestellingen.Count == 0)
+    {
+        <h3>Er zijn geen bestellingen</h3>
+    }
+    else
+    {
+        @foreach (Bestelling bestelling in this.bestellingen)
+        {
+
+            <div>
+
+                Begunstigde: @bestelling.GebruikersNaam
+                <br />
+                Datum: @bestelling.AanmaakDatum.ToString()
+                <br />
+                Prijs: € @bestelling.TotaalBedrag
+
+                @foreach (BesteldArtikel artikel in bestelling.GetBesteldeArtikels())
+                {
+                    artikel.PrettyPrint();
+                    <br />
+                }
+
+                <br />
+
+            </div>
+
+        }
+    }
+
     <MatDialog @bind-IsOpen="@showDialog">
         <MatDialogTitle>Artikel Toevoegen</MatDialogTitle>
         <MatDialogContent>
@@ -209,6 +244,7 @@ else
     public List<Winkel> winkels = new List<Winkel>();
 
     public Winkel winkel { get; set; }
+    public List<Bestelling> bestellingen { get; set; }
 
     [Parameter]
     public string winkelNaam { get; set; }
@@ -237,6 +273,7 @@ else
         else
         {
             winkel = DBConnection.GetWinkel(winkelNaam);
+            bestellingen = DBConnection.GetAllBestellingenFromWinkel(winkel.winkelnr);
             showMijnWinkels = false;
         }
     }

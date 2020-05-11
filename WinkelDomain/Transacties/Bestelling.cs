@@ -12,6 +12,11 @@ namespace WinkelDomain
         public double TotaalBedrag { get; set; } = 0;
         public string Code { get; set; }
 
+        public Bestelling()
+        {
+
+        }
+
         public Bestelling(string gebruikersNaam)
         {
             this.AanmaakDatum = DateTime.Now;
