@@ -39,6 +39,14 @@
         padding: 10px;
         opacity: 0.6;
     }
+
+    .border {
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        width: 500px;
+        margin: 10px;
+    }
 </style>
 
 @if (showMijnWinkels)
@@ -87,18 +95,26 @@
 }
 else
 {
+<div class="border">
     <h1>@winkel.naam</h1>
 
     @foreach (Artikel artikel in winkel.artikels)
     {
         <div>
-            Naam: @artikel.productnaam
-            <br />
-            Prijs: @artikel.standaardPrijs
-            <br />
-            Stock: @artikel.stock
-            <br />
-
+            <h4>
+                @artikel.productnaam
+            </h4>
+            <table>
+                <tr>
+                    <td>Prijs: </td>
+                    <td>@artikel.standaardPrijs</td>
+                </tr>
+                <tr>
+                    <td>Stock: </td>
+                    <td>@artikel.stock</td>
+                </tr>
+            </table>
+            
             @if (artikel.actief)
             {
                 <span>Actief</span>
@@ -130,7 +146,8 @@ else
 
     <br />
     <br />
-
+</div>
+<div class="border">
     <h2>Bestellingen</h2>
 
     @if (this.bestellingen.Count == 0)
@@ -162,7 +179,7 @@ else
 
         }
     }
-
+</div>
     <MatDialog @bind-IsOpen="@showDialog">
         <MatDialogTitle>Artikel Toevoegen</MatDialogTitle>
         <MatDialogContent>
