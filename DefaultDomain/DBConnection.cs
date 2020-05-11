@@ -1033,7 +1033,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"UPDATE tblartikel SET actief = @actief, productnaam = @productnaam, prijs = @prijs, stock = @stock WHERE productnr = {artikel.productnr}";
+                string sql = $"UPDATE tblartikel SET actief = @actief, productnaam = @productnaam, prijs = @prijs, stock = @stock, korting = @korting WHERE productnr = {artikel.productnr}";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
@@ -1049,6 +1049,7 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@productnaam", artikel.productnaam);
                 command.Parameters.AddWithValue("@prijs", artikel.standaardPrijs);
                 command.Parameters.AddWithValue("@stock", artikel.stock);
+                command.Parameters.AddWithValue("@korting", artikel.korting);
 
                 var temp = command.ExecuteNonQuery();
 

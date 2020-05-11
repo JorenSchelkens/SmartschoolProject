@@ -1,4 +1,6 @@
-﻿namespace WinkelDomain
+﻿using System;
+
+namespace WinkelDomain
 {
     public class Artikel
     {
@@ -14,18 +16,22 @@
         {
 
         }
+
         public Artikel(string productnaam)
         {
             this.productnaam = productnaam;
         }
-        public void kortingAanzetten(int korting)
-        {
-            this.korting = korting;
-        }
+
         public double geefHuidigePrijs()
         {
-            //TODO
-            return standaardPrijs;
+            if (korting == 0)
+            {
+                return Math.Round(standaardPrijs, 2);
+            }
+            else
+            {
+                return Math.Round(standaardPrijs * ((100 - korting) / 100.00), 2);
+            }
         }
     }
 }

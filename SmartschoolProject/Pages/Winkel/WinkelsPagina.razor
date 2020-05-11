@@ -87,14 +87,14 @@ else
                         {
                             @if (string.IsNullOrWhiteSpace(SearchString2))
                             {
-                                @foreach (Artikel artikel in winkel.artikels)
+                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief))
                                 {
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                         <h2>Product naam: @artikel.productnaam</h2>
                                     </div>
 
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Prijs: €@artikel.standaardPrijs</h2>
+                                        <h2>Prijs: €@artikel.geefHuidigePrijs()</h2>
                                     </div>
 
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
@@ -119,14 +119,14 @@ else
                             }
                             else
                             {
-                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
+                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
                                 {
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                         <h2>Product naam: @artikel.productnaam</h2>
                                     </div>
 
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Prijs: €@artikel.standaardPrijs</h2>
+                                        <h2>Prijs: €@artikel.geefHuidigePrijs()</h2>
                                     </div>
 
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
@@ -149,7 +149,7 @@ else
                                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
                                 }
 
-                                @if (winkel.artikels.Where(v => v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())).Count() == 0)
+                                @if (winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())).Count() == 0)
                                 {
                                     <h2>Geen artikels gevonden</h2>
                                 }
