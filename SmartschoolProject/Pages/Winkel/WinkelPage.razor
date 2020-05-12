@@ -65,7 +65,7 @@
 
                     <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.naam))" Class="knop">bewerken</MatButton>
 
-                    <MatCheckbox @bind-Value="@winkel.actief" Class="check" Label="Actief"></MatCheckbox>
+                    <MatCheckbox @bind-Value="@winkel.actief" Class="check" @onclick="@(() => ActiefMakenWinkel(winkel))" Label="Actief"></MatCheckbox>
 
                 </MatListItem>
 
@@ -80,7 +80,7 @@
 
                     <MatButton Unelevated="true" Disabled="true" Class="knop">bewerken</MatButton>
 
-                    <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" Label="Actief"></MatCheckbox>
+                    <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" @onclick="@(() => ActiefMakenWinkel(winkel))" Label="Actief"></MatCheckbox>
 
                 </MatListItem>
 
@@ -439,6 +439,13 @@ else
     public void GaNaarWinkel(string winkelNaam)
     {
         navigationManager.NavigateTo($"/winkel/{winkelNaam.ToString()}", true);
+    }
+
+    public void ActiefMakenWinkel(WinkelDomain.Winkel winkel)
+    {
+        winkel.actief = !winkel.actief;
+        bool temp = DBConnection.VeranderStatusWinkel(winkel);
+        this.StateHasChanged();
     }
 
 }
