@@ -59,7 +59,7 @@
         {
             if (winkel.goedgekeurd)
             {
-                <MatListItem Class="actief">
+                <MatListItem Class="actief" Disabled="true">
 
                     <div class="winkelnaam">@winkel.naam</div>
 
@@ -80,7 +80,7 @@
 
                     <MatButton Unelevated="true" Disabled="true" Class="knop">bewerken</MatButton>
 
-                    <MatCheckbox @bind-Value="@winkel.actief" Disabled="true" Class="check" @onclick="@(() => ActiefMakenWinkel(winkel))" Label="Actief"></MatCheckbox>
+                    <MatCheckbox @bind-Value="@winkel.actief" Class="check" @onclick="@(() => ActiefMakenWinkel(winkel))" Label="Actief"></MatCheckbox>
 
                 </MatListItem>
 
