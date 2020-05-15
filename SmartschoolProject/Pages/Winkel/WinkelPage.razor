@@ -95,91 +95,91 @@
 }
 else
 {
-<div class="border">
-    <h1>@winkel.naam</h1>
+    <div class="border">
+        <h1>@winkel.naam</h1>
 
-    @foreach (Artikel artikel in winkel.artikels)
-    {
-        <div>
-            <h4>
-                @artikel.productnaam
-            </h4>
-            <table>
-                <tr>
-                    <td>Prijs: </td>
-                    <td>@artikel.standaardPrijs</td>
-                </tr>
-                <tr>
-                    <td>Stock: </td>
-                    <td>@artikel.stock</td>
-                </tr>
-            </table>
-            
-            @if (artikel.actief)
-            {
-                <span>Actief</span>
-            }
-            else
-            {
-                <span>Niet Actief</span>
-            }
-
-            <br />
-
-            <MatButton Unelevated="true" @onclick="@(() => ShowDialogArtikelAanpassen(artikel))">Artikel aanpassen</MatButton>
-
-            <MatButton Unelevated="true" @onclick="@(() => ShowDialogArtikelKorting(artikel))">Korting toevoegen</MatButton>
-
-            <br />
-
-            @if (artikel.actief)
-            {
-                <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op niet actief zetten</MatButton>
-            }
-            else
-            {
-                <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op actief zetten</MatButton>
-            }
-
-        </div>
-    }
-
-    <br />
-    <br />
-</div>
-<div class="border">
-    <h2>Bestellingen</h2>
-
-    @if (this.bestellingen.Count == 0)
-    {
-        <h3>Er zijn geen bestellingen</h3>
-    }
-    else
-    {
-        @foreach (Bestelling bestelling in this.bestellingen)
+        @foreach (Artikel artikel in winkel.artikels)
         {
-
             <div>
+                <h4>
+                    @artikel.productnaam
+                </h4>
+                <table>
+                    <tr>
+                        <td>Prijs: </td>
+                        <td>@artikel.standaardPrijs</td>
+                    </tr>
+                    <tr>
+                        <td>Stock: </td>
+                        <td>@artikel.stock</td>
+                    </tr>
+                </table>
 
-                Begunstigde: @bestelling.GebruikersNaam
-                <br />
-                Datum: @bestelling.AanmaakDatum.ToString()
-                <br />
-                Prijs: € @bestelling.TotaalBedrag
-
-                @foreach (BesteldArtikel artikel in bestelling.GetBesteldeArtikels())
+                @if (artikel.actief)
                 {
-                    artikel.PrettyPrint();
-                    <br />
+                    <span>Actief</span>
+                }
+                else
+                {
+                    <span>Niet Actief</span>
                 }
 
                 <br />
 
-            </div>
+                <MatButton Unelevated="true" @onclick="@(() => ShowDialogArtikelAanpassen(artikel))">Artikel aanpassen</MatButton>
 
+                <MatButton Unelevated="true" @onclick="@(() => ShowDialogArtikelKorting(artikel))">Korting toevoegen</MatButton>
+
+                <br />
+
+                @if (artikel.actief)
+                {
+                    <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op niet actief zetten</MatButton>
+                }
+                else
+                {
+                    <MatButton Unelevated="true" @onclick="@(() => ToggleArtikelActief(artikel))">Artikel op actief zetten</MatButton>
+                }
+
+            </div>
         }
-    }
-</div>
+
+        <br />
+        <br />
+    </div>
+    <div class="border">
+        <h2>Bestellingen</h2>
+
+        @if (this.bestellingen.Count == 0)
+        {
+            <h3>Er zijn geen bestellingen</h3>
+        }
+        else
+        {
+            @foreach (Bestelling bestelling in this.bestellingen)
+            {
+
+                <div>
+
+                    Begunstigde: @bestelling.GebruikersNaam
+                    <br />
+                    Datum: @bestelling.AanmaakDatum.ToString()
+                    <br />
+                    Prijs: € @bestelling.TotaalBedrag
+
+                    @foreach (BesteldArtikel artikel in bestelling.GetBesteldeArtikels())
+                    {
+                        artikel.PrettyPrint();
+                        <br />
+                    }
+
+                    <br />
+
+                </div>
+
+            }
+        }
+    </div>
     <MatDialog @bind-IsOpen="@showDialog">
         <MatDialogTitle>Artikel Toevoegen</MatDialogTitle>
         <MatDialogContent>
@@ -244,7 +244,7 @@ else
                                    TValue="int"
                                    @bind-Value=@tempArtikel.korting
                                    Minimum="0"
-                                   Maximum="100">
+                                   Maximum="99">
             </MatNumericUpDownField>
 
         </MatDialogContent>
@@ -356,24 +356,21 @@ else
 
     public void UpdateArtikelKorting()
     {
-        if (tempArtikel.korting != 0)
+        bool succes = DBConnection.UpdateArtikel(tempArtikel);
+
+        if (succes)
         {
-            bool succes = DBConnection.UpdateArtikel(tempArtikel);
-
-            if (succes)
-            {
-                Toaster.Add("Korting toegevoegd", MatToastType.Success, "Succes");
-            }
-            else
-            {
-                winkel.artikels.Remove(tempArtikel);
-                Toaster.Add("Probleem bij het toevoegen van de korting", MatToastType.Danger, "Error");
-            }
-
-            tempArtikel = new Artikel();
-            tempPrijs = 0m;
-            showDialog3 = false;
+            Toaster.Add("Korting toegevoegd", MatToastType.Success, "Succes");
         }
+        else
+        {
+            winkel.artikels.Remove(tempArtikel);
+            Toaster.Add("Probleem bij het toevoegen van de korting", MatToastType.Danger, "Error");
+        }
+
+        tempArtikel = new Artikel();
+        tempPrijs = 0m;
+        showDialog3 = false;
     }
 
     public void AddArtikel()

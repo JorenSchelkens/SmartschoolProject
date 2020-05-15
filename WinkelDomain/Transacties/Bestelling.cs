@@ -78,6 +78,8 @@ namespace WinkelDomain
             {
                 this.TotaalBedrag += besteldArtikel.Prijs;
             }
+
+            this.TotaalBedrag = Math.Round(this.TotaalBedrag, 2);
         }
     }
 }

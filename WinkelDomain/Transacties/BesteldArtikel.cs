@@ -1,4 +1,6 @@
-﻿namespace WinkelDomain
+﻿using System;
+
+namespace WinkelDomain
 {
     public class BesteldArtikel
     {
@@ -14,7 +16,7 @@
         {
             this.artikel = artikel;
             this.Productnr = artikel.productnr;
-            this.Prijs = artikel.geefHuidigePrijs() * aantal;
+            this.Prijs = Math.Round(artikel.geefHuidigePrijs() * aantal, 2);
             this.Productnaam = artikel.productnaam;
 
             this.Aantal = aantal;
