@@ -706,7 +706,7 @@ namespace DefaultDomain
 
                 while (reader.Read())
                 {
-                    artikel = artikels.First(v => v.productnr == reader.GetInt32(1));
+                    artikel = artikels.FirstOrDefault(v => v.productnr == reader.GetInt32(1));
                     besteldArtikel = new BesteldArtikel(artikel, reader.GetInt32(4), reader.GetString(3));
 
                     besteldArtikel.Prijs = reader.GetDouble(2);

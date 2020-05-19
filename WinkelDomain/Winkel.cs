@@ -10,6 +10,7 @@ namespace WinkelDomain
         public bool actief;
         public List<Artikel> artikels;
         public bool goedgekeurd;
+        public string adress;
 
         public Winkel() 
         {
@@ -22,6 +23,7 @@ namespace WinkelDomain
             this.beheerder = beheerder;
             artikels = new List<Artikel>();
             goedgekeurd = false;
+            this.adress = this.naam.Trim().Replace(' ', '-');
         }
 
         public void veranderActief()
