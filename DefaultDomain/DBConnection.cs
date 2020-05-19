@@ -83,7 +83,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE naam = @naam;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd, adress FROM tblwinkel WHERE naam = @naam;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 command.Parameters.AddWithValue("@naam", winkelnaam);
@@ -98,6 +98,95 @@ namespace DefaultDomain
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = reader.GetBoolean(3);
                     winkel.goedgekeurd = reader.GetBoolean(4);
+                    winkel.adress = reader.GetString(5);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            List<Artikel> artikels = new List<Artikel>();
+            Artikel artikel;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT productnr, productnaam, prijs, stock, winkelnr, korting, actief FROM tblartikel WHERE winkelnr = @winkelnr;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@winkelnr", winkel.winkelnr);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    artikel = new Artikel
+                    {
+                        productnr = reader.GetInt32(0),
+                        productnaam = reader.GetString(1),
+                        standaardPrijs = reader.GetDouble(2),
+                        stock = reader.GetInt32(3),
+                        winkelnr = reader.GetInt32(4),
+                        korting = reader.GetInt32(5),
+                        actief = (reader.GetInt32(6) == 1) ? true : false
+                    };
+
+                    artikels.Add(artikel);
+                }
+
+                //Reader sluiten
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                //Bij een error word de ToString van die error op ErrorMessage gezet zodat dit gebruikt kan worden, voornamelijk tijdens het developen
+                this.ErrorMessage = ex.ToString();
+            }
+
+            //Connectie sluiten
+            this.MySqlConnection.Close();
+
+            winkel.artikels = artikels;
+
+            //Return object
+            return winkel;
+        }
+
+        public Winkel GetWinkelByAdress(string winkelAdress)
+        {
+            this.ResetErrorMessage();
+
+            Winkel winkel = new Winkel();
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd, adress FROM tblwinkel WHERE adress = @adress;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+                command.Parameters.AddWithValue("@adress", winkelAdress);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    winkel.winkelnr = reader.GetInt32(0);
+                    winkel.naam = reader.GetString(1);
+                    winkel.beheerder = reader.GetString(2);
+                    winkel.actief = reader.GetBoolean(3);
+                    winkel.goedgekeurd = reader.GetBoolean(4);
+                    winkel.adress = reader.GetString(5);
                 }
 
                 //Reader sluiten
@@ -170,7 +259,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE winkelnr = @winkelnr;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd, adress FROM tblwinkel WHERE winkelnr = @winkelnr;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 command.Parameters.AddWithValue("@winkelnr", winkelNr);
@@ -179,12 +268,12 @@ namespace DefaultDomain
 
                 while (reader.Read())
                 {
-
                     winkel.winkelnr = reader.GetInt32(0);
                     winkel.naam = reader.GetString(1);
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = reader.GetBoolean(3);
                     winkel.goedgekeurd = reader.GetBoolean(4);
+                    winkel.adress = reader.GetString(5);
                 }
 
                 //Reader sluiten
@@ -490,7 +579,7 @@ namespace DefaultDomain
             try
             {
                 this.MySqlConnection.Open();
-                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd, adress FROM tblwinkel;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -502,6 +591,7 @@ namespace DefaultDomain
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
                     winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
+                    winkel.adress = reader.GetString(5);
 
                     for (int i = 0; i < artikels.Count; i++)
                     {
@@ -538,7 +628,7 @@ namespace DefaultDomain
             try
             {
                 this.MySqlConnection.Open();
-                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd FROM tblwinkel WHERE beheerder = @beheerder;";
+                string sql = $"SELECT winkelnr, naam, beheerder, actief, goedgekeurd, adress FROM tblwinkel WHERE beheerder = @beheerder;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
@@ -553,6 +643,7 @@ namespace DefaultDomain
                     winkel.beheerder = reader.GetString(2);
                     winkel.actief = (reader.GetInt32(3) == 1) ? true : false;
                     winkel.goedgekeurd = (reader.GetInt32(4) == 1) ? true : false;
+                    winkel.adress = reader.GetString(5);
 
                     for (int i = 0; i < artikels.Count; i++)
                     {
@@ -854,7 +945,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"INSERT INTO tblwinkel(naam, beheerder, actief,goedgekeurd) VALUES(@naam, @beheerder, @actief,@goedgekeurd);";
+                string sql = $"INSERT INTO tblwinkel(naam, beheerder, actief, goedgekeurd, adress) VALUES(@naam, @beheerder, @actief, @goedgekeurd, @adress);";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
 
@@ -862,6 +953,7 @@ namespace DefaultDomain
                 command.Parameters.AddWithValue("@beheerder", winkel.beheerder);
                 command.Parameters.AddWithValue("@actief", (winkel.actief) ? 1 : 0);
                 command.Parameters.AddWithValue("@goedgekeurd", winkel.goedgekeurd);
+                command.Parameters.AddWithValue("@adress", winkel.adress);
 
                 if (command.ExecuteNonQuery() > 0)
                 {
@@ -1045,6 +1137,36 @@ namespace DefaultDomain
 
             return succes;
 
+        }
+
+        public bool KeurWinkelAf(Winkel winkel)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"DELETE FROM tblwinkel WHERE winkelnr = {winkel.winkelnr}";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
         }
         #endregion
 

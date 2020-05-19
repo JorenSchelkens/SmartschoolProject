@@ -7,166 +7,24 @@
 @inject Microsoft.JSInterop.IJSRuntime JS
 @using System.IO;
 
-    <MatAccordion Multi="true">
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Bekijk alle winkels</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <div class="mat-layout-grid">
-                    <MatSlideToggle @bind-Value="@Val1"></MatSlideToggle>
-                    @if (Val1)
-                    {
-                        <span style="margin:10px">alle winkels</span>
-                    }
-                    else
-                    {
-                        <span style="margin:10px">actieve winkels</span>
-                    }
-                    @if (Val1)
-                    {
-                        <div class="mat-layout-grid-inner">
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>winkelnummer</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>naam</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>beheerder</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>actief</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                                <b>goedgekeurd</b>
-                            </div>
-
-
-                            @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.goedgekeurd))
-                            {
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.winkelnr
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.naam
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.beheerder
-                                <MatButton Unelevated="true" OnClick="@(() => WijzigWinkelVerantwoordelijkePopUp(winkel.naam))">Wijzig</MatButton>
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-
-                                    @if (winkel.actief)
-                                    {
-                                        <span>Actief</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Niet Actief</span>
-                                    }
-
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-
-                                    @if (winkel.goedgekeurd)
-                                    {
-                                        <span>Goedgekeurd</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Niet Goedgekeurd</span>
-                                    }
-
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @if (winkel.actief)
-                                    {
-                                        <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
-                                    }
-                                    else
-                                    {
-                                        <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="mat-layout-grid-inner">
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>winkelnummer</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>naam</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>beheerder</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <b>actief</b>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                                <b>goedgekeurd</b>
-                            </div>
-
-
-
-                            @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
-                            {
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.winkelnr
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.naam
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @winkel.beheerder
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @if (winkel.actief)
-                                    {
-                                        <span>Actief</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Niet Actief</span>
-                                    }
-                                </div>
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @if (winkel.goedgekeurd)
-                                    {
-                                        <span>Goedgekeurd</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Niet Goedgekeurd</span>
-                                    }
-                                </div>
-
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    @if (winkel.actief)
-                                    {
-                                        <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
-                                    }
-                                    else
-                                    {
-                                        <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Winkelverzoeken bekijken</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <div class="mat-layout-grid">
+<MatAccordion Multi="true">
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk alle winkels</MatExpansionPanelHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <div class="mat-layout-grid">
+                <MatSlideToggle @bind-Value="@Val1"></MatSlideToggle>
+                @if (Val1)
+                {
+                    <span style="margin:10px">alle winkels</span>
+                }
+                else
+                {
+                    <span style="margin:10px">actieve winkels</span>
+                }
+                @if (Val1)
+                {
                     <div class="mat-layout-grid-inner">
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             <b>winkelnummer</b>
@@ -185,7 +43,77 @@
                         </div>
 
 
-                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => !winkel.goedgekeurd))
+                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.goedgekeurd))
+                        {
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.winkelnr
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.naam
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @winkel.beheerder
+                                <MatButton Unelevated="true" OnClick="@(() => WijzigWinkelVerantwoordelijkePopUp(winkel.naam))">Wijzig</MatButton>
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+
+                                @if (winkel.actief)
+                                {
+                                    <span>Actief</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Actief</span>
+                                }
+
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+
+                                @if (winkel.goedgekeurd)
+                                {
+                                    <span>Goedgekeurd</span>
+                                }
+                                else
+                                {
+                                    <span>Niet Goedgekeurd</span>
+                                }
+
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                @if (winkel.actief)
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                                }
+                                else
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="mat-layout-grid-inner">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <b>winkelnummer</b>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <b>naam</b>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <b>beheerder</b>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <b>actief</b>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                            <b>goedgekeurd</b>
+                        </div>
+
+
+
+                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
                         {
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                 @winkel.winkelnr
@@ -205,7 +133,8 @@
                                 {
                                     <span>Niet Actief</span>
                                 }
-                            </div> <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            </div>
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                                 @if (winkel.goedgekeurd)
                                 {
                                     <span>Goedgekeurd</span>
@@ -215,112 +144,186 @@
                                     <span>Niet Goedgekeurd</span>
                                 }
                             </div>
+
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                <MatButton Type="submit" @key="winkel" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Actief maken</MatButton>
+                                @if (winkel.actief)
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                                }
+                                else
+                                {
+                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                                }
                             </div>
                         }
                     </div>
+                }
+            </div>
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Winkelverzoeken bekijken</MatExpansionPanelHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>winkelnummer</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>naam</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>beheerder</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <b>actief</b>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                        <b>goedgekeurd</b>
+                    </div>
+
+
+                    @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => !winkel.goedgekeurd))
+                    {
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.winkelnr
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.naam
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @winkel.beheerder
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @if (winkel.actief)
+                            {
+                                <span>Actief</span>
+                            }
+                            else
+                            {
+                                <span>Niet Actief</span>
+                            }
+                        </div> <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            @if (winkel.goedgekeurd)
+                            {
+                                <span>Goedgekeurd</span>
+                            }
+                            else
+                            {
+                                <span>Niet Goedgekeurd</span>
+                            }
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                            <MatButton Type="submit" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Goedkeuren</MatButton>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                            <MatButton Type="submit" OnClick="@(() => afkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Afwijzen</MatButton>
+                        </div>
+                    }
                 </div>
+            </div>
 
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Bekijk stock (winkel)</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <MatAccordion Multi="true">
-                    @if (winkels != null)
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk stock (winkel)</MatExpansionPanelHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <MatAccordion Multi="true">
+                @if (winkels != null)
+                {
+                    @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
                     {
-                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
-                        {
-                            <MatExpansionPanel>
-                                <MatExpansionPanelSummary>
-                                    <MatExpansionPanelHeader>@winkel.naam</MatExpansionPanelHeader>
-                                </MatExpansionPanelSummary>
-                                <MatExpansionPanelDetails>
-                                    <MatList>
-                                        @foreach (Artikel artikel in winkel.artikels)
-                                        {
-                                            <MatListItem>
-                                                @artikel.productnaam
-                                                <p style="text-align:left; width:100%; padding:0;"></p>
-                                                @artikel.stock
-                                            </MatListItem>
-                                            <MatListDivider></MatListDivider>
-                                        }
-                                    </MatList>
-                                </MatExpansionPanelDetails>
-                            </MatExpansionPanel>
-                        }
+                        <MatExpansionPanel>
+                            <MatExpansionPanelSummary>
+                                <MatExpansionPanelHeader>@winkel.naam</MatExpansionPanelHeader>
+                            </MatExpansionPanelSummary>
+                            <MatExpansionPanelDetails>
+                                <MatList>
+                                    @foreach (Artikel artikel in winkel.artikels)
+                                    {
+                                        <MatListItem>
+                                            @artikel.productnaam
+                                            <p style="text-align:left; width:100%; padding:0;"></p>
+                                            @artikel.stock
+                                        </MatListItem>
+                                        <MatListDivider></MatListDivider>
+                                    }
+                                </MatList>
+                            </MatExpansionPanelDetails>
+                        </MatExpansionPanel>
                     }
-                </MatAccordion>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>Bekijk lokalen</MatExpansionPanelHeader>
-                <MatExpansionPanelSubHeader>
-                    <MatButton Label="Lokaal toevoegen" OnClick="@voegLokaalToePopup" />
-                </MatExpansionPanelSubHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <MatAccordion Multi="true">
-                    @if (lokalen != null)
+                }
+            </MatAccordion>
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
+    <MatExpansionPanel>
+        <MatExpansionPanelSummary>
+            <MatExpansionPanelHeader>Bekijk lokalen</MatExpansionPanelHeader>
+            <MatExpansionPanelSubHeader>
+                <MatButton Label="Lokaal toevoegen" OnClick="@voegLokaalToePopup" />
+            </MatExpansionPanelSubHeader>
+        </MatExpansionPanelSummary>
+        <MatExpansionPanelDetails>
+            <MatAccordion Multi="true">
+                @if (lokalen != null)
+                {
+                    @foreach (Lokaal lokaal in lokalen)
                     {
-                        @foreach (Lokaal lokaal in lokalen)
-                        {
-                            <MatExpansionPanel>
-                                <MatExpansionPanelSummary>
-                                    <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
-                                </MatExpansionPanelSummary>
-                                <MatExpansionPanelDetails>
+                        <MatExpansionPanel>
+                            <MatExpansionPanelSummary>
+                                <MatExpansionPanelHeader>Lokaal @lokaal.lokaalNr</MatExpansionPanelHeader>
+                            </MatExpansionPanelSummary>
+                            <MatExpansionPanelDetails>
 
-                                    <p style="font-weight: bold">Lokaal actief/inactief: </p>
+                                <p style="font-weight: bold">Lokaal actief/inactief: </p>
 
-                                    <MatSlideToggle @onclick="(() => veranderStatus(lokaal))" @bind-Value="@lokaal.isActief"></MatSlideToggle>
+                                <MatSlideToggle @onclick="(() => veranderStatus(lokaal))" @bind-Value="@lokaal.isActief"></MatSlideToggle>
 
-                                    @if (lokaal.isActief)
+                                @if (lokaal.isActief)
+                                {
+                                    <p style="font-weight: bold">Actief</p>
+                                }
+                                else
+                                {
+                                    <p style="font-weight: bold">Inactief</p>
+                                }
+
+                                <p>Verantwoordelijke : @lokaal.lokaalVerantwoordelijke</p>
+
+                                <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => WijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
+                                <MatButton Unelevated="true" Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))" />
+
+                                <p style="margin-top: 20px">Voorwerpen :</p>
+                                <MatList>
+                                    @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
                                     {
-                                        <p style="font-weight: bold">Actief</p>
+                                        <MatListItem>
+                                            @voorwerp.voorwerpNaam
+                                            <p style="text-align:right; width:100%; padding:0;"></p>
+                                            <MatButton Label="-" style="padding-right:10px" OnClick="@(() => Verlaag(voorwerp, lokaal))" />
+                                            <p style="padding-right:10px; max-height:10px">@voorwerp.aantal</p>
+                                            <MatButton Label="+" style="margin-right:0px;" OnClick="@(() => Verhoog(voorwerp, lokaal))" />
+                                            <MatIconButton Icon="notification_important" style="margin-right:5px;" OnClick="@(() => popupOnClick(voorwerp, lokaal))"></MatIconButton>
+                                            <p style="margin-right:0px; max-height:1px">@voorwerp.aantalDefecten</p>
+                                            <MatButton Label="-" style="margin-right:1px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
+                                            <p style="position: absolute; right: 0; max-height:10px"></p>
+
+                                        </MatListItem>
+                                        <MatListDivider></MatListDivider>
                                     }
-                                    else
-                                    {
-                                        <p style="font-weight: bold">Inactief</p>
-                                    }
-
-                                    <p>Verantwoordelijke : @lokaal.lokaalVerantwoordelijke</p>
-
-                                    <MatButton Unelevated="true" Label="Verantwoordelijke wijzigen" OnClick="@(() => WijzigVerantwoordelijkePopup(lokaal.lokaalNr))" />
-                                    <MatButton Unelevated="true" Label="Voorwerp toevoegen" OnClick="@(() => voegVoorwerpToePopup(lokaal.lokaalNr))" />
-
-                                    <p style="margin-top: 20px">Voorwerpen :</p>
-                                    <MatList>
-                                        @foreach (Voorwerp voorwerp in lokaal.Voorwerpen)
-                                        {
-                                            <MatListItem>
-                                                @voorwerp.voorwerpNaam
-                                                <p style="text-align:right; width:100%; padding:0;"></p>
-                                                <MatButton Label="-" style="padding-right:10px" OnClick="@(() => Verlaag(voorwerp, lokaal))" />
-                                                <p style="padding-right:10px; max-height:10px">@voorwerp.aantal</p>
-                                                <MatButton Label="+" style="margin-right:0px;" OnClick="@(() => Verhoog(voorwerp, lokaal))" />
-                                                <MatIconButton Icon="notification_important" style="margin-right:5px;" OnClick="@(() => popupOnClick(voorwerp, lokaal))"></MatIconButton>
-                                                <p style="margin-right:0px; max-height:1px">@voorwerp.aantalDefecten</p>
-                                                <MatButton Label="-" style="margin-right:1px;" OnClick="@(() => verwijderDefect(voorwerp, lokaal))" />
-                                                <p style="position: absolute; right: 0; max-height:10px"></p>
-
-                                            </MatListItem>
-                                            <MatListDivider></MatListDivider>
-                                        }
-                                    </MatList>
-                                </MatExpansionPanelDetails>
-                            </MatExpansionPanel>
-                        }
+                                </MatList>
+                            </MatExpansionPanelDetails>
+                        </MatExpansionPanel>
                     }
-                </MatAccordion>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-    </MatAccordion>
+                }
+            </MatAccordion>
+        </MatExpansionPanelDetails>
+    </MatExpansionPanel>
+</MatAccordion>
 
 <MatDialog @bind-IsOpen="@dialogLokaalIsOpen">
     <MatDialogTitle>Nieuw lokaal</MatDialogTitle>
@@ -520,7 +523,8 @@
         if (gelukt)
         {
             Toaster.Add("Succesvol gewijzigd", MatToastType.Success, "Gelukt");
-        } else
+        }
+        else
         {
             Toaster.Add("Er is iets misgelopen", MatToastType.Success, "Mislukt");
         }
@@ -540,6 +544,18 @@
         //TODO VERANDER STATUS WINKEL
         winkel.goedgekeurd = !winkel.goedgekeurd;
         bool temp = DBConnection.VeranderGoedgekeurdWinkel(winkel);
+        this.StateHasChanged();
+    }
+
+    public void afkeuringWinkel(WinkelDomain.Winkel winkel)
+    {
+        bool temp = DBConnection.KeurWinkelAf(winkel);
+
+        if (temp)
+        {
+            this.winkels.Remove(winkel);
+        }
+
         this.StateHasChanged();
     }
 
@@ -638,7 +654,7 @@
     {
         if (string.IsNullOrWhiteSpace(naamWinkelVerantwoordelijke))
         {
-            naamWinkelVerantwoordelijke= "verantwoordelijke";
+            naamWinkelVerantwoordelijke = "verantwoordelijke";
         }
     }
 

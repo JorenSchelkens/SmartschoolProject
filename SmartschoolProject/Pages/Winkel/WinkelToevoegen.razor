@@ -1,5 +1,7 @@
 ﻿@page "/winkeltoevoegen"
 @inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
+@inject GoogleGebruiker Gebruiker
 @using System.ComponentModel.DataAnnotations
 
 <style>
@@ -18,17 +20,35 @@
     <DataAnnotationsValidator />
 
     <p>
-        <MatTextField Label="Naam winkel" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
-        <MatTextField @bind-Value="myModel.Beheerder" Label="Beheerder"/>
+        <MatTextField Label="Winkel naam" Class="naamWinkel" @bind-Value="myModel.NaamWinkel" />
+        <br />
+        <MatTextField @bind-Value="myModel.Beheerder" Label="Winkel beheerder" />
+        <MatButton Type="button" Raised="true" OnClick="VulIn">Ik ben de beheerder</MatButton>
+        <MatIconButton Icon="info" OnClick="@ShowInfo"></MatIconButton>
     </p>
 
     <MatButton Type="submit" Raised="true">Toevoegen</MatButton>
 
 </EditForm>
 
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <MatDialogTitle>Gebruikernaam info</MatDialogTitle>
+    <MatDialogContent>
+        <p>
+            De gebruikernaam van de beheerder wordt alsvolgt ingevoerd:
+            voornaam.achternaam (vergeet het puntje niet!, eventuele extra cijfers hoeven niet vermeld te worden)
+        </p>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { dialogIsOpen = false; })">Sluiten</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
 @code {
 
     DBConnection dBConnection = new DBConnection();
+
+    public bool dialogIsOpen = false;
 
     LoginModel myModel = new LoginModel();
     public class LoginModel
@@ -40,16 +60,33 @@
         public string Beheerder { get; set; }
     }
 
-    public void succes()
+    public async void succes()
     {
-        Winkel winkel = new Winkel();
+        GebruikerInfo gebruiker = await GebruikerInfoBuilder.BuildGebruikerInfoFromEmail($"{myModel.Beheerder}@bazandpoort.be");
 
-        winkel.naam = myModel.NaamWinkel;
-        winkel.beheerder = myModel.Beheerder;
-        winkel.actief = false;
+        if (gebruiker == null)
+        {
+            Toaster.Add("Deze gebruiker bestaat niet, probeer opnieuw", MatToastType.Danger, "Gebruiker niet gevonden");
+        }
+        else
+        {
+            Winkel winkel = new Winkel(myModel.Beheerder, myModel.NaamWinkel);
+            winkel.actief = false;
 
-        dBConnection.AddWinkel(winkel);
+            dBConnection.AddWinkel(winkel);
 
-        NavigationManager.NavigateTo("/winkel");
+            NavigationManager.NavigateTo("/winkel");
+        }
+    }
+
+    public void ShowInfo()
+    {
+        dialogIsOpen = true;
+    }
+
+    public void VulIn()
+    {
+        myModel.Beheerder = Gebruiker.GebruikerInfo.GebruikersNaam;
+        this.StateHasChanged();
     }
 }

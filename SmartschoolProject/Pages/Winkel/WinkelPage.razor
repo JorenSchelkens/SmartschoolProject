@@ -1,5 +1,5 @@
 ﻿@page "/winkel"
-@page "/winkel/{winkelNaam}"
+@page "/winkel/{winkelAdress}"
 @inject NavigationManager navigationManager
 @inject GoogleGebruiker Gebruiker
 @inject ISessionStorageService sessionStorage
@@ -63,7 +63,7 @@
 
                     <div class="winkelnaam">@winkel.naam</div>
 
-                    <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.naam))" Class="knop">bewerken</MatButton>
+                    <MatButton Unelevated="true" OnClick="@(() => GaNaarWinkel(winkel.adress))" Class="knop">bewerken</MatButton>
 
                     <MatCheckbox @bind-Value="@winkel.actief" Class="check" @onclick="@(() => ActiefMakenWinkel(winkel))" Label="Actief"></MatCheckbox>
 
@@ -266,7 +266,7 @@ else
     public List<Bestelling> bestellingen { get; set; }
 
     [Parameter]
-    public string winkelNaam { get; set; }
+    public string winkelAdress { get; set; }
 
     public bool showMijnWinkels { get; set; }
     public bool showDialog { get; set; }
@@ -284,14 +284,14 @@ else
         tempPrijs = 0m;
         tempArtikel = new Artikel();
 
-        if (string.IsNullOrEmpty(winkelNaam))
+        if (string.IsNullOrEmpty(winkelAdress))
         {
             winkels = DBConnection.GetMyWinkels(this.Gebruiker.GebruikerInfo.GebruikersNaam);
             showMijnWinkels = true;
         }
         else
         {
-            winkel = DBConnection.GetWinkel(winkelNaam);
+            winkel = DBConnection.GetWinkelByAdress(winkelAdress);
             bestellingen = DBConnection.GetAllBestellingenFromWinkel(winkel.winkelnr);
             showMijnWinkels = false;
         }
@@ -430,12 +430,19 @@ else
 
     public void GaNaarWinkelToevoegen()
     {
-        navigationManager.NavigateTo("/winkeltoevoegen");
+        if (this.winkels.Any(v => !v.goedgekeurd))
+        {
+            Toaster.Add("Uw vorige winkel moet nog goedgekeurd worden", MatToastType.Danger, "Error");
+        }
+        else
+        {
+            navigationManager.NavigateTo("/winkeltoevoegen");
+        }
     }
 
-    public void GaNaarWinkel(string winkelNaam)
+    public void GaNaarWinkel(string winkelAdress)
     {
-        navigationManager.NavigateTo($"/winkel/{winkelNaam.ToString()}", true);
+        navigationManager.NavigateTo($"/winkel/{winkelAdress}", true);
     }
 
     public void ActiefMakenWinkel(WinkelDomain.Winkel winkel)

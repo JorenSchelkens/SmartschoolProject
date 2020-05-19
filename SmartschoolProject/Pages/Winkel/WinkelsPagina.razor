@@ -1,5 +1,5 @@
 ﻿@page "/winkels"
-@page "/winkels/{naam}"
+@page "/winkels/{adress}"
 @inject IMatToaster Toaster
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
@@ -244,13 +244,13 @@ else
     public Artikel Artikel { get; set; }
 
     [Parameter]
-    public string Naam { get; set; }
+    public string Adress { get; set; }
 
     protected override void OnInitialized()
     {
         DBConnection = new DBConnection();
 
-        if (Naam == null)
+        if (Adress == null)
         {
             winkels = DBConnection.GetAllWinkels();
             alleWinkels = true;
@@ -261,7 +261,7 @@ else
             //Get artikels van winkel uit DB
             //winkel = DBConnection
 
-            winkel = DBConnection.GetWinkel(Naam);
+            winkel = DBConnection.GetWinkelByAdress(Adress);
 
             Bestelling = new Bestelling(Gebruiker.GebruikerInfo.GebruikersNaam);
 
@@ -285,7 +285,7 @@ else
 
     public void GaNaarWinkel(Winkel winkel)
     {
-        NavigationManager.NavigateTo($"/winkels/{winkel.naam}", true);
+        NavigationManager.NavigateTo($"/winkels/{winkel.adress}", true);
     }
 
     public void TerugNaarAlleWinkels()
@@ -323,7 +323,7 @@ else
 
         if (succes)
         {
-            NavigationManager.NavigateTo($"/betalen/{this.Bestelling.Code}/{this.Naam}");
+            NavigationManager.NavigateTo($"/betalen/{this.Bestelling.Code}/{this.Adress}");
         }
         else
         {
