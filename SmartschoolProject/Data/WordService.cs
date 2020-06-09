@@ -77,7 +77,7 @@ namespace SmartschoolProject.Data
 
             //Derde cel van tabel
             WTableCell thirdCell = table.Rows[0].Cells[2];
-            thirdCell.Width = 156;
+            thirdCell.Width = 170;
             paragraph = thirdCell.AddParagraph();
             paragraph.ApplyStyle("Normal");
             textRange = paragraph.AppendText("Voorwerpen") as WTextRange;
@@ -103,9 +103,9 @@ namespace SmartschoolProject.Data
                 textRange.CharacterFormat.FontSize = 13f;
 
                 //Voorwerpen per lokaal
-                for (int j = 1; j < lokalen[i].Voorwerpen.Count(); j++)
+                for (int j = 0; j < lokalen[i].Voorwerpen.Count(); j++)
                 {
-                    thirdCell = table.Rows[j].Cells[2];
+                    thirdCell = table.Rows[i].Cells[2];
                     thirdCell.Width = 170;
                     paragraph = thirdCell.AddParagraph();
                     textRange = paragraph.AppendText("- " + lokalen[i].Voorwerpen[j].aantal + " x " + lokalen[i].Voorwerpen[j].voorwerpNaam + "\n" +
