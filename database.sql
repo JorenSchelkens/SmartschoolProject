@@ -31,7 +31,7 @@ CREATE TABLE `tblartikel` (
   `korting` int NOT NULL,
   `actief` int NOT NULL,
   PRIMARY KEY (`productnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `tblartikel` (
 
 LOCK TABLES `tblartikel` WRITE;
 /*!40000 ALTER TABLE `tblartikel` DISABLE KEYS */;
-INSERT INTO `tblartikel` VALUES (48,'Boterham',5,50,34,0,1),(47,'Wafel',1.5,500,34,0,0);
+INSERT INTO `tblartikel` VALUES (52,'Snoepzakje',1,500,35,0,1);
 /*!40000 ALTER TABLE `tblartikel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +67,6 @@ CREATE TABLE `tblbesteldeartikels` (
 
 LOCK TABLES `tblbesteldeartikels` WRITE;
 /*!40000 ALTER TABLE `tblbesteldeartikels` DISABLE KEYS */;
-INSERT INTO `tblbesteldeartikels` VALUES (25,47,8,'test',5),(24,47,8,'Allemaal met witte suiker',5);
 /*!40000 ALTER TABLE `tblbesteldeartikels` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,11 +81,11 @@ CREATE TABLE `tblbestelling` (
   `bestelnr` int NOT NULL AUTO_INCREMENT,
   `datum` date NOT NULL,
   `gebruikersnaam` varchar(40) NOT NULL,
-  `prijs` int NOT NULL,
+  `prijs` double NOT NULL,
   `betaald` int NOT NULL,
   `code` varchar(100) NOT NULL,
   PRIMARY KEY (`bestelnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +94,6 @@ CREATE TABLE `tblbestelling` (
 
 LOCK TABLES `tblbestelling` WRITE;
 /*!40000 ALTER TABLE `tblbestelling` DISABLE KEYS */;
-INSERT INTO `tblbestelling` VALUES (25,'2020-05-04','joren.schelkens',8,0,'489f4a6f-1280-40e0-98e6-5b93e29dd48a'),(24,'2020-05-04','joren.schelkens',8,0,'0a6c6817-a69e-4cef-81e0-19c3e06b90d7');
 /*!40000 ALTER TABLE `tblbestelling` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +122,6 @@ CREATE TABLE `tblinschrijvingen` (
 
 LOCK TABLES `tblinschrijvingen` WRITE;
 /*!40000 ALTER TABLE `tblinschrijvingen` DISABLE KEYS */;
-INSERT INTO `tblinschrijvingen` VALUES (9,'JorenSchelkens','6IT','Wijns','Robyn',1,'94f4db9d-f764-457f-98b1-71806e0b87a7');
 /*!40000 ALTER TABLE `tblinschrijvingen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,8 +187,9 @@ CREATE TABLE `tblwinkel` (
   `beheerder` varchar(45) NOT NULL,
   `actief` int NOT NULL,
   `goedgekeurd` int NOT NULL,
+  `adress` varchar(60) NOT NULL,
   PRIMARY KEY (`winkelnr`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +198,7 @@ CREATE TABLE `tblwinkel` (
 
 LOCK TABLES `tblwinkel` WRITE;
 /*!40000 ALTER TABLE `tblwinkel` DISABLE KEYS */;
-INSERT INTO `tblwinkel` VALUES (34,'Test2','joren.schelkens',1,1),(33,'Test','JorenSchelkens',1,1);
+INSERT INTO `tblwinkel` VALUES (35,'1€ Winkel','joren.schelkens',1,1,'1€-Winkel');
 /*!40000 ALTER TABLE `tblwinkel` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -213,4 +211,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-04 14:49:59
+-- Dump completed on 2020-06-09 19:38:37
