@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
 @inject ISessionStorageService sessionStorage
+@inject IJSRuntime JSRuntime;
 
 <MatH1>Betalen</MatH1>
 
@@ -39,9 +40,12 @@
             <h2>Totaal bedrag: €@Bestelling.TotaalBedrag</h2>
 
             <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
+        
             <MatButton Unelevated="true" @onclick="TerugNaarWinkel">Terug naar winkel</MatButton>
 
         </div>
+
+        <div id="test"></div>
 
     </div>
 </div>
@@ -80,13 +84,14 @@
         this.StateHasChanged();
     }
 
-    public void BestellingAfronden()
+    public async Task BestellingAfronden()
     {
-
+        await JSRuntime.InvokeAsync<string>("showPaypalButtonCustom", Bestelling.TotaalBedrag);
     }
 
     public void TerugNaarWinkel()
     {
         NavigationManager.NavigateTo($"/winkels/{this.WinkelNaam}");
     }
+
 }

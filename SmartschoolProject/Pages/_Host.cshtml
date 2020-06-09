@@ -16,6 +16,26 @@
     <link href="css/site.css" rel="stylesheet" />
     <script src="_content/MatBlazor/dist/matBlazor.js"></script>
     <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+    <script src="https://www.paypal.com/sdk/js?client-id=ARMOZE-TMwwksDxUFMo7bfv9ie6uvXKQCvOld1F2BFGZ4xep2zud41n0CFfz7ffCAALX8JoOyYZNXD9p"></script>
+<script>
+
+
+function showPaypalButtonCustom(bedrag) {
+            paypal.Buttons({
+                createOrder: function (data, actions) {
+                    // This function sets up the details of the transaction, including the amount and line item details.
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: bedrag
+                            }
+                        }]
+                    });
+                }
+            }).render('#test');
+        }
+</script>
+
 </head>
 <body>
     <app>
