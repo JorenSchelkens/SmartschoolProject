@@ -96,7 +96,7 @@ else
                                     <tr>
                                         <td><h2 style="width:200px">Product naam</h2></td>
                                         <td><h2>Prijs</h2></td>
-                                        <td><h2>aantal</h2></td>
+                                        <td><h2>Aantal</h2></td>
                                     </tr>
                                     @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief))
                                     {
@@ -138,7 +138,7 @@ else
                                     <tr>
                                         <td><h2 style="width:200px">Product naam</h2></td>
                                         <td><h2>Prijs</h2></td>
-                                        <td><h2>aantal</h2></td>
+                                        <td><h2>Aantal</h2></td>
                                     </tr>
                                     @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
                                     {
@@ -212,7 +212,7 @@ else
                                 <tr>
                                     <td><h2 style="width:200px">Product naam</h2></td>
                                     <td><h2>Prijs</h2></td>
-                                    <td><h2>aantal</h2></td>
+                                    <td><h2>Aantal</h2></td>
                                 </tr>
                                 @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
                                 {
