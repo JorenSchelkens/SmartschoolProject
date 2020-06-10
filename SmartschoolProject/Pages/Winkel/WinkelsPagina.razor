@@ -21,6 +21,11 @@
     .content px-4 {
         padding-right: 0px;
     }
+
+    td {
+        padding: 10px;
+    }
+
 </style>
 
 @if (alleWinkels)
@@ -34,7 +39,7 @@
 
             @if (string.IsNullOrWhiteSpace(SearchString1))
             {
-                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+                @foreach (WinkelDomain.Winkel winkel in winkelss.Where(winkel => winkel.actief && winkel.goedgekeurd))
                 {
                     <div class="mat-layout-grid-cell">
                         <img src="https://image.freepik.com/vrije-vector/vlees-winkel-logo_71835-89.jpg" style="width: 150px;height: 150px;" alt="Afbeeldingsresultaat voor winkel logo" />
@@ -87,72 +92,86 @@ else
                         {
                             @if (string.IsNullOrWhiteSpace(SearchString2))
                             {
-                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief))
-                                {
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Product naam: @artikel.productnaam</h2>
-                                    </div>
+                                <table>
+                                    <tr>
+                                        <td><h2 style="width:200px">Product naam</h2></td>
+                                        <td><h2>Prijs</h2></td>
+                                        <td><h2>aantal</h2></td>
+                                    </tr>
+                                    @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <h2>@artikel.productnaam</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Prijs: €@artikel.geefHuidigePrijs()</h2>
-                                    </div>
+                                            <td>
+                                                <h2>€ @artikel.geefHuidigePrijs()</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Aantal producten in stock: @artikel.stock</h2>
-                                    </div>
+                                            <td>
+                                                <h2>@artikel.stock</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                            <td>
 
-                                        @if (artikel.stock == 0)
-                                        {
-                                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
-                                        }
-                                        else
-                                        {
-                                            <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
-                                        }
+                                                @if (artikel.stock == 0)
+                                                {
+                                                    <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
+                                                }
+                                                else
+                                                {
+                                                    <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
+                                                }
 
-                                    </div>
+                                            </td>
+                                        </tr>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
-                                }
+                                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                                    }
+                                </table>
+
                             }
                             else
                             {
-                                @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
-                                {
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Product naam: @artikel.productnaam</h2>
-                                    </div>
+                                <table>
+                                    <tr>
+                                        <td><h2 style="width:200px">Product naam</h2></td>
+                                        <td><h2>Prijs</h2></td>
+                                        <td><h2>aantal</h2></td>
+                                    </tr>
+                                    @foreach (Artikel artikel in winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <h2>@artikel.productnaam</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Prijs: €@artikel.geefHuidigePrijs()</h2>
-                                    </div>
+                                            <td>
+                                                <h2>€ @artikel.geefHuidigePrijs()</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                        <h2>Aantal producten in stock: @artikel.stock</h2>
-                                    </div>
+                                            <td>
+                                                <h2>@artikel.stock</h2>
+                                            </td>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                                            <td>
 
-                                        @if (artikel.stock == 0)
-                                        {
-                                            <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
-                                        }
-                                        else
-                                        {
-                                            <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
-                                        }
+                                                @if (artikel.stock == 0)
+                                                {
+                                                    <MatButton Disabled="true" Unelevated="true" @onclick="@(() => OpenDialog(null))">Bestel</MatButton>
+                                                }
+                                                else
+                                                {
+                                                    <MatButton Unelevated="true" @onclick="@(() => OpenDialog(artikel))">Bestel</MatButton>
+                                                }
 
-                                    </div>
+                                            </td>
+                                        </tr>
 
-                                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
-                                }
-
-                                @if (winkel.artikels.Where(v => v.actief && v.productnaam.ToLower().Contains(SearchString2.ToLower().Trim())).Count() == 0)
-                                {
-                                    <h2>Geen artikels gevonden</h2>
-                                }
+                                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12"></div>
+                                    }
+                                </table>
                             }
                         }
 
@@ -189,26 +208,41 @@ else
                                 <h3>Winkelmandje</h3>
                             </div>
 
-                            @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
-                            {
+                            <table>
+                                <tr>
+                                    <td><h2 style="width:200px">Product naam</h2></td>
+                                    <td><h2>Prijs</h2></td>
+                                    <td><h2>aantal</h2></td>
+                                </tr>
+                                @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
+                                {
+                                    <tr>
+                                        <td style="padding:0px">
+                                            <h2>
+                                                <h2>@besteldArtikel.AantalString</h2>
+                                            </h2>
+                                        </td>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>@besteldArtikel.AantalString</h2>
-                                </div>
+                                        <td style="padding:0px">
+                                            <h2>
+                                                <h2>@besteldArtikel.Productnaam</h2>
+                                            </h2>
+                                        </td>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>@besteldArtikel.Productnaam</h2>
-                                </div>
+                                        <td style="padding:0px">
+                                            <h2>
+                                                <h2>€@besteldArtikel.Prijs</h2>
+                                            </h2>
+                                        </td>
 
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <h2>€@besteldArtikel.Prijs</h2>
-                                </div>
-
-                                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                    <MatFAB @onclick="@(() => VerwijderArtikel(besteldArtikel))" Icon="@MatIconNames.Remove"></MatFAB>
-                                </div>
-
-                            }
+                                        <td style="padding:0px">
+                                            <h2>
+                                                <MatFAB @onclick="@(() => VerwijderArtikel(besteldArtikel))" Icon="@MatIconNames.Remove"></MatFAB>
+                                            </h2>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
 
                             <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
                                 <MatButton Unelevated="true" @onclick="@(() => BestellingAfronden())">Bestelling Afronden</MatButton>
