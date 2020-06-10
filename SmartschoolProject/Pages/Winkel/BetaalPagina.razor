@@ -7,40 +7,50 @@
 
 <MatH1>Betalen</MatH1>
 
+<style>
+    td {
+        padding: 15px;
+    }
+</style>
+
 <div class="mat-layout-grid">
     <div class="mat-layout-grid-inner">
 
         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
             <h3>Bestelling</h3>
         </div>
-
-        @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
-        {
-
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                <h2>@besteldArtikel.Productnaam</h2>
-            </div>
-
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                <h2>@besteldArtikel.AantalString</h2>
-            </div>
-
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                <h2>€@besteldArtikel.Prijs</h2>
-            </div>
-
-            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                <h2>@besteldArtikel.Notitie</h2>
-            </div>
-
-        }
+        <table>
+            <tr>
+                <td>Productnaam</td>
+                <td>Aantal</td>
+                <td>Prijs</td>
+                <td>Notitie</td>
+            </tr>
+            @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
+            {
+            <tr>
+                <td>
+                    <h2>@besteldArtikel.Productnaam</h2>
+                </td>
+                <td>
+                    <h2>@besteldArtikel.AantalString</h2>
+                </td>
+                <td>
+                    <h2>€@besteldArtikel.Prijs</h2>
+                </td>
+                <td>
+                    <h2>@besteldArtikel.Notitie</h2>
+                </td>
+            </tr>
+            }
+        </table>
 
         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 
             <h2>Totaal bedrag: €@Bestelling.TotaalBedrag</h2>
 
             <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
-        
+
             <MatButton Unelevated="true" @onclick="TerugNaarWinkel">Terug naar winkel</MatButton>
 
         </div>
