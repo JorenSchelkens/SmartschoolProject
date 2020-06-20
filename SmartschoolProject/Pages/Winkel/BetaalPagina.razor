@@ -17,29 +17,29 @@
     <div class="mat-layout-grid-inner">
 
         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-            <h3>Bestelling</h3>
+            <h2>Bestelling</h2>
         </div>
         <table>
             <tr>
-                <td>Productnaam</td>
-                <td>Aantal</td>
-                <td>Prijs</td>
-                <td>Notitie</td>
+                <td><h3>Naam</h3></td>
+                <td><h3>Aantal</h3></td>
+                <td><h3>Prijs</h3></td>
+                <td><h3>Notitie</h3></td>
             </tr>
             @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
             {
             <tr>
                 <td>
-                    <h2>@besteldArtikel.Productnaam</h2>
+                    <h3>@besteldArtikel.Productnaam</h3>
                 </td>
                 <td>
-                    <h2>@besteldArtikel.AantalString</h2>
+                    <h3>@besteldArtikel.AantalString</h3>
                 </td>
                 <td>
-                    <h2>€@besteldArtikel.Prijs</h2>
+                    <h3>€@besteldArtikel.Prijs</h3>
                 </td>
                 <td>
-                    <h2>@besteldArtikel.Notitie</h2>
+                    <h3>@besteldArtikel.Notitie</h3>
                 </td>
             </tr>
             }
