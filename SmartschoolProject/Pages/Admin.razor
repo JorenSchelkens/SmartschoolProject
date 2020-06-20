@@ -168,35 +168,37 @@
         <MatExpansionPanelDetails>
             <div class="mat-layout-grid">
                 <div class="mat-layout-grid-inner">
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                         <b>winkelnummer</b>
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                         <b>naam</b>
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                         <b>beheerder</b>
                     </div>
-                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                         <b>actief</b>
                     </div>
                     <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
                         <b>goedgekeurd</b>
                     </div>
 
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 
+                    </div>
                     @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => !winkel.goedgekeurd))
                     {
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                             @winkel.winkelnr
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                             @winkel.naam
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                             @winkel.beheerder
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
                             @if (winkel.actief)
                             {
                                 <span>Actief</span>
@@ -215,15 +217,18 @@
                                 <span>Niet Goedgekeurd</span>
                             }
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             <MatButton Type="submit" OnClick="@(() => goedkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Goedkeuren</MatButton>
                         </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
                             <MatButton Type="submit" OnClick="@(() => afkeuringWinkel(winkel))" Style="width: 200px" Raised="true">Afwijzen</MatButton>
+                        </div>
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
                         </div>
                     }
                 </div>
-            </div>
+                </div>
 
         </MatExpansionPanelDetails>
     </MatExpansionPanel>
