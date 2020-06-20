@@ -25,138 +25,153 @@
                 }
                 @if (Val1)
                 {
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>winkelnummer</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>naam</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>beheerder</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>actief</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <b>goedgekeurd</b>
-                        </div>
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>winkelnummer</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>naam</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>beheerder</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>actief</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <b>goedgekeurd</b>
+                </div>
 
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 
-                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.goedgekeurd))
+                </div>
+
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.goedgekeurd))
+                {
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.winkelnr
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.naam
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.beheerder
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+
+                        @if (winkel.actief)
                         {
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.winkelnr
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.naam
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.beheerder
-                                <MatButton Unelevated="true" OnClick="@(() => WijzigWinkelVerantwoordelijkePopUp(winkel.naam))">Wijzig</MatButton>
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                            <span>Actief</span>
+                        }
+                        else
+                        {
+                            <span>Niet Actief</span>
+                        }
 
-                                @if (winkel.actief)
-                                {
-                                    <span>Actief</span>
-                                }
-                                else
-                                {
-                                    <span>Niet Actief</span>
-                                }
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
 
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @if (winkel.goedgekeurd)
+                        {
+                            <span>Goedgekeurd</span>
+                        }
+                        else
+                        {
+                            <span>Niet Goedgekeurd</span>
+                        }
 
-                                @if (winkel.goedgekeurd)
-                                {
-                                    <span>Goedgekeurd</span>
-                                }
-                                else
-                                {
-                                    <span>Niet Goedgekeurd</span>
-                                }
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @if (winkel.actief)
+                        {
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                        }
+                        else
+                        {
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                        }
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        <MatButton Unelevated="true" OnClick="@(() => WijzigWinkelVerantwoordelijkePopUp(winkel.naam))">Wijzig</MatButton>
+                    </div>
 
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @if (winkel.actief)
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
-                                }
-                                else
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
-                                }
-                            </div>
+
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
+                        </div>
                         }
                     </div>
                 }
                 else
                 {
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>winkelnummer</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>naam</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>beheerder</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                            <b>actief</b>
-                        </div>
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-                            <b>goedgekeurd</b>
-                        </div>
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>winkelnummer</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>naam</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>beheerder</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                    <b>actief</b>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+                    <b>goedgekeurd</b>
+                </div>
 
 
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 
-                        @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+                </div>
+                @foreach (WinkelDomain.Winkel winkel in winkels.Where(winkel => winkel.actief && winkel.goedgekeurd))
+                {
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.winkelnr
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.naam
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @winkel.beheerder
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-1">
+                        @if (winkel.actief)
                         {
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.winkelnr
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.naam
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @winkel.beheerder
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @if (winkel.actief)
-                                {
-                                    <span>Actief</span>
-                                }
-                                else
-                                {
-                                    <span>Niet Actief</span>
-                                }
-                            </div>
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @if (winkel.goedgekeurd)
-                                {
-                                    <span>Goedgekeurd</span>
-                                }
-                                else
-                                {
-                                    <span>Niet Goedgekeurd</span>
-                                }
-                            </div>
-
-                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
-                                @if (winkel.actief)
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
-                                }
-                                else
-                                {
-                                    <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
-                                }
-                            </div>
+                            <span>Actief</span>
+                        }
+                        else
+                        {
+                            <span>Niet Actief</span>
                         }
                     </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @if (winkel.goedgekeurd)
+                        {
+                            <span>Goedgekeurd</span>
+                        }
+                        else
+                        {
+                            <span>Niet Goedgekeurd</span>
+                        }
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-2">
+                        @if (winkel.actief)
+                        {
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">niet actief</MatButton>
+                        }
+                        else
+                        {
+                            <MatButton Type="submit" @key="winkel" OnClick="@(() => ActiefMakenWinkel(winkel))" Style="width: 200px" Raised="true">actief</MatButton>
+                        }
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
+                    </div>
+                }
+            </div>
                 }
             </div>
         </MatExpansionPanelDetails>
