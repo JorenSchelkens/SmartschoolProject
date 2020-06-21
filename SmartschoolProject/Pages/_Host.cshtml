@@ -16,7 +16,8 @@
     <link href="css/site.css" rel="stylesheet" />
     <script src="_content/MatBlazor/dist/matBlazor.js"></script>
     <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
-    <script src="https://www.paypal.com/sdk/js?client-id=ARMOZE-TMwwksDxUFMo7bfv9ie6uvXKQCvOld1F2BFGZ4xep2zud41n0CFfz7ffCAALX8JoOyYZNXD9p"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ARMOZE-TMwwksDxUFMo7bfv9ie6uvXKQCvOld1F2BFGZ4xep2zud41n0CFfz7ffCAALX8JoOyYZNXD9p&currency=EUR"
+            ></script>
     <script>
         function showPaypalButtonCustom(bedrag) {
             paypal.Buttons({
@@ -25,11 +26,22 @@
                     return actions.order.create({
                         purchase_units: [{
                             amount: {
+                                currency_code: "EUR",
                                 value: bedrag
-                            }
+                            },  payee: {
+                                email_address: "gerrit@business.example.com"
+                             }
                         }]
+
                     });
-                }
+                },
+                   onApprove: function(data, actions) {
+              // This function captures the funds from the transaction.
+              return actions.order.capture().then(function(details) {
+                // This function shows a transaction success message to your buyer.
+                window.location.href = 'index';
+              });
+            }
             }).render('#test');
         }
     </script>
