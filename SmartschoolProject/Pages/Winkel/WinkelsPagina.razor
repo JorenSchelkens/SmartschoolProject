@@ -94,7 +94,7 @@ else
                             {
                                 <table>
                                     <tr>
-                                        <td><h2 style="width:200px">Product naam</h2></td>
+                                        <td><h2 style="width:200px">Naam</h2></td>
                                         <td><h2>Prijs</h2></td>
                                         <td><h2>Aantal</h2></td>
                                     </tr>
@@ -136,7 +136,7 @@ else
                             {
                                 <table>
                                     <tr>
-                                        <td><h2 style="width:200px">Product naam</h2></td>
+                                        <td><h2 style="width:200px">Naam</h2></td>
                                         <td><h2>Prijs</h2></td>
                                         <td><h2>Aantal</h2></td>
                                     </tr>
@@ -210,18 +210,13 @@ else
 
                             <table>
                                 <tr>
-                                    <td><h2 style="width:200px">Product naam</h2></td>
+                                    <td><h2 style="width:200px">Naam</h2></td>
                                     <td><h2>Prijs</h2></td>
                                     <td><h2>Aantal</h2></td>
                                 </tr>
                                 @foreach (BesteldArtikel besteldArtikel in this.Bestelling.GetBesteldeArtikels())
                                 {
                                     <tr>
-                                        <td style="padding:0px">
-                                            <h2>
-                                                <h2>@besteldArtikel.AantalString</h2>
-                                            </h2>
-                                        </td>
 
                                         <td style="padding:0px">
                                             <h2>
@@ -232,6 +227,12 @@ else
                                         <td style="padding:0px">
                                             <h2>
                                                 <h2>€@besteldArtikel.Prijs</h2>
+                                            </h2>
+                                        </td>
+
+                                        <td style="padding:0px">
+                                            <h2>
+                                                <h2>@besteldArtikel.AantalString</h2>
                                             </h2>
                                         </td>
 
