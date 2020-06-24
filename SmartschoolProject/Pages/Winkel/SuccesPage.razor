@@ -1,0 +1,33 @@
+﻿@page "/succes/{code}"
+@inject GoogleGebruiker GoogleGebruiker
+@inject ISessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
+
+<h1>Bedankt voor je bestelling!</h1>
+
+<MatButton Unelevated="true" OnClick="ReturnToStart">Ga naar startpagina</MatButton>
+
+@code{
+
+    [Parameter]
+    public string Code { get; set; }
+
+    private DBConnection DBConnection { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.DBConnection = new DBConnection();
+
+        if (!string.IsNullOrEmpty(this.Code))
+        {
+            bool succes = this.DBConnection.VeranderBestellingStatus(this.Code);
+        }
+    }
+
+    public void ReturnToStart()
+    {
+        NavigationManager.NavigateTo("/index");
+    }
+
+}

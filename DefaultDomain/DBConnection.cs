@@ -523,7 +523,7 @@ namespace DefaultDomain
             return temp;
         }
 
-        public List<Artikel> GetBesteldeArtikels(int bestelNr) 
+        public List<Artikel> GetBesteldeArtikels(int bestelNr)
         {
             this.ResetErrorMessage();
             List<Artikel> artikels = new List<Artikel>();
@@ -545,7 +545,7 @@ namespace DefaultDomain
 
                 while (reader.Read())
                 {
-                                        
+
                     artikel.actief = (reader.GetInt32(6) == 1) ? true : false;
                 }
 
@@ -722,7 +722,7 @@ namespace DefaultDomain
             {
                 this.MySqlConnection.Open();
 
-                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs, code FROM tblbestelling;";
+                string sql = $"SELECT bestelnr, datum, gebruikersnaam, prijs, code, betaald FROM tblbestelling;";
 
                 MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -734,6 +734,7 @@ namespace DefaultDomain
                     bestelling.GebruikersNaam = reader.GetString(2);
                     bestelling.TotaalBedrag = reader.GetDouble(3);
                     bestelling.Code = reader.GetString(4);
+                    bestelling.Betaald = (reader.GetInt32(5) == 0) ? false : true;
 
                     bestellingen.Add(bestelling);
                     bestelling = new Bestelling();
@@ -760,7 +761,7 @@ namespace DefaultDomain
             List<Bestelling> alleBestellingenMetProducten = new List<Bestelling>();
 
 
-            foreach (Bestelling temp in alleBestellingenZonderProducten)
+            foreach (Bestelling temp in alleBestellingenZonderProducten.Where(v => v.Betaald))
             {
                 bestelling = this.GetBestelling(temp.Code);
                 alleBestellingenMetProducten.Add(bestelling);
@@ -1137,6 +1138,38 @@ namespace DefaultDomain
 
             return succes;
 
+        }
+
+        public bool VeranderBestellingStatus(string code)
+        {
+            this.ResetErrorMessage();
+
+            bool succes = false;
+
+            try
+            {
+                this.MySqlConnection.Open();
+
+                string sql = $"UPDATE tblbestelling SET betaald = 1 WHERE code = @code;";
+
+                MySqlCommand command = new MySqlCommand(sql, this.MySqlConnection);
+
+                command.Parameters.AddWithValue("@code", code);
+
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    succes = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                this.ErrorMessage = ex.ToString();
+                succes = false;
+            }
+
+            this.MySqlConnection.Close();
+
+            return succes;
         }
 
         public bool KeurWinkelAf(Winkel winkel)

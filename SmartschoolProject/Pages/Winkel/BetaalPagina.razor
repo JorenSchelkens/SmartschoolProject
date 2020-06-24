@@ -3,7 +3,7 @@
 @inject NavigationManager NavigationManager
 @inject GoogleGebruiker Gebruiker
 @inject ISessionStorageService sessionStorage
-@inject IJSRuntime JSRuntime;
+@inject IJSRuntime JSRuntime
 
 <MatH1>Betalen</MatH1>
 
@@ -49,7 +49,14 @@
 
             <h2>Totaal bedrag: €@Bestelling.TotaalBedrag</h2>
 
-            <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
+            @if (first)
+            {
+                <MatButton Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
+            }
+            else
+            {
+                <MatButton Disabled="true" Unelevated="true" @onclick="BestellingAfronden">Bestelling afronden</MatButton>
+            }
 
             <MatButton Unelevated="true" @onclick="TerugNaarWinkel">Terug naar winkel</MatButton>
 
@@ -71,6 +78,8 @@
     private DBConnection DBConnection { get; set; }
 
     public Bestelling Bestelling { get; set; }
+
+    public bool first { get; set; } = true;
 
     protected override void OnInitialized()
     {
@@ -96,7 +105,13 @@
 
     public async Task BestellingAfronden()
     {
-        await JSRuntime.InvokeAsync<string>("showPaypalButtonCustom", Bestelling.TotaalBedrag);
+        first = false;
+
+        object[] parameters = new object[2];
+        parameters[0] = this.Bestelling.TotaalBedrag;
+        parameters[1] = this.Code;
+
+        await JSRuntime.InvokeAsync<string>("showPaypalButtonCustom", parameters);
     }
 
     public void TerugNaarWinkel()

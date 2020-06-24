@@ -11,6 +11,7 @@ namespace WinkelDomain
         private List<BesteldArtikel> BesteldeArtikels { get; set; }
         public double TotaalBedrag { get; set; } = 0;
         public string Code { get; set; }
+        public bool Betaald { get; set; }
 
         public Bestelling()
         {
